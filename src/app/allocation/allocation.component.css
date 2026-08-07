@@ -1,0 +1,61 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: .5rem;
+  background-color: #fff;
+  margin: 0.8rem 0 0.8rem 0;
+  box-shadow: 0 .25rem .5rem #e6edef;
+  padding: 10px;
+
+  .card-head {
+    padding: 1rem 1.5rem;
+      border-bottom: 1px solid #edf1f7;
+      font-size: 1rem;
+
+      .btn:focus {
+          box-shadow: none;
+          outline: none;
+      }
+
+      .example-form-field {
+          width: 50%;
+          margin-top: -5px;
+          margin-bottom: -30px;
+      }
+
+      ::ng-deep .mdc-notched-outline {
+          padding: 10px;
+      }
+
+      ::ng-deep .mat-mdc-icon-button {
+          background: transparent;
+      }
+
+      ::ng-deep .mat-mdc-icon-button {
+          pointer-events: none;
+      }
+  }
+
+  .card-body {
+      .nav-link {
+          color: black;
+      }
+
+      .nav-link.active {
+          background-color: #fff; 
+          color: #12263f; 
+          font-weight: bold;
+      }
+
+      
+  }
+
+}
+
+@media screen and (max-width: 1045px) and (min-width: 768px) {
+
+}
+
+@media screen and (max-width: 767px){
+
+}

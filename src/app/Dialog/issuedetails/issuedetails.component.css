@@ -1,0 +1,183 @@
+.card {
+    width: 450px; 
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  .tooltip {
+    max-width: 10px !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+  }
+
+  .badge {
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-left: 8px;
+    color: white;
+    font-weight: bold;
+  }
+  .badge.open {
+    background-color: rgb(245, 83, 83);
+  }
+  .badge.in-progress {
+    background-color: rgb(51, 137, 207);
+  }
+  .badge.closed {
+    background-color: rgb(161, 159, 159);
+  }
+  .badge.resolved{
+    background-color: rgb(4, 122, 20);
+  }
+  
+  
+  .tooltip-inner {
+    max-width: 10px !important;
+    text-align: left !important; 
+    padding: 8px 12px !important; 
+  }
+
+
+  .datepicker-container {
+    display: flex;
+    justify-content: space-between;
+    width: 234px;  
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 3px; /* Add padding to make room for the border */
+  }
+
+  .is-invalid {
+    border: 1px solid red;
+  }
+  
+  .datepicker-input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  .datepicker-input {
+    width: 100%;
+    padding-right: 30px; /* Add padding to the right to make room for the icon */
+    border: none; 
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: border-color 0.3s;  
+  }
+  
+  .datepicker-input:focus {
+    border-color: #007bff;  
+    outline: none; 
+  }
+  
+  .calendar-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Ensure the icon doesn't interfere with input interaction */
+    font-size: 16px;
+    color: #12263f; /* Adjust the color as needed */
+  }
+  
+  .datepicker {
+    position: absolute;
+    min-width: 700px !important; 
+  }
+  
+  .datepicker .calendar-table {
+    width: auto !important;
+  }
+  
+  ::ng-deep .md-drppicker {
+    min-width: 600px;
+  }
+  
+  ::ng-deep .md-drppicker {
+    font-size: 12px; 
+  }
+  
+  ::ng-deep .md-drppicker .calendar,
+  ::ng-deep .md-drppicker .calendar-table,
+  ::ng-deep .md-drppicker .calendar-table table,
+  ::ng-deep .md-drppicker .calendar-table th,
+  ::ng-deep .md-drppicker .calendar-table td {
+    font-size: inherit; 
+  }
+  
+  ::ng-deep .md-drppicker .btn {
+    font-size: 12px; 
+  } 
+  
+
+  
+  
+  .card-head {
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+  
+  .row {
+    margin-bottom: 10px;
+  }
+  
+  .form-label {
+    font-weight: 600;
+  }
+  
+  .form-control {
+    width: calc(100% - 12px);
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    outline: none;
+    box-shadow: none;
+    font-size: small;
+  }
+
+  .form-select {
+    width: calc(100% - 12px);
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    outline: none;
+    box-shadow: none;
+    font-size: small;
+  }
+  
+  button {
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    border:1px solid
+  }
+  
+
+  .close-form{
+    text-align: end;
+    cursor: pointer;
+  }
+
+  .close-icon{
+    font-size: 30px;
+    font-weight: 200;
+    background-color: rgb(231, 231, 230);
+    border-radius: 50%;
+  }
+
+  .empty-input{
+    border-color: red;
+  }
+  
+  .description-content{
+    padding: 5px;
+    max-height: 300px;
+    overflow-y: auto;
+  }

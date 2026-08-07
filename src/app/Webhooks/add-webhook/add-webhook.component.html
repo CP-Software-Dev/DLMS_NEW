@@ -1,0 +1,119 @@
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-head">
+                <div class="row">
+                    <div class="col">
+                        <h5>Webhook For Order Booking</h5>
+                    </div>
+                    <div class="col text-end">
+                        <button class="btn btn-sm btn-outline-dark btn-sm me-3" (click)="navigateToWebhook()">
+                            <i class="ri-arrow-left-circle-line"></i> Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 mb-2">
+
+                        <label for="stop-tracking" class="form-label">User
+                            <span class="text-danger font-weight-bold">*</span>
+                        </label>
+                        <select class="form-select form-select-sm mb-2" id="sellerName"
+                            [(ngModel)]="webhookObj.sellerId" [disabled]="sellerId > 0">
+                            <option value="" selected>Select User</option>
+                            <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
+                        </select>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label for="api-key" class="form-label">Name
+                            <span class="text-danger font-weight-bold">*</span>
+                        </label>
+                        <input type="text" [(ngModel)]="webhookObj.name" class="form-control form-control-sm"
+                            id="webhook-name" placeholder="Webhook Name" maxlength="50"
+                            (keypress)="allowOnlyAlphanumeric($event)">
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label for="api-key" class="form-label">Secret Token
+                        </label>
+                        <input type="text" [(ngModel)]="webhookObj.token" class="form-control form-control-sm"
+                            id="token" placeholder="Webhook Secret">
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label for="api-key" class="form-label">Delivery URL
+                            <span class="text-danger font-weight-bold">*</span>
+                        </label>
+                        <input type="text" [(ngModel)]="webhookObj.url" class="form-control form-control-sm" id="url"
+                            placeholder="Webhook URL">
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label for="stop-tracking" class="form-label">Status</label>
+                        <select class="form-select form-select-sm mb-2" id="status" [(ngModel)]="webhookObj.isActive">
+                            <option selected value="1">Active</option>
+                            <option value="0">Disabled</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-sm btn-primary" (click)="onSubmit()">Submit</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body" style="font-size: 14px;">
+
+                <div class="form-row">
+                    <p><b>Webhooks are event notifications sent to URLs of your choice. Use these to receive real time
+                            shipment updates in your system.</b></p>
+                </div>
+                <div class="form-row">
+                    <p><b>Name: </b> Used to easily identify webhook.</p>
+                </div>
+                <div class="form-row">
+                    <p><b>Delivery URL: </b>URL where the webhook payload is delivered.</p>
+                </div>
+                <div class="form-row">
+                    <p><b>Secret: </b>The Secret Key generates a hash of the delivered webhook and is provided in the
+                        request headers. No hash generated if left blank.</p>
+                </div>
+                <div class="form-row">
+                    <p><b>Status: </b>Set to Active (delivers payload), Paused (does not deliver), or Disabled (does not
+                        deliver due delivery failures).</p>
+                </div>
+                <div class="form-row">
+                    <p><b>Timeout: </b>System has a five second timeout period. It waits five seconds for a response to
+                        each request to a webhook. If there is no response, or an error is returned, then request is
+                        marked as failed. If there are 100 consecutive failures, then the webhook automatically get
+                        disabled.</p>
+                </div>
+                <div class="form-row">
+                    <p><b>Webhook Response: </b>Your webhook acknowledges that it received data by sending a 200 OK
+                        response. Any response outside of the 200 range, including 3XX HTTP redirection codes, indicates
+                        that you did not receive the webhook. System does not follow redirects for webhook notifications
+                        and considers them to be an error response.</p>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <p><b>Sample Payload: </b></p>
+                    </div>
+                </div>
+                <div class="form-row " style="overflow: hidden;">
+                    <div class="col-12">
+                        <!-- <span>
+                            <pre style="color: #e83e8c; white-space: pre-wrap;">{{ '{"status":true,"order_number":"34066","card_id":"4832 XXXX XX00 2559","order_status":"ready to dispatch","awb_number":"81201990730","ship_status":"waiting for pickup","kit_number":"R92701405","courier_name":"Blue Dart"}' }}</pre>
+                        </span> -->
+                        <span>
+                            <pre
+                                style="color: #e83e8c; white-space: pre-wrap;">{{ '{"status": true, "order_number": "34066", "card_id": "4832 XXXX XX00 2559", "order_status": "ready to dispatch", "awb_number": "81201990730", "ship_status": "waiting for pickup", "kit_number": "R92701405", "courier_name": "Blue Dart" }' }}</pre>
+                        </span>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>

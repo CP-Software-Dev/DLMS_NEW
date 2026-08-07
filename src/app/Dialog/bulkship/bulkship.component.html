@@ -1,0 +1,135 @@
+<div class="loader-overlay" *ngIf="isLoading">
+  <div class="loader"></div>
+</div>
+
+<div class="card" [@fadeSlideInOut]>
+  <div class="card-head">
+    <nav style="margin-top: 10px">
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button [class.active]="selectedTab === 'Manual'" id="Manual-tab" (click)="onTabChange('Manual')"
+          class="nav-link active" id="Manual-tab" data-bs-toggle="tab" data-bs-target="#Manual" type="button" role="tab"
+          aria-controls="Manual" aria-selected="true">
+          Manual
+        </button>
+        <button [class.active]="selectedTab === 'Auto'" id="Auto-tab" (click)="onTabChange('Auto')" class="nav-link"
+          id="Auto-tab" data-bs-toggle="tab" data-bs-target="#Auto" type="button" role="tab"
+          aria-controls="Auto-profile" aria-selected="false">
+          Auto
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <div class="card-body" style="overflow-y: auto">
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="Manual" role="tabpanel" aria-labelledby="Manual-tab">
+        <div class="select-container">
+          <div class="row">
+            <div class="col-6">
+              <label for="Bank">Bank</label>
+              <select class="form-select form-select-sm" (change)="onBankChange($event)">
+                <option value="" selected disabled>Select Bank</option>
+                <option *ngFor="let bank of banks" id="company" [value]="bank.id">
+                  {{ bank.name }}
+                </option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label for="pickupWarehouse">Pickup Warehouse</label>
+
+              <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="bulkshipObj.warehouseID">
+                <option value="0" selected disabled>Select Warehouse</option>
+                <option *ngFor="let courier of warehouses" [value]="courier.id">
+                  {{ courier.warehouseName }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="cards-container">
+          <span>
+            <h5>Select Courier Partner</h5>
+          </span>
+
+          <div class="radio-cards mt-3" *ngIf="courierData.length > 0">
+            <label *ngFor="let courier of courierData">
+              <input type="radio" [value]="courier.courierId" [(ngModel)]="bulkshipObj.courierID" />
+              <span class="radio-card">{{ courier.name }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="Auto" role="tabpanel" aria-labelledby="Auto-tab">
+        <div class="select-container">
+          <div class="row">
+
+            <div class="col-6">
+              <label for="Bank">Bank</label>
+              <select class="form-select form-select-sm" (change)="onBankChange1($event)">
+                <option value="" selected disabled>Select Bank</option>
+                <option *ngFor="let bank of banks" id="company" [value]="bank.id">
+                  {{ bank.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-6">
+              <label for="pickupWarehouse">Pickup Warehouse</label>
+
+              <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="warehouseID">
+                <option value="0" selected disabled>Select Warehouse</option>
+                <option *ngFor="let warehouse of warehouses" [value]="warehouse.id">
+                  {{ warehouse.warehouseName }}
+                </option>
+              </select>
+            </div>
+
+
+          </div>
+        </div>
+        <hr />
+        <div class="cards-container">
+          <span>
+            <h5>Allotted Courier Partner</h5>
+          </span>
+
+          <div class="cards-container mt-3" *ngIf="courierData1.length > 0">
+            <div class="radio-cards">
+              <label *ngFor="let courier of courierData1; let i = index">
+                <input type="radio" [value]="courier" [(ngModel)]="bulkshipObj.courierID" disabled />
+                <div class="courier">
+                  <span class="courier-card">{{ courier }}
+                    <span class="priority-number">{{ i + 1 }}</span></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <div class="d-flex justify-content-end align-items-center gap-2">
+
+      <button *ngIf="selectedTab === 'Manual'" class="btn btn-primary btn-sm custom-btn" (click)="manualShip()">
+        <b>Manual Ship</b>
+      </button>
+
+      <button *ngIf="selectedTab === 'Manual' && selectedBankId === 15" class="btn btn-primary btn-sm auto-btn"
+        (click)="onManualIPAwb()">
+        <b>Manual IP AWB</b>
+      </button>
+
+      <button *ngIf="selectedTab === 'Auto'" class="btn btn-primary btn-sm auto-btn" (click)="autoShip()">
+        <b>Auto Ship</b>
+      </button>
+
+      <button class="btn btn-danger btn-sm custom-btn" (click)="closeDialog()">
+        <b>Close</b>
+      </button>
+
+    </div>
+  </div>
+</div>

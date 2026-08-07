@@ -1,0 +1,129 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    background-color: #fff;
+    margin: 0.8rem 0 0.8rem 0;
+    box-shadow: 0 .25rem .5rem #e6edef;
+
+    .card-head {
+        padding: 1rem 1.5rem;
+        border-bottom: none;
+        font-size: 1rem;
+
+        .btn-outline-dark{
+            box-shadow: none;
+            outline: none;
+            font-size: small; 
+            padding: 0.1rem 0.35rem; 
+        }
+        
+
+        .form {
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: -5px -5px 5px rgba(109, 109, 109, 0.2),
+                0 5px 5px rgba(109, 109, 109, 0.2),
+                -5px 5px 5px rgba(109, 109, 109, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .form-label {
+            font-size: small;
+        }
+
+        .form-control-sm {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            box-shadow: none;
+        }
+
+        .form-select-sm {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+
+        .form-select:focus , .form-control:focus {
+            border-color: #747575;
+            box-shadow: none;
+            outline: none;
+        }
+    }
+
+    .example-form-field {
+        width: 105%;
+        border-radius: 6px;
+        font-size: small;
+        margin-left: -10px;
+        margin-bottom: -30px;
+    }
+
+    .example-form-field:focus {
+        border-color: #747575;
+    }
+
+    ::ng-deep .mdc-notched-outline {
+        padding: 11px;
+    }
+
+
+    ::ng-deep .mat-mdc-icon-button {
+        pointer-events: none;
+    }
+
+    .card-body {
+        padding: 1rem 1.5rem;
+
+        .btn-outline-dark{
+            box-shadow: none;
+            outline: none;
+        }
+        
+        .btn {
+            padding: 0.2rem 0.25rem;
+            box-shadow: 0 0 10px rgba(117, 117, 117, 0.5);
+        }
+
+        .btn.active {
+            background-color: #12263f;
+            border: #12263f;
+            color: #fff;
+        }
+
+
+        .table th {
+            font-size: small;
+            font-weight: 700;
+            background-color: #f9fbfd;
+            vertical-align: middle;
+        }
+
+
+        .table td {
+            font-size: smaller;
+            font-weight: 400;
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd; 
+            vertical-align: middle;
+        }
+
+        .nav-link {
+            color: black;
+        }
+
+    }
+}
+
+@media (max-width: 872px) {
+    .card-body {
+        overflow-x: scroll;
+    }
+
+    .card-body .col-md-2.btn {
+        width: 100%;
+        margin: 0 10px 5px;
+    }
+
+}

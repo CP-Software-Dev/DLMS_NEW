@@ -1,0 +1,56 @@
+<div class="card">
+    <div class="card-body ">
+
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" [class.active]="activeTab === 'Delivery'"
+                    (click)="activeTab = 'Delivery'" id="Delivery-tab" data-bs-toggle="tab" data-bs-target="#Delivery"
+                    type="button" role="tab" aria-controls="Delivery" aria-selected="true">Delivery</button>
+
+                <button class="nav-link" [class.active]="activeTab === 'Setting'" (click)="activeTab = 'Setting'"
+                    id="Setting-tab" data-bs-toggle="tab" data-bs-target="#Setting" type="button" role="tab"
+                    aria-controls="Setting-profile" aria-selected="false">Setting</button>
+
+                <button class="nav-link" [class.active]="activeTab === 'Pincode'" (click)="activeTab = 'Pincode'"
+                    id="Pincode-tab" data-bs-toggle="tab" data-bs-target="#Pincode" type="button" role="tab"
+                    aria-controls="Pincode" aria-selected="false">Pincode</button>
+
+                <button class="nav-link" [class.active]="activeTab === 'Zone'" (click)="activeTab = 'Zone'"
+                    id="Zone-tab" data-bs-toggle="tab" data-bs-target="#Zone" type="button" role="tab"
+                    aria-controls="Zone" aria-selected="false">Zone</button>
+            </div>
+
+
+        </nav>
+
+                      <a type="submit" class="btn btn-outline-dark mt-2 btn-sm" routerLink = "/admin/couriers/add"> <i
+                    class="ri-arrow-left-circle-line"></i>
+                Back</a>  
+
+          
+
+        <div class="tab-content" id="nav-tabContent">
+
+            <div class="tab-pane fade show active" id="Delivery" role="tabpanel" aria-labelledby="Delivery-tab">
+                <app-courier-delivery></app-courier-delivery>
+            </div>
+
+            <div class="tab-pane fade" id="Setting" role="tabpanel" aria-labelledby="Setting-tab">
+                <app-courier-settings></app-courier-settings>
+            </div>
+
+            <div class="tab-pane fade" id="Pincode" role="tabpanel" aria-labelledby="Pincode-tab">
+                <!-- Content for Pincode tab -->
+            </div>
+
+            <div class="tab-pane fade" id="Zone" role="tabpanel" aria-labelledby="Zone-tab">
+                <!-- Content for Zone tab -->
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+</div>

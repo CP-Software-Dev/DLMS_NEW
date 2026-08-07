@@ -1,0 +1,29 @@
+<div class="paginator">
+    <div class="left-section">
+        <select (change)="onPageSizeChange($event)">
+            <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+        </select>
+        <div class="pagination-info">
+            Showing {{ startIndex + 1 }} to {{ endIndex }} of {{ length }} entries
+        </div>
+    </div>
+    <div class="pagination-buttons" *ngIf="shouldShowPagination">
+        <button (click)="goToPage(pageIndex - 1)" style="text-align: center;" [disabled]="pageIndex === 0">
+            <i class="ri-arrow-left-s-line" style="font-size: 15px;"></i> Prev
+        </button>
+        <ng-container *ngFor="let page of pages">
+            <span (click)="goToPage(page)" [class.active]="page === pageIndex">
+                {{ page + 1 }}
+            </span>
+        </ng-container>
+        <button (click)="goToPage(pageIndex + 1)" style="text-align: center;" [disabled]="pageIndex >= totalPages - 1">
+            Next <i class="ri-arrow-right-s-line" style="font-size: 15px;"></i>
+        </button>
+    </div>
+
+    <div class="page-input"  *ngIf="shouldShowPagination">
+        <input type="number" [(ngModel)]="inputPageNumber" min="1" max="{{ totalPages }}"  [maxlength]="maxDigits(totalPages)" pattern="\d{1,{{ maxDigits(totalPages) }}}" placeholder="" (input)="validateInput($event)">
+        <button (click)="goToInputPage()">Jump to Page</button>
+        <span style="margin-left: 5px;">of {{ totalPages }} pages</span>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+<div class="card" [@fadeSlideInOut]>
+ 
+    <div class="card-head">
+       
+        <div class="row">
+            <div class="col">
+                <h3>Update Priority</h3>
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+ 
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Rule Name</label>
+                <input type="text" name="rulename" class="form-control" placeholder="Enter Rule Name" id="name" disabled [(ngModel)]="name">
+            </div>
+            <div class="col">
+                <label class="form-label">Institution</label>
+                <input type="text" name="institutiuon" class="form-control" placeholder="Enter Institution" id="institutiuon" disabled [(ngModel)]="institution">    
+            </div>
+            
+        </div>
+       
+        <div class="row">
+
+            <div class="col-sm-6">
+                <label for="courier" class="form-label">Priority 1</label>
+                <select class="form-select form-select-sm mb-2" name="firstPriority" id="sellerName"
+                    [(ngModel)]="firstPriorityId">
+                    <option value="" selected disabled>Select Courier</option>
+                    <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-sm-6">
+                <label for="courier" class="form-label">Priority 2</label>
+                <select class="form-select form-select-sm mb-2" name="secondPriority" id="sellerName"
+                    [(ngModel)]="secondPriorityId">
+                    <option value="" selected disabled>Select Courier</option>
+                    <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-sm-6">
+                <label for="courier" class="form-label">Priority 3</label>
+                <select class="form-select form-select-sm mb-2" name="thirdPriority" id="sellerName"
+                    [(ngModel)]="thirdPriorityId">
+                    <option value="" selected disabled>Select Courier</option>
+                    <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-2">
+                <button class="btn btn-outline-danger " (click)="closeDialog()">Close</button>
+            </div>
+           
+            <div class="col-2">
+                <button class="btn btn-primary" (click)="UpdatePriority()">Update</button>
+            </div>
+        </div>   
+    </div>
+</div>

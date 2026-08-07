@@ -1,0 +1,18 @@
+export class Usermodal{
+    id: string = ""
+    uid: string =""
+    username: string =""
+    firstName: string =""
+    lastName: string =""
+    emailAddress: string =""
+    password: string =""
+    passwordSalt: string =""
+    contact: string =""
+    roleId: string =""
+    companyId: string =""
+    createdAt: string =""
+    modifiedAt: string =""
+    isActive: string =""
+    companyName: string =""
+    role:string =""
+}

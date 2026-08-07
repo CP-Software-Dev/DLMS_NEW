@@ -1,0 +1,106 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    background-color: #fff;
+    margin: 0.8rem 0 0.8rem 0;
+    border: none;
+
+    .card-head {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+
+        .btn-outline-dark {
+            box-shadow: none;
+            outline: none;
+            font-size: small;
+            padding: 0.1rem 0.35rem;
+        }
+    }
+
+    .card-body {
+
+
+
+        .courier-card {
+            box-shadow: #d4d3d340 0px 54px 55px,
+                #c5c4c41f 0px -12px 30px,
+                #d4d3d340 0px 4px 6px,
+                #d4d3d340 0px 12px 13px,
+                #d4d3d340 0px -3px 5px;
+            border-radius: 8px;
+            transition: box-shadow 0.3s ease;
+            min-height: 250px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+
+        .courier-card:hover {
+            box-shadow: 0 4px 6px rgba(148, 31, 31, 0.1);
+        }
+
+        .courier-card .card-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150px;
+            /* Fixed height for the image container */
+            padding: 10px;
+            /* Adjust padding as necessary */
+        }
+
+
+        .courier-card img {
+            width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            /* Ensure images maintain their aspect ratio */
+        }
+
+        .courier-card .card-body {
+            padding: 1rem;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            /* border-bottom: 1px solid #dee2e6; */
+        }
+
+        .courier-card .card-footer {
+            padding: 1.2rem;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .courier-card .card-footer .integrate , .btn {
+            background-color: #fff;
+        }
+
+        .courier-card .card-footer .card-text {
+            color: black;
+        }
+
+
+        .courier-card .card-footer .integrate:hover {
+            background-color: rgb(37, 37, 37);
+        }
+
+    }
+
+}
+
+@media (max-width: 872px) {
+    .card-body {
+        overflow-x: scroll;
+    }
+
+    .card-body .col-md-2.btn {
+        width: 100%;
+        margin: 0 10px 5px;
+    }
+
+}

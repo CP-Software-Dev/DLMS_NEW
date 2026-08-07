@@ -1,0 +1,53 @@
+<div class="card">
+    <div class="card-head">
+        <div class="row">
+            <div class="col">
+                <h5>NDR : Email Settings</h5>
+            </div>
+            <div class="col text-end">
+                <button class="btn btn-sm btn-outline-dark btn-sm me-3" (click)="navigateToSettings()" onclick="makeActive(this)">
+                    <i class="ri-arrow-left-circle-line"></i> Back
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <label for="courierName" class="form-label">Courier Name</label>
+                <select class="form-select form-select-sm mb-3" id="courierName" >
+                    <option selected>Select Courier</option>      
+                    <option value="1">Courier 1</option>
+                    <option value="2">Courier 2</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <label for="emailCount" class="form-label">No. Of Emails <span style="font-weight: normal;">(per day)</span></label>
+                <input type="number" class="form-control form-control-sm mb-3" min="0"  id="emailcount" placeholder="">
+            </div>
+            <div class="col-4">
+                <label for="timings" class="form-label">Enter Timings <span style="font-weight: normal;">(12 hrs format)</span> </label>
+                <input type="text" class="form-control form-control-sm mb-3" id="timings" placeholder="">
+            </div>
+            <div class="col-12">
+                <label for="sendToEmail" class="form-label">Send to Email:</label>
+                <input type="text" class="form-control form-control-sm mb-3" id="sendToEmail" placeholder="Send to Email (,) comma separated">
+            </div>
+            <div class="col-12">
+                <label for="ccEmail" class="form-label">CC Email:</label>
+                <input type="text" class="form-control form-control-sm mb-3" id="ccEmail" placeholder="CC Email (,) comma separated">
+            </div>
+            <div class="col-12">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select form-select-sm mb-4" id="status">
+                    <option selected>Select Option</option>
+                    <option value="enable">Enable</option>
+                    <option value="disable">Disable</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-sm btn-primary" (click) = "submitForm()" >Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,113 @@
+<div class="card p-4" style=" border: none;">
+
+
+    <div class="row">
+        <div class="col-5">
+            <div class="row mb-3">
+                <div class="col-md-6 col-sm-6">
+                    <h5><i class="ri-checkbox-blank-fill"
+                            style="border: 2px solid black; margin-right: 10px;"></i>Shipments Tracking</h5>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row" *ngFor="let info of details" style="margin-bottom: 16px;">
+        <div class="col-md-5 col-sm-5">
+            <div class="details-card card">
+                <div class="card-header">
+                    <span>Order Details</span>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <span class="label">Order Placed On:</span>
+                        <span class="value">{{info.date}}</span>
+                    </div>
+                    <hr>
+                    <div class="info-row">
+                        <span class="label">Courier:</span>
+                        <span class="value">{{info.courier}}</span>
+                    </div>
+                    <hr>
+                    <!-- <div class="info-row">
+                          <span class="label">Tracking ID:</span>
+                          <span class="value">{{info.awb}}</span>
+                        </div> -->
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <div class="info-row">
+                            <span class="label">Tracking ID:</span>
+                            <a class="value" style="cursor: pointer; color: #0b72c7;"
+                                (click)="navigateToTracking(info.awb)">
+                                {{ info.awb }}
+                            </a>
+                        </div >
+                        <div class="info-row">
+                            <ng-container *ngIf="info.oldAWB">
+                               <span class="label">OLD Tracking ID:</span>
+                                <a class="value" style="cursor: pointer; color: #0b72c7;"
+                                    (click)="navigateToTracking(info.oldAWB)">
+                                    {{info.oldAWB}}
+                                </a>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="info-row">
+                        <span class="label">Order ID:</span>
+                        <a class="value" style="cursor: pointer; color: #0b72c7;"
+                            (click)="navigateToOrderDetail(info.orderID)">{{info.orderID}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-7">
+            <div class="tracking-card card" style="max-height: 90vh; min-height: 275px">
+                <div class="card-header">
+                    <div class="row d-flex">
+                        <div class="col">
+                            <span>Delivery Status ({{statusAWB}})</span>
+                        </div>
+                        <div class="col d-flex align-items-center justify-content-end">
+                            <span class="badge badge-success">{{ info.shipmentStatus }}</span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-body" style="overflow-y: auto;">
+
+                    <div *ngIf="statusdata && statusdata.length > 0; else noStatus">
+                        <div *ngFor="let status of statusdata; let last = last;">
+                            <div class="status-row">
+                                <div class="circle-container">
+                                    <div class="circle">
+                                        <i class="ri-truck-line"></i>
+                                    </div>
+                                    <div [ngClass]="{'line': true, 'hidden-line': last}"></div>
+                                </div>
+                                <div class="status-info">
+                                    <span class="status-name">{{ status.scanType === 'RT' ? 'RTO ' + status.scan :
+                                        status.scan }}</span>
+                                    <span class="status-date">{{ status.statusDateTime }}</span>
+                                    <span class="status-instruction">{{ status.instructions }}</span>
+                                    <span class="status-location"><i class="ri-map-pin-line"></i> {{
+                                        status.scannedLocation }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #noStatus>
+                        <div class="no-status-message">No status available</div>
+                    </ng-template>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

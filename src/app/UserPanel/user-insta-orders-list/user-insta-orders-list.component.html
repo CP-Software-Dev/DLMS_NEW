@@ -1,0 +1,123 @@
+<div class="card">
+    <div class="card-head">
+
+        <!-- Card-header elements -->
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <h5 class="mb-0 me-4"><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Insta
+                    Orders
+                </h5>
+            </div>
+            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+                <button class="btn btn-outline-dark btn-sm me-3" (click)=" toggleFiltersForm()">
+                    <i [class]="buttonIcon"></i> {{ buttonText }}
+                </button>
+            </div>
+        </div>
+
+        <div class="form" *ngIf="showFiltersForm" style="margin-top: 30px;">
+
+
+            <div class="row">
+
+                <!-- Phone -->
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="shippingPhone" class="form-label">Name</label>
+                        <input type="text" class="form-control form-control-sm" id="phone" [(ngModel)]="name"
+                            placeholder="Shipping Phone here">
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="button-grp mb-2 d-flex justify-content-start">
+                        <button class="btn btn-outline-dark btn-sm me-3" type="button"
+                            style="background-color: rgb(5, 114, 209); font-size: small; color: white;"
+                            (click)="applyFilters()">Apply</button>
+                        <button class="btn btn-danger btn-sm me-3" style="font-size: small; box-shadow: none;"
+                            (click)="clearFilters()">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <!-- Status Filter Buttons  -->
+
+
+            <!-- Change Status NAd AWB Dailog  -->
+
+            <app-loader [loading]="loading"></app-loader>
+
+
+            <div class="table-row" *ngIf="!loading">
+                <table class="table">
+                    <thead class="table-head-hover">
+                        <tr>
+                            <th scope="col">Order</th>
+                            <th scope="col">Card ID</th>
+                            <th scope="col">Kit Number</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Bank</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Zip Code</th>
+                            <th scope="col">Courier</th>
+                            <th scope="col">AWB Number<br><span style="font-size: 12px; font-weight: 500;">
+                                    <i class="ri-corner-down-right-line"></i>
+                                    Shipment Status
+                                </span></th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let order of paginatedOrders">
+                            <td>{{ order.orderID }}</td>
+                            <td>{{ order.cardID }}</td>
+                            <td>{{ order.kitNumber}}</td>
+                            <td>{{ order.date}}</td>
+                            <td>{{ order.company}}</td>
+                            <td>
+                                <span [matTooltip]="getAddressTooltip(order)" matTooltipPosition="right"
+                                    matTooltipClass="multiline-tooltip">
+                                    <!-- {{ order.customer.length > 25 ? (order.customer | slice:0:19) + '...' :
+                                    order.customer }} -->
+                                    {{ order.customer.trim().length > 25 ? (order.customer.trim() | slice: 0: 19) +
+                                    '...' : order.customer.trim() }}
+                                </span>
+                            </td>
+                            <td>{{ order.pincode }}</td>
+                            <td>{{ order.courier }}</td>
+                            <td><span style="cursor: pointer; color:#0b72c7
+                                        ; font-weight: 700;" (click)="navigateToAwbStatus(order.awb)">{{ order.awb
+                                    }}</span><br><span *ngIf="order.shipmentStatus && order.awb">
+                                    <i class="ri-corner-down-right-line"></i>
+                                    {{ order.shipmentStatus }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn statusbtn btn-sm" style="min-width: 80px;">{{
+                                    order.orderStatus }}</button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <app-paginator [length]="totalOrders" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100 , 500 , 1000]"
+            [pageIndex]="pageIndex" (page)="handlePageEvent($event)">
+        </app-paginator>
+
+    </div>
+</div>

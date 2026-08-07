@@ -1,0 +1,58 @@
+<div class="card" [@fadeSlideInOut]>
+    <div class="card-head">
+        <div class="row">
+            <div class="col">
+                Bulk Orders Upload
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row mb-3">
+            <div class="col ">
+                <label for="sellerName" class="form-label" style="font-weight: 600;">Company Name</label>
+                <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="sellerId"
+                    (change)="onSellerChange()">
+                    <option value="" selected>Select Seller</option>
+                    <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-1" *ngIf="showLotId">
+            <div class="col">
+                <label class="form-label fw-semibold">Lot ID</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="lotId"
+                    placeholder="Enter Lot ID" />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <label class="form-label fw-semibold" style="visibility: hidden ;">Lot ID</label>
+                <div class="input-group">
+                    <input class="form-control" type="text" [value]="selectedFileName" readonly>
+                    <input #fileInput type="file" style="display:none;" (change)="onFileSelected($event)">
+                    <button class="btn btn-browse" type="button" (click)="fileInput.click()">Select File</button>
+                </div>
+                <div *ngIf="fileInvalid" class="text-danger mt-2">Invalid file format. Please select a .csv file.</div>
+            </div>
+        </div>
+
+
+        <div class="row justify-content-end">
+            <button class="col-2 btn btn-outline-success btn-sm" (click)="uploadFile()"
+                [disabled]="!fileSelected"><b>Upload</b></button>
+            <button class="col-2 btn btn-outline-danger btn-sm" (click)="closeDialog()"><b>Close</b></button>
+        </div>
+        <div class="row download-csv">
+
+            <a href="/assets/File_format/Sample_Order.csv" download="Sample_Orders.csv"><i
+                    class="ri-download-2-fill"></i> Download CSV Format</a>
+        </div>
+    </div>
+</div>

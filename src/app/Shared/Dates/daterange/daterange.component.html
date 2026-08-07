@@ -1,0 +1,32 @@
+<!-- <div class="daterange-container">
+  <input type="text"
+    class="daterange-input"
+    ngxDaterangepickerMd
+    [(ngModel)]="selected"
+    [showCustomRangeLabel]="true"
+    [alwaysShowCalendars]="true"
+    [ranges]="ranges"
+    [linkedCalendars]="true"
+    [isInvalidDate]="isInvalidDate"
+    [showClearButton]="false"
+    placeholder="Select please..." />
+</div> -->
+<div class="daterange-container" [ngClass]="{'report-page': isReportPage}">
+  <div class="daterange-input-wrapper">
+    <input type="text"
+      class="daterange-input"
+      ngxDaterangepickerMd
+      [(ngModel)]="selected"
+      [showCustomRangeLabel]="true"
+      [alwaysShowCalendars]="true"
+      [ranges]="ranges"
+      [linkedCalendars]="true"
+      [isInvalidDate]="isInvalidDate"
+      [showClearButton]="false"
+      (change)="onDateRangeChange(selected)" 
+      placeholder="Select please..." />
+    <span class="calendar-icon" style="font-size: 16px; cursor: pointer;">
+      <i class="ri-calendar-line" aria-hidden="true"></i>
+    </span>
+  </div>
+</div>

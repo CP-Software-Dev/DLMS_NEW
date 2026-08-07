@@ -1,0 +1,55 @@
+<div class="card" [@fadeSlideInOut]>
+
+    <div class="card-head">
+
+        <div class="row">
+            <div class="col-10">
+                <h3>Add Sales Person</h3>
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Full Name</label>
+                <input type="text" [(ngModel)]="Name" name="firstName" class="form-control "
+                    placeholder="Enter Your Name" id="fname" autocomplete="off" maxlength="30" (keypress)="allowOnlyAlphanumeric($event)">
+                <span *ngIf="invalidname" class="invalid-email text-danger">
+                    Only Alphapets and space is allowed.
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Email</label>
+                <input type="email" [(ngModel)]="email" name="emailAddress" class="form-control "
+                    placeholder="Enter Email id" id="email" autocomplete="off" maxlength="50">
+                <span *ngIf="invalidemail" class="invalid-email text-danger" >
+                    Invalid Email.
+                </span>
+            </div>
+            <div class="col">
+                <label class="form-label">Contact No.</label>
+                <input type="text" [(ngModel)]="contact" name="contact" class="form-control "
+                    placeholder="Enter Your Number" id="phone" autocomplete="off" maxlength="15" (keypress)="allowOnlyNumeric($event)">
+                <span *ngIf="invalidphone" class="invalid-email text-danger">
+                    Invalid Contact.
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <button class="btn btn-outline-danger " (click)="closeDialog()">Close</button>
+            </div>
+
+            <div class="col-2">
+                <button class="btn btn-primary " (click)="user()">Save</button>
+            </div>
+        </div>
+
+    </div>
+</div>

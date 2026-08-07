@@ -1,0 +1,84 @@
+<div class="card" [@fadeSlideInOut]>
+ 
+    <div class="card-head">
+       
+        <div class="row">
+            <div class="col-7">
+                <h3>Edit Order Details</h3>
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+ 
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Customer Name</label>
+                <input type="text" [(ngModel)] = "name" name="name" class="form-control"  id="name" disabled>
+            </div>
+            <div class="col">
+                <label class="form-label">Courier</label>
+                <input type="text" [(ngModel)] = "courier" name="courier" class="form-control"  id="courier" disabled>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Address 1</label>
+                <textarea type="text" [(ngModel)] = "address1" name="address1" class="form-control"  id="address1" autocomplete="off"> </textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Address 2</label>
+                <textarea type="text" [(ngModel)] = "address2" name="address2" class="form-control"  id="address2" autocomplete="off"> </textarea>
+            </div>
+        </div>
+        <div *ngIf="isSubmitted && !address1 && !address2" class="text-danger">
+            Please fill at least one address.
+        </div>
+
+        <div class="row">
+           
+            <div class="col">
+                <label class="form-label">City<font color="red">*</font></label>
+                <input type="text" [(ngModel)] = "city" name="city" class="form-control"  id="city" autocomplete="off" required>
+                <div *ngIf="!city && isSubmitted" class="text-danger">City is required</div>
+            </div>
+            <div class="col">
+                <label class="form-label">State<font color="red">*</font></label>
+                <input type="text" [(ngModel)] = "state" name="state" class="form-control"  id="state" autocomplete="off" required>
+                <div *ngIf="!state && isSubmitted" class="text-danger">State is required</div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col">
+                <label class="form-label">Pincode<font color="red">*</font></label>
+                <input type="text" [(ngModel)] = "pincode" name="pincode" class="form-control"  id="pincode" autocomplete="off" maxlength="6" (keypress)="allowOnlyNumeric($event)">
+                <div *ngIf="!pincode && isSubmitted" class="text-danger">Valid pincode is required</div>
+                <div *ngIf="isInvalidPincode" class="text-danger">Pincode must be of 6 digits.</div>
+            </div>
+            <div class="col">
+                <label class="form-label">Contact<font color="red">*</font></label>
+                <input type="text" [(ngModel)]= "contact"  name="contact" class="form-control"  id="contact" autocomplete="off" maxlength="15" (keypress)="allowOnlyNumeric($event)" required>
+                <div *ngIf="!contact && isSubmitted" class="text-danger">Contact is required</div>
+                <div *ngIf="isInvalidPhone" class="text-danger">Phone No. must be of valid 10 digits.</div>
+            </div>
+        </div>
+ 
+        <div class="row">
+            <div class="col-2">
+                <button class="btn btn-outline-danger " (click)="closeDialog()">Close</button>
+            </div>
+           
+            <div class="col-2">
+                <button class="btn btn-primary" (click)="UpdateDetails()">Save</button>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,110 @@
+<div class="card">
+    <div class="card-head">
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <h5>
+                    <i class="ri-checkbox-blank-fill icon-box"></i>
+                    Update Address
+                </h5>
+            </div>
+            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <!-- Title -->
+        <h6 class="fw-semibold mb-1">Search Order</h6>
+
+        <!-- Subtitle -->
+        <p class="text-muted mb-3" style="font-size: 13px;">
+            Enter Order ID or Kit Number to find and update the address
+        </p>
+
+        <!-- Search Input + Button -->
+        <div class="d-flex gap-2 mb-3">
+            <input type="text" class="form-control" [(ngModel)]="searchText"
+                placeholder="Enter Order ID (e.g., 100000000001) or Kit Number (e.g., KIT-2024-0001)" />
+
+            <button class="btn btn-primary d-flex align-items-center gap-1 px-3" (click)="searchOrder()">
+                <i class="ri-search-line"></i>
+                Search
+            </button>
+
+            <button class="btn btn-secondary d-flex align-items-center gap-1 px-3" (click)="clearSearch()">
+                <i class="ri-close-line"></i>
+                Clear
+            </button>
+        </div>
+
+
+
+        <!-- DEFAULT / EMPTY STATE -->
+        <div class="empty-state" *ngIf="!isSearched">
+
+            <i class="ri-search-line empty-icon"></i>
+
+            <h6>No orders loaded yet</h6>
+            <p>Search by Order ID or Kit Number</p>
+
+        </div>
+
+
+        <!-- NO DATA FOUND -->
+        <div class="empty-state" *ngIf="isSearched && orders.length === 0">
+
+            <i class="ri-file-search-line empty-icon"></i>
+
+            <h6>No matching orders found</h6>
+            <p>Try a different Order ID or Kit Number</p>
+
+        </div>
+
+
+        <!-- RESULTS TABLE -->
+        <div class="results-container" *ngIf="orders.length > 0">
+
+            <div class="results-header">
+                <h6>Search Results</h6>
+                <span class="result-count">
+                    Found {{orders.length}} matching order(s)
+                </span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Kit Number</th>
+                            <th>Customer Name</th>
+                            <th>City, State</th>
+                            <th>Phone</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let order of orders">
+                            <td>{{order.orderID}}</td>
+                            <td>{{order.kitNumber}}</td>
+                            <td>{{order.customer}}</td>
+                            <td>{{order.city}}, {{order.state}}</td>
+                            <td>{{order.contact}}</td>
+
+                            <td class="text-center">
+                                <button class="edit-btn" (click)="rtoEditDialog(order)">
+                                    <i class="ri-pencil-line"></i>
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+</div>

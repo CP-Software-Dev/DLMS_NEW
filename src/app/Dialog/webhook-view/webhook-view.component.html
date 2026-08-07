@@ -1,0 +1,69 @@
+<div class="card" [@fadeSlideInOut]>
+  <div class="card-head">
+    <div class="row" style="margin-bottom: 0px">
+      <div class="col-8">
+        <h3>Webhook Journey</h3>
+      </div>
+      <div class="col close-form">
+        <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+      </div>
+    </div>
+    <div
+      class="row1"
+      style="
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      "
+    >
+      <div class="order">
+        <h6 style="color: #555454"><strong>Order ID :</strong>{{ orderID }}</h6>
+      </div>
+      <div class="button">
+        <button class="export-btn" (click)="exportExcel()">
+          <i class="ri-upload-2-line" style="margin-right: 5px"></i>Export
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <table class="table">
+      <thead class="table-head-hover">
+        <tr>
+          <th scope="col">Order Status</th>
+          <th scope="col">Shipment Status</th>
+          <th scope="col">Event Time</th>
+          <th scope="col">Webhook Update Time</th>
+          <th scope="col">Webhook Status</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+
+      <tbody *ngFor="let journey of JourneyData">
+        <tr>
+          <td
+            [ngClass]="{
+              sent: journey.isWebhookSent === '1',
+              'not-sent': journey.isWebhookSent !== '1',
+            }"
+          >
+            {{ journey.orderStatus }}
+          </td>
+          <td>{{ journey.shipmentStatus }}</td>
+          <td>{{ journey.eventDateTime }}</td>
+          <td>{{ journey.createdAt }}</td>
+          <td>{{ journey.isWebhookSent === "1" ? "Sent" : "Not Sent" }}</td>
+          <td>
+            <button
+              class="btn statusbtn btn-sm" style="cursor: pointer;"
+              (click)="sendWebhook(journey.id)"
+            >
+              {{ journey.isWebhookSent === "1" ? "Resend" : "Send" }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,104 @@
+.card {
+    width: 500px; 
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .example-form-field {
+    width: 50%;
+    border-radius: 6px;
+    font-size: smaller;
+    margin-left: -10px;
+}
+
+.date-label{
+  font-weight:600 ;
+}
+.date-selector {
+
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 70%;
+  padding: 6px 10px;
+  margin-left: 42px;
+}
+
+.date-selector:focus {
+  border: 1px solid gray; 
+  outline: none;
+}
+  
+  .card-head {
+    padding: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+  
+  .close-form{
+    text-align: end;
+    cursor: pointer;
+  }
+
+  .close-icon{
+    font-size: 30px;
+    font-weight: 200;
+    background-color: rgb(231, 231, 230);
+    border-radius: 50%;
+  }
+
+  
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-group input[type="file"] {
+    display: none;
+}
+
+.input-group input[type="text"] {
+    flex: 1;
+    border: 1px solid #ced4da; 
+    height: 38px;
+    box-shadow: none;
+}
+
+.input-group button {
+    margin-left: 5px;
+    box-shadow: none;
+    height: 38px;
+}
+
+.card-body .btn-browse{
+    box-shadow: none;
+    margin-right: 5px;
+    background-color: #4c66fb;
+    color: #fff;
+}
+
+.card-body .btn{
+    box-shadow: none;
+    margin-right: 5px;
+}
+
+.card-footer{
+    padding: 10px;
+    background-color: #fff;
+}
+
+.form-select:focus{
+  box-shadow: none;
+}
+@media (max-width: 768px) {
+    .card {
+        width: 90%;
+    }
+}

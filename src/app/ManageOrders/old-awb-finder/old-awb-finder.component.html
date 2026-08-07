@@ -1,0 +1,74 @@
+<div class="card">
+  <div class="card-head">
+    <div class="row">
+      <div class="col-md-6 col-sm-6">
+        <h5>
+          <i class="ri-checkbox-blank-fill icon-box"></i>
+          AWB Finder
+        </h5>
+      </div>
+      <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="upload-container">
+
+      <!-- ROW 1 → Upload Section -->
+      <div class="row">
+        <div class="col-md-12 d-flex">
+
+          <div class="card inner-card w-100">
+            <h3 class="title">Upload Excel File</h3>
+            <p class="subtitle">
+              Upload a .xlsx or .xls file with old AWB numbers in the first column
+            </p>
+
+            <div class="drop-zone"
+              (dragover)="onDragOver($event)"
+              (drop)="onDrop($event)"
+              (click)="fileInput.click()">
+
+              <input #fileInput type="file" hidden accept=".xlsx,.xls"
+                (change)="onFileSelected($event)" />
+
+              <div class="upload-content">
+                <div class="icon">⬆</div>
+                <p *ngIf="!fileName">Drag and drop your Excel file</p>
+                <p *ngIf="fileName"><strong>{{ fileName }}</strong></p>
+                <span>or click to browse</span>
+                <small>Supported formats: .xlsx, .xls</small>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ROW 2 → How it works -->
+      <div class="row mt-3">
+        <div class="col-md-12 d-flex">
+          <div class="card info-card w-100">
+            <h4>How it works</h4>
+            <ol>
+              <li>Prepare an Excel file with old AWB numbers in the first column</li>
+              <li>Upload the file using the upload area above</li>
+              <li>The system will automatically map each old AWB to a new AWB</li>
+              <li>Download the results as an Excel file for your records</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ✅ LOADER OVERLAY -->
+<div *ngIf="isUploading" class="upload-overlay">
+  <div class="loader-box">
+    <div class="spinner"></div>
+    <p>Processing & Downloading file...</p>
+  </div>
+</div>

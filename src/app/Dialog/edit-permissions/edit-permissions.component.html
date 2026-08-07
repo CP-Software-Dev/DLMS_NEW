@@ -1,0 +1,115 @@
+<div class="card" [@fadeSlideInOut]>
+ 
+    <div class="card-head">
+       
+        <div class="row">
+            <div class="col">
+                <h3>Add Employee</h3>
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+ 
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">First Name</label>
+                <input type="text" name="Name" class="form-control" [(ngModel)]="firstName"  placeholder="Enter First Name" id="fname" disabled>
+            </div>
+            <div class="col">
+                <label class="form-label">Last Name</label>
+                <input type="text" name="Name" class="form-control" [(ngModel)]="lastName" placeholder="Enter Last Name" id="lname" disabled>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Employee Email</label>
+                <input type="email" name="emailAddress" class="form-control" [(ngModel)]="email"  placeholder="Enter Email id" id="email" disabled>
+                
+            </div>
+            <div class="col">
+                <label class="form-label">Contact No.</label>
+                <input type="text" name="contact" class="form-control" [(ngModel)]="contact" placeholder="Enter Your Number" id="phone" disabled>    
+            </div>
+            
+        </div>
+       
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Permissions</label>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-check">
+                            <!-- <input type="checkbox" class="form-check-input" id="orders" > -->
+                            <input type="checkbox" class="form-check-input" id="orders" [(ngModel)]="hasOrders">
+                            <label class="form-check-label" for="orders">Manage Orders</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-check">
+                            <!-- <input type="checkbox" class="form-check-input" id="shipments"> -->
+                            <input type="checkbox" class="form-check-input" id="shipments" [(ngModel)]="hasShipments">
+                            <label class="form-check-label" for="shipments">Manage Shipments</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-check">
+                            <!-- <input type="checkbox" class="form-check-input" id="orders" > -->
+                            <input type="checkbox" class="form-check-input" id="ndr" [(ngModel)]="hasNdr">
+                            <label class="form-check-label" for="ndr">Manage NDR</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-check">
+                            <!-- <input type="checkbox" class="form-check-input" id="shipments"> -->
+                            <input type="checkbox" class="form-check-input" id="rto" [(ngModel)]="hasRto">
+                            <label class="form-check-label" for="rto">Manage RTO</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+
+
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-check">
+                            <!-- <input type="checkbox" class="form-check-input" id="reports"> -->
+                            <input type="checkbox" class="form-check-input" id="reports" [(ngModel)]="hasReports">
+                            <label class="form-check-label" for="reports">Manage Reports</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <button class="btn btn-outline-danger " (click)="closeDialog()">Close</button>
+            </div>
+           
+            <div class="col-2">
+                <button class="btn btn-primary " (click)="update()">Update</button>
+            </div>
+        </div>
+        <!-- <span *ngIf="invalidsubmit" class=" text-danger">
+            Please agree to user policies before proceeding.
+        </span> -->
+       
+    </div>
+</div>

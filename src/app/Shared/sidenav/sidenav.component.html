@@ -1,0 +1,286 @@
+<div class="sidenav" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()"
+    [ngClass]="collapsed ? 'sidenav-collapsed': ''">
+    <div class="logo-container">
+        <i class="logo ri-menu-line" (click)="toggleCollapse()"></i>
+        <img src="assets\Images\CP1.png" class="company-logo" alt="Dashboard Image"
+            style="height: 35px; width: 100%; margin-right: 10px;">
+    </div>
+    <ul class="sidenav-nav">
+        <li class="sidenav-nav-item" [ngClass]="isLinkActive('admin/dashboard') ? 'active' : ''">
+            <a class="sidenav-nav-link" (click)="navigateToDashboard()" matTooltip="Dashboard"
+                matTooltipPosition="right" [matTooltipDisabled]="collapsed">
+                <i class="sidenav-link-icon ri-dashboard-line "></i>
+                <span class="sidenav-link-text" *ngIf="collapsed">
+                    Dashboard
+                </span>
+            </a>
+        </li>
+        <li class="sidenav-nav-item" [ngClass]="isLinkActive('admin/orders') ? 'active' : ''">
+            <a class="sidenav-nav-link" (click)="navigateToOrders()" routerLink='admin/orders' matTooltip="Orders"
+                matTooltipPosition="right" [matTooltipDisabled]="collapsed">
+                <i class="sidenav-link-icon ri-pages-line"></i>
+                <span class="sidenav-link-text" *ngIf="collapsed">
+                    Orders List
+                </span>
+            </a>
+        </li>
+        <!-- <li  class="sidenav-nav-item" [ngClass]="isLinkActive('admin/branch-orders') ? 'active' : ''">
+            <a class="sidenav-nav-link" (click)="navigateToBranchOrders('admin/branch-orders')" routerLink='admin/branch-orders' matTooltip="Branch Orders"
+                matTooltipPosition="right" [matTooltipDisabled]="collapsed">
+                <i class="sidenav-link-icon ri-pages-line"></i>
+                <span class="sidenav-link-text" *ngIf="collapsed">
+                    Branch Orders
+                </span>
+            </a>
+        </li> -->
+        <li class="sidenav-dropdown" [ngClass]="{'active': isShipmentDropdownActive()}">
+            <a class="dropdown-nav-link" (click)="toggleShipmentClicked()">
+                <i class="dropdown-link-icon bi-truck"></i>
+                <span class="dropdown-link-text" *ngIf="collapsed">Shipments <i [class]="buttonIcon"></i></span>
+            </a>
+            <div class="submenu" *ngIf="shipmentClicked">
+        <li class="submenu-nav-item mt-2" [ngClass]="isLinkActive('admin/shipment') ? 'active' : ''">
+            <a class="submenu-nav-link" (click)="navigateToShipment()" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}" matTooltip="Shipment's List" matTooltipPosition="right"
+                [matTooltipDisabled]="collapsed">
+                <i class="submenu-link-icon ri-list-check-3 width:2px;height:2px"></i>
+                <span class="submenu-link-text" *ngIf="collapsed">
+                    Shipment List
+                </span>
+            </a>
+        </li>
+        <li class="submenu-nav-item" [ngClass]="isLinkActive('admin/ndr') ? 'active' : ''">
+            <a class="submenu-nav-link" (click)="navigateToException()" matTooltip="Exception's List"
+                matTooltipPosition="right" [matTooltipDisabled]="collapsed">
+                <i class="submenu-link-icon ri-list-check-2"></i>
+                <span class="submenu-link-text" *ngIf="collapsed">
+                    NDR List
+                </span>
+            </a>
+        </li>
+        <li class="submenu-nav-item" [ngClass]="isLinkActive('admin/rto') ? 'active' : ''">
+            <a class="submenu-nav-link" (click)="navigateToRTO()" matTooltip="RTO Process" matTooltipPosition="right"
+                [matTooltipDisabled]="collapsed">
+                <i class="submenu-link-icon bi bi-bootstrap-reboot"></i>
+                <span class="submenu-link-text" *ngIf="collapsed">
+                    RTO Process
+                </span>
+            </a>
+        </li>
+</div>
+</li>
+
+<li class="sidenav-dropdown" [ngClass]="{'active': isManageOrdersDropdownActive()}">
+
+    <!-- Parent -->
+    <a class="dropdown-nav-link" (click)="toggleManageOrdersClicked()">
+        <i class="dropdown-link-icon bi bi-gear"></i>
+        <span class="dropdown-link-text" *ngIf="collapsed">
+            Manage Orders <i [class]="managebuttonIcon"></i>
+        </span>
+    </a>
+
+    <!-- Submenu -->
+    <div class="submenu" *ngIf="manageOrdersClicked">
+
+<li class="submenu-nav-item mt-2" [ngClass]="isLinkActive('admin/nsz') ? 'active' : ''">
+    <a class="submenu-nav-link" (click)="navigateToNSZ()" matTooltip="NSZ" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="submenu-link-icon bi-box-seam"></i>
+        <span class="submenu-link-text" *ngIf="collapsed">NSZ</span>
+    </a>
+</li>
+
+<li class="submenu-nav-item" [ngClass]="isLinkActive('admin/remake') ? 'active' : ''">
+    <a class="submenu-nav-link" (click)="navigateToRemake()" matTooltip="Remake" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="submenu-link-icon ri-pages-line"></i>
+        <span class="submenu-link-text" *ngIf="collapsed">Remake</span>
+    </a>
+</li>
+
+<li class="submenu-nav-item" [ngClass]="isLinkActive('admin/rejection-list') ? 'active' : ''">
+    <a class="submenu-nav-link" (click)="navigateToRejection()" matTooltip="Rejection List" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="submenu-link-icon ri-list-unordered"></i>
+        <span class="submenu-link-text" *ngIf="collapsed">Manual Awb List</span>
+    </a>
+</li>
+
+<li class="submenu-nav-item" [ngClass]="isLinkActive('admin/branch-master') ? 'active' : ''">
+    <a class="submenu-nav-link" (click)="navigateToBranchMaster()" matTooltip="Branch Master" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="submenu-link-icon ri-git-branch-line"></i>
+        <span class="submenu-link-text" *ngIf="collapsed">Branch Master</span>
+    </a>
+</li>
+
+<li class="submenu-nav-item" [ngClass]="isLinkActive('admin/zone-master') ? 'active' : ''">
+    <a class="submenu-nav-link" (click)="navigateToZoneMaster()" matTooltip="Zone Master" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="submenu-link-icon ri-map-pin-line"></i>
+        <span class="submenu-link-text" *ngIf="collapsed">Zone Master</span>
+    </a>
+</li>
+
+<li class="submenu-nav-item" [ngClass]="isLinkActive('admin/awb-finder') ? 'active' : ''">
+    <a class="submenu-nav-link" (click)="navigateToOldAwbFinder()" matTooltip="Old AWB Finder"
+        matTooltipPosition="right" [matTooltipDisabled]="collapsed">
+        <i class="submenu-link-icon ri-search-line"></i>
+        <span class="submenu-link-text" *ngIf="collapsed">AWB Finder</span>
+    </a>
+</li>
+
+<li class="submenu-nav-item" [ngClass]="isLinkActive('admin/pincode-master') ? 'active' : ''">
+    <a class="submenu-nav-link" (click)="navigateToPincodeMaster()" matTooltip="Pincode Master"
+        matTooltipPosition="right" [matTooltipDisabled]="collapsed">
+        <i class="submenu-link-icon ri-map-2-line"></i>
+        <span class="submenu-link-text" *ngIf="collapsed">Pincode Master</span>
+    </a>
+</li>
+
+<li class="submenu-nav-item" [ngClass]="isLinkActive('admin/automation-log') ? 'active' : ''">
+    <a class="submenu-nav-link" (click)="navigateToAutomationLog()" matTooltip="Automation Log"
+        matTooltipPosition="right" [matTooltipDisabled]="collapsed">
+        <i class="submenu-link-icon ri-file-chart-line"></i>
+        <span class="submenu-link-text" *ngIf="collapsed">Automation Log</span>
+    </a>
+</li>
+
+<li class="submenu-nav-item" [ngClass]="isLinkActive('admin/webhook-log') ? 'active' : ''">
+    <a class="submenu-nav-link" (click)="navigateToWebhookLog()" matTooltip="Webhook Log"
+        matTooltipPosition="right" [matTooltipDisabled]="collapsed">
+        <i class="submenu-link-icon ri-file-chart-line"></i>
+        <span class="submenu-link-text" *ngIf="collapsed">Webhook Log</span>
+    </a>
+</li>
+
+<li  class="submenu-nav-item" [ngClass]="isLinkActive('admin/update-address') ? 'active' : ''">
+    <a class="submenu-nav-link" (click)="navigateToUpdateAddress()" matTooltip="Update Address & Pincode"
+        matTooltipPosition="right" [matTooltipDisabled]="collapsed">
+        <i class="submenu-link-icon ri-edit-2-line"></i>
+        <span class="submenu-link-text" *ngIf="collapsed">
+            Update Address
+        </span>
+    </a>
+</li>
+
+</div>
+</li>
+
+<!-- <li class="sidenav-nav-item" [ngClass]="isLinkActive('admin/nsz') ? 'active' : ''">
+    <a class="sidenav-nav-link" (click)="navigateToNSZ()" matTooltip="NSZ" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="sidenav-link-icon bi-box-seam"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">
+            NSZ
+        </span>
+    </a>
+</li> -->
+
+<!-- <li class="sidenav-nav-item" [ngClass]="isLinkActive('admin/pincode-master') ? 'active' : ''">
+    <a class="sidenav-nav-link" (click)="navigateToPincodeMaster()" routerLink='admin/pincode-master'
+        matTooltip="Pincode Master" matTooltipPosition="right" [matTooltipDisabled]="collapsed">
+        <i class="sidenav-link-icon ri-pages-line"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">
+            Pincode Master
+        </span>
+    </a>
+</li> -->
+
+<li *ngIf="isAdmin" class="sidenav-nav-item" [ngClass]="isLinkActive('admin/allocation') ? 'active' : ''">
+    <a class="sidenav-nav-link" (click)="navigateToAllocation()" matTooltip="Allocation" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="sidenav-link-icon bi-pencil-square"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">
+            Allocation
+        </span>
+    </a>
+</li>
+<li class="sidenav-nav-item" [ngClass]="isLinkActive('admin/couriers') ? 'active' : ''">
+    <a class="sidenav-nav-link" (click)="navigateToCourier()" matTooltip="Courier's List" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="sidenav-link-icon bi-box-seam"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">
+            Couriers
+        </span>
+    </a>
+</li>
+
+
+
+<li *ngIf="isAdmin" class="sidenav-nav-item" [ngClass]="isLinkActive('admin/webhook') ? 'active' : ''">
+    <a class="sidenav-nav-link" (click)="navigateToWebhook()" matTooltip="Webhooks" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="sidenav-link-icon ri-git-merge-line"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">
+            Webhooks
+        </span>
+    </a>
+</li>
+<li *ngIf="isAdmin" class="sidenav-nav-item" [ngClass]="isLinkActive('admin/users') ? 'active' : ''">
+    <a class="sidenav-nav-link" (click)="navigateToUser()" matTooltip="User's List" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="sidenav-link-icon ri-user-3-line"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">
+            Users List
+        </span>
+    </a>
+</li>
+<li *ngIf="isAdmin" class="sidenav-nav-item" [ngClass]="isLinkActive('admin/banks') ? 'active' : ''">
+    <a class="sidenav-nav-link" (click)="navigateToBank()" matTooltip="Sales Dashboard" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="sidenav-link-icon ri-bank-fill"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">
+            Financial Institutions
+        </span>
+    </a>
+</li>
+<li *ngIf="isAdmin" class="sidenav-nav-item" [ngClass]="isLinkActive('admin/sales') ? 'active' : ''">
+    <a class="sidenav-nav-link" (click)="navigateToSales()" matTooltip="Sales Dashboard" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="sidenav-link-icon ri-file-list-line"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">
+            Sales Dashboard
+        </span>
+    </a>
+</li>
+<li *ngIf="isAdmin" class="sidenav-nav-item" [ngClass]="isLinkActive('admin/warehouses') ? 'active' : ''">
+    <a class="sidenav-nav-link" (click)="navigateToWarehouse()" matTooltip="Warehouse" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="sidenav-link-icon ri-community-line"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">
+            Warehouse
+        </span>
+    </a>
+</li>
+<li class="sidenav-nav-item" [ngClass]="isLinkActive('admin/reports') ? 'active' : ''">
+    <a class="sidenav-nav-link" (click)="navigateToReports()" matTooltip="Report's List" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="sidenav-link-icon ri-file-chart-line"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">
+            Reports
+        </span>
+    </a>
+</li>
+<li *ngIf="isAdmin" class="sidenav-nav-item" [ngClass]="isLinkActive('admin/issues') ? 'active' : ''">
+    <a class="sidenav-nav-link" (click)="navigateToIssues()" matTooltip="Issues" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="sidenav-link-icon ri-question-answer-line"></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">
+            Issues
+        </span>
+    </a>
+</li>
+<li class="sidenav-nav-item" [ngClass]="isLinkActive('admin/bank-invoice') ? 'active' : ''">
+    <a class="sidenav-nav-link" (click)="navigateCourierDetails()" matTooltip="Invoice" matTooltipPosition="right"
+        [matTooltipDisabled]="collapsed">
+        <i class="sidenav-link-icon ri-file-info-line"></i>
+        <i class=""></i>
+        <span class="sidenav-link-text" *ngIf="collapsed">
+            Invoice
+        </span>
+    </a>
+</li>
+</ul>
+</div>

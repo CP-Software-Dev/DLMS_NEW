@@ -1,0 +1,56 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    background-color: #fff;
+    margin: 0.8rem 0 0.8rem 0;
+    box-sizing: border-box;
+    z-index: 0;
+    box-shadow: 0 .25rem .5rem #e6edef;
+}
+
+.card-head {
+    padding: 1rem 1.5rem 0.5rem 1.5rem;
+    border-bottom: 1px solid #edf1f7;
+    font-size: 1rem;
+}
+
+.card-body{
+    min-height: 300px;
+    padding: 10px 20px;
+}
+
+.nsz{
+    display: flex;
+    gap: 0px;
+    flex-direction: column;
+}
+
+.nsz label{
+    font-weight: 500;
+}
+
+.nsz input{
+    outline: none;
+    border: 1px solid #999999;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-top: 8px;
+}
+
+.nsz input:focus{
+    outline:none;
+    box-shadow: 0 .15rem .2rem #0c71c9;
+    border: 1px solid #0c71c9;
+}
+
+.nsz button{
+    margin-top: 20px;
+    min-width: 100px;
+    max-width: 150px;
+    background-color: #0a7ee4;
+}
+
+.nsz button:hover{
+    background-color: #0c71c9;
+}

@@ -1,0 +1,182 @@
+<div class="card">
+    <div class="card-head">
+        <!-- <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Orders</h5>
+            </div>
+            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+                <button class="btn btn-outline-dark btn-sm me-3" (click)="exportToCSV()">
+                    <i class="ri-upload-2-line"></i> Export
+                </button>
+                <button class="btn btn-outline-dark btn-sm me-3"
+                    (click)="makeActive('buttonText'); toggleFiltersForm()">
+                    <i [class]="buttonIcon"></i> {{ buttonText }}
+                </button>
+            </div>
+        </div> -->
+
+        <!-- Filter Forms -->
+
+        <div class="form" style="margin-top: 30px;" *ngIf="showFiltersForm">
+            <div class="row">
+                <!-- Daterange -->
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="filterCriteria" class="form-label">From Date:</label>
+                        <!-- <app-datepicker (dateRangeSelected)="onDateRangeSelected($event)"></app-datepicker> -->
+                         <app-date-picker-invoice [selectedRange]="selectedDateRange" (dateRangeSelected)="onDateRangeSelected($event)"></app-date-picker-invoice>
+                    </div>
+                </div>
+                <!-- OrderID -->
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="orderIds" class="form-label">Order ID(s):</label>
+                        <input type="text" class="form-control form-control-sm" id="orderIds" [(ngModel)]="orderIds"
+                            placeholder="Enter Order Id separated by comma">
+                    </div>
+                </div>
+                <!-- AWB -->
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="awb" class="form-label">Search AWB:</label>
+                        <input type="text" class="form-control form-control-sm" id="awb" [(ngModel)]="awbnumber"
+                            placeholder="Enter AWB Number">
+                    </div>
+                </div>
+                <!-- Kitnumber -->
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="awb" class="form-label">Kit Number:</label>
+                        <input type="text" class="form-control form-control-sm" id="awb" [(ngModel)]="kitnumber"
+                            placeholder="Enter Kit Number">
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <!-- Phone -->
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="shippingPhone" class="form-label">Shipping Phone</label>
+                        <input type="text" class="form-control form-control-sm" id="phone" [(ngModel)]="phone"
+                            placeholder="Shipping Phone here">
+                    </div>
+                </div>
+                <!-- Courier -->
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="courier" class="form-label">Courier:</label>
+                        <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="courierId">
+                            <option value="" selected disabled>Select Courier</option>
+                            <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="button-grp mb-2 d-flex justify-content-start">
+                        <button class="btn btn-outline-dark btn-sm  me-3" type="button"
+                            style="background-color: rgb(5, 114, 209); font-size: small; color: white;"
+                            (click)="applyFilters()">Apply</button>
+                        <button class="btn btn-danger btn-sm  me-3" style="font-size: small; box-shadow: none;"
+                            (click)="clearFilters()">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+       
+
+        <div class="row">
+
+            <!-- Status Filters -->
+
+            <div class="col-sm-12 col-md-12">
+                <button class="col-md-2 btn btn-sm mb-4 me-4" [class.active]="isActive === 'All'"
+                    (click)="applyStatusFilter(null)">All</button>
+                <button *ngFor="let button of statusData" class="col-md-2 btn btn-sm mb-4 me-4"
+                    [class.active]="isActive === button.id.toString()" (click)="applyStatusFilter(button.id)">
+                    {{ button.name === 'RTO' ? 'RTO Re-Dispatch' : button.name }}({{ getCountByStatusId(button.id) }})
+
+                </button>
+                <button (click)="awbFilter(0,0,'AWB_Process')" class="col-md-2 btn btn-sm mb-4 me-4"
+                    style="background-color: #E67E22; color: #fff;">AWB Unassigned</button>
+                <button (click)="awbFilter(1,1,'AWB_Success')" class="col-md-2 btn btn-sm mb-4 me-4"
+                    style="background-color: #008000; color: #fff;">AWB Assigned</button>
+                <button (click)="awbFilter(1,0, 'AWB_ERROR')" class="col-md-2 btn btn-sm mb-4 me-4"
+                    style="background-color: #ff0000; color: #fff;">AWB Error</button>
+            </div>
+
+            <!-- Orders Table -->
+
+            <app-loader [loading]="loading"></app-loader>
+
+            <div class="table-row" *ngIf="!loading">
+                <table class="table">
+                    <thead class="table-head-hover">
+                        <tr>
+                            <th scope="col">Order</th>
+                            <th scope="col">Card ID</th>
+                            <th scope="col">Kit Number</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Pin Code</th>
+                            <th scope="col">Weight</th>
+                            <th scope="col">Courier</th>                           
+                            <th scope="col">AWB Number<br><span style="font-size: 12px; font-weight: 500;">
+                                    <i class="ri-corner-down-right-line"></i>
+                                    Shipment Status
+                                </span></th>
+                                <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let order of paginatedOrders">
+                            <td><span style="cursor: pointer; font-weight: 700;" [ngClass]="{
+                                  'blue-color': order.isAttempted == 0 && !order.awb,
+                                  'red-color': order.isAttempted == 1 && !order.awb,
+                                  'green-color': order.isAttempted == 1 && order.awb
+                                }" (click)="navigateToOrderDetail(order.orderID)">
+                                    {{ order.orderID }}
+                                </span> </td>
+                            <td scope="col">{{order.cardID}}</td>
+                            <td scope="col">{{order.kitNumber}}</td>
+                            <td scope="col">{{order.date}}</td>
+                            <td scope="col">{{order.product}}</td>
+                            <td scope="col">
+                                <span [matTooltip]="getAddressTooltip(order)" matTooltipPosition="right" matTooltipClass="multiline-tooltip">
+                                    {{ order.customer.length > 25 ? (order.customer | slice:0:19) + '...' : order.customer }}
+                                </span>
+                            </td>
+                            <td scope="col">{{order.pincode}}</td>
+                            <td scope="col">{{order.weight}}</td>
+                            <td scope="col">{{order.courier}}</td>
+                            <td><span style="cursor: pointer; color:#0b72c7
+                                    ; font-weight: 700;" (click)="navigateToAwbStatus(order.awb)">{{ order.awb
+                                    }}</span><br><span *ngIf="order.shipmentStatus && order.awb">
+                                    <i class="ri-corner-down-right-line"></i>
+                                    {{ order.shipmentStatus }}
+                                </span>
+                            </td>
+                            <td scope="col"><button class="btn btn-sm statusbtn" style="min-width: 80px;">{{
+                                order.orderStatus }}</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- Pagination -->
+
+        <app-paginator [length]="totalOrders" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100 , 500 , 1000]"
+            [pageIndex]="pageIndex" (page)="handlePageEvent($event)">
+        </app-paginator>
+
+    </div>
+</div>

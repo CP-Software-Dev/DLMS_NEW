@@ -1,0 +1,240 @@
+.sidenav {
+    background: #f9fbfd;
+    transition: all .4s ease;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    bottom: 0;
+    width: 5rem;
+    height: 198vh;
+    box-shadow: 0.063rem 0 0.625rem 0 #65676b;
+
+    
+    .company-logo {
+        display: none;
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        padding: 0.938rem 0.938rem 0 0.938rem;
+        width: 100%;
+
+        .logo {
+            background: transparent;
+            text-align: center;
+            width: 3rem;
+            min-width: 3rem;
+            border-radius: 0.313rem;
+            padding: 0.313rem;
+            font-size: 20px;
+            font-weight: 900;
+            cursor: pointer;
+            border: none;
+        }
+
+        .logo-text {
+            margin-left: 1.5rem;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .btn-close {
+            margin-left: auto;
+            cursor: pointer;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: transparent;
+            border: none;
+
+            .fa-times {
+                color: #fff;
+                font-size: 24px;
+            }
+        }
+    }
+}
+
+.sidenav-collapsed {
+    width: 16.5625rem;
+
+    .company-logo {
+        display: block;
+    }
+}
+
+.sidenav-nav {
+    list-style: none;
+    padding: 0.838rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding-bottom: 1.25rem; 
+    overflow-y: scroll;
+    height: 100vh;
+    padding-bottom: 70px;
+
+    .sidenav-nav-item {
+        width: 100%;
+        margin-bottom: 0.625rem;
+
+        .sidenav-nav-link {
+            display: flex;
+            align-items: center;
+            height: 3rem;
+            color: #1f1d1d;
+            text-decoration: none;
+            border-radius: 0.625rem;
+            transition: all .3s ease;
+
+            .sidenav-link-icon {
+                font-size: 18px;
+                width: 2rem;
+                min-width: 2rem;
+                margin: 0 0.5rem;
+                text-align: center;
+
+            }
+
+            .sidenav-link-text {
+                margin-left: 1.5rem;
+                font-weight: 600;
+            }
+        }
+    }
+    .sidenav-nav-item:last-child {
+        margin-bottom: 1.25rem;
+    }
+    .sidenav-dropdown {
+        width: 100%;
+        margin-bottom: 0.625rem;
+
+        .dropdown-nav-link {
+            display: flex;
+            align-items: center;
+            height: 3rem;
+            color: #1f1d1d;
+            text-decoration: none;
+            border-radius: 0.625rem;
+            transition: all .3s ease;
+
+
+            .dropdown-link-icon {
+                font-size: 18px;
+                width: 2rem;
+                min-width: 2rem;
+                margin: 0 0.5rem;
+                text-align: center;
+            }
+
+            .dropdown-link-text {
+                margin-left: 1.5rem;
+                font-weight: 600;
+            }
+        }
+    }
+    .submenu {
+        padding: 0%;
+        width: 100%;
+        margin-bottom: 0.625rem;
+
+        .submenu-nav-link {
+            display: flex;
+            align-items: center;
+            height: 3rem;
+            color: #1f1d1d;
+            text-decoration: none;
+            margin-bottom: 10px;
+            border-radius: 0.625rem;
+            transition: all .3s ease;
+
+            .submenu-link-icon {
+                font-size: 18px;
+                width: 2rem;
+                min-width: 2rem;
+                margin: 0 1.2rem;
+                text-align: center;
+            }
+
+            .submenu-link-text {
+                margin-left: 1.5rem;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .sidenav-nav-item:hover {
+
+        .sidenav-nav-link {
+            background-color:  #c0c8f7ee;
+            color: #fff;
+        }
+    }
+
+    .submenu-nav-item:hover {
+
+        .submenu-nav-link {
+            background-color:  #c0c8f7ee;
+            color: #fff;
+        }
+    }
+}
+
+.mat-tooltip {
+    font-size: 34px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 4px;
+    padding: 8px 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mat-tooltip.mat-tooltip-after {
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-right-color: rgba(0, 0, 0, 0.8);
+}
+
+.mat-tooltip:hover {
+    color: #fff;
+}
+
+.sidenav-nav-item.active,
+.submenu-nav-item.active,
+.sidenav-dropdown {
+    border-radius: 8px;
+}
+
+.sidenav-link-text,
+.submenu-link-text,
+.dropdown-link-text {
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: max-width 0.3s ease, opacity 0.3s ease;
+}
+
+.sidenav-collapsed .sidenav-link-text,
+.sidenav-collapsed .submenu-link-text,
+.sidenav-collapsed .dropdown-link-text {
+    opacity: 1;
+    max-width: 200px; /* Set this to the desired max-width */
+}
+
+.active {
+    background-color: #8696f1ee;
+    
+    .dropdown-link-text,
+    .submenu-link-text,
+    .sidenav-link-text,
+    .sidenav-link-icon,
+    .dropdown-link-icon,
+    .submenu-link-icon {
+        color: #fff;
+    }
+} 
+

@@ -1,0 +1,175 @@
+<div class="card">
+    <div class="card-head">
+
+        <!-- Card-header elements -->
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <h5 class="mb-0 me-4"><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Insta
+                    Orders
+                </h5>
+            </div>
+            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+
+                <!-- <button class="btn btn-outline-dark btn-sm me-3" (click)="openDialog()">
+                    <i class="ri-upload-2-line"></i> CSV Upload
+                </button> -->
+
+                <button class="btn btn-outline-dark btn-sm me-3" (click)="exportToCSV()" [disabled]="isExporting">
+                    <!-- <i class="ri-export-fill"></i>Export -->
+
+                    <span *ngIf="!isExporting">
+                        <i class="ri-export-fill"></i> Export
+                    </span>
+
+                    <span *ngIf="isExporting">
+                        <i class="ri-loader-4-line spin"></i> Exporting...
+                    </span>
+                </button>
+
+                <button class="btn btn-outline-dark btn-sm me-3" (click)=" toggleFiltersForm()">
+                    <i [class]="buttonIcon"></i> {{ buttonText }}
+                </button>
+            </div>
+        </div>
+
+        <div class="form" *ngIf="showFiltersForm" style="margin-top: 30px;">
+
+
+            <div class="row">
+
+                <!-- Phone -->
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="shippingPhone" class="form-label">Kit Number</label>
+                        <input type="text" class="form-control form-control-sm" id="phone" [(ngModel)]="name"
+                            placeholder="Enter kit number here">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="sellerName" class="form-label">Remake</label>
+                        <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="remakeId">
+                            <option *ngFor="let remake of remakes" [value]="remake.id">{{ remake.name }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="button-grp mb-2 d-flex justify-content-start">
+                        <button class="btn btn-outline-dark btn-sm me-3" type="button"
+                            style="background-color: rgb(5, 114, 209); font-size: small; color: white;"
+                            (click)="applyFilters()">Apply</button>
+                        <button class="btn btn-danger btn-sm me-3" style="font-size: small; box-shadow: none;"
+                            (click)="clearFilters()">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <!-- Status Filter Buttons  -->
+
+
+            <!-- Change Status NAd AWB Dailog  -->
+
+            <app-loader [loading]="loading"></app-loader>
+
+
+            <div class="row" style="width: 25%;">
+                <div class="btn-group col p-1" [@fadeInOut] *ngIf="getSelectedCount() > 0" role="group"
+                    aria-label="Basic outlined example" style="margin-bottom: 20px;">
+                    <button type="button" style="pointer-events: none;" class="btn btn-outline-dark"><b>{{
+                            getSelectedCount() }}</b>
+                        selected</button>
+                    <button type="button" class="btn btn-outline-dark" (click)="remake()"> <i
+                            class="bi bi-chat-left-fill"></i> Remake</button>
+                </div>
+            </div>
+
+            <div class="table-row" *ngIf="!loading">
+                <table class="table">
+                    <thead class="table-head-hover">
+                        <tr>
+                            <th scope="col">
+                                <input type="checkbox" id="selectAllCheckbox" name="selectAll"
+                                    [(ngModel)]="isSelectAllChecked" (click)="toggleAllCheckboxes($event)">
+                            </th>
+                            <th scope="col">Order</th>
+                            <th scope="col">Card ID</th>
+                            <th scope="col">Kit Number</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Bank</th>
+                            <th scope="col">Lot ID</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Zip Code</th>
+                            <th scope="col">Courier</th>
+                            <th scope="col">AWB Number<br><span style="font-size: 12px; font-weight: 500;">
+                                    <i class="ri-corner-down-right-line"></i>
+                                    Shipment Status
+                                </span></th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let order of paginatedOrders">
+                            <td>
+                                <input *ngIf="order.isRemake == 1" type="checkbox" [id]="'checkbox'+order.order"
+                                    [name]="'checkbox'+order.order" [(ngModel)]="order.selected"
+                                    (ngModelChange)="updateSelectAllCheckbox()">
+                            </td>
+                            <td>{{ order.orderID }}</td>
+                            <td>{{ order.cardID }}</td>
+                            <td>{{ order.kitNumber}}</td>
+                            <td>{{ order.date}}</td>
+                            <td>{{ order.company}}</td>
+                            <td>{{ order.lotId}}</td>
+                            <td>
+                                <span [matTooltip]="getAddressTooltip(order)" matTooltipPosition="right"
+                                    matTooltipClass="multiline-tooltip">
+                                    <!-- {{ order.customer.length > 25 ? (order.customer | slice:0:19) + '...' :
+                                    order.customer }} -->
+                                    {{ order.customer.trim().length > 25 ? (order.customer.trim() | slice: 0: 19) +
+                                    '...' : order.customer.trim() }}
+                                </span>
+                            </td>
+                            <td>
+                                {{ order.isRemake == 0 ? 'Remake' : 'Non Remake' }}
+                            </td>
+                            <td>{{ order.pincode }}</td>
+                            <td>{{ order.courier }}</td>
+                            <td><span style="cursor: pointer; color:#0b72c7
+                                        ; font-weight: 700;" (click)="navigateToAwbStatus(order.awb)">{{ order.awb
+                                    }}</span><br><span *ngIf="order.shipmentStatus && order.awb">
+                                    <i class="ri-corner-down-right-line"></i>
+                                    {{ order.shipmentStatus }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn statusbtn btn-sm" style="min-width: 80px;">{{
+                                    order.orderStatus }}</button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <app-paginator [length]="totalOrders" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100 , 500 , 1000]"
+            [pageIndex]="pageIndex" (page)="handlePageEvent($event)">
+        </app-paginator>
+
+    </div>
+</div>

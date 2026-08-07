@@ -1,0 +1,173 @@
+<div class="card">
+  <div class="card-head">
+    <div class="row">
+      <div class="col">
+        <h5>Create Warehouse</h5>
+      </div>
+      <div class="col text-end">
+        <button
+          class="btn btn-sm btn-outline-dark btn-sm me-3"
+          (click)="navigateToWarehouse()"
+        >
+          <i class="ri-arrow-left-circle-line"></i> Back
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-6 mb-2">
+        <label for="courier-name" class="form-label"
+          >Warehouse Name
+          <span class="text-danger font-weight-bold">*</span>
+        </label>
+        <input
+          type="text" style="cursor: not-allowed;"
+          class="form-control form-control-sm"
+          id="warehouse-name"
+          readonly
+          placeholder="Warehouse Name"
+          [(ngModel)]="warehouseObj.warehouseName"
+        />
+      </div>
+      <div class="col-6 mb-2">
+        <label for="api-key" class="form-label"
+          >Unique Code
+          <span class="text-danger font-weight-bold">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="unique-code"
+          
+          placeholder="Enter Unique Code"
+          [(ngModel)]="warehouseObj.uid"
+        />
+      </div>
+
+      <div class="col-6 mb-2">
+        <label class="form-label">Bank Name <font color="red">*</font></label>
+        <select style="cursor: not-allowed;"
+          class="form-select form-select-sm"
+          [(ngModel)]="institutionId"
+          disabled
+          (ngModelChange)="onBankChange($event)"
+        >
+          <option value="" selected disabled>Select Bank</option>
+          <option *ngFor="let bank of banks" id="company" [value]="bank.id">
+            {{ bank.name }}
+          </option>
+        </select>
+        <div *ngIf="invalidBankSelection" class="text-danger">Select Bank.</div>
+      </div>
+
+      <div class="col-6 mb-2">
+        <label class="form-label"
+          >Warehouse Type <font color="red">*</font></label
+        >
+        <select style="cursor: not-allowed;" disabled class="form-select form-select-sm" [(ngModel)]="warehouseType">
+          <option value="" selected disabled>Select Warehouse Type</option>
+          <option *ngFor="let role of userRole" id="company" [value]="role.id">
+            {{ role.role }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-6 mb-2">
+        <label for="api-key" class="form-label"
+          >Contact Name
+          <span class="text-danger font-weight-bold">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="contact-name"
+          placeholder="Enter Contact Name"
+          [(ngModel)]="warehouseObj.contactPerson"
+        />
+      </div>
+
+      <div class="col-6 mb-2">
+        <label for="api-key" class="form-label"
+          >Contact Number
+          <span class="text-danger font-weight-bold">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="contact-number"
+          placeholder="Enter Contact Number"
+          [(ngModel)]="warehouseObj.contactPersonNumber"
+        />
+      </div>
+      <div class="col-12 mb-2">
+        <label for="api-key" class="form-label"
+          >Address Line 1
+          <span class="text-danger font-weight-bold">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="address-1"
+          placeholder="Address Line 1 "
+          [(ngModel)]="warehouseObj.address1"
+        />
+      </div>
+      <div class="col-12 mb-2">
+        <label for="api-key" class="form-label"
+          >Address Line 2
+        </label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="address-2"
+          placeholder="Address Line 2 "
+          [(ngModel)]="warehouseObj.address2"
+        />
+      </div>
+      <div class="col-12 mb-2">
+        <label for="api-key" class="form-label"
+          >Address Line 3
+        </label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="address-3"
+          placeholder="Address Line 3 "
+          [(ngModel)]="warehouseObj.address3"
+        />
+      </div>
+      <div class="col-6 mb-2">
+        <label for="api-key" class="form-label"
+          >City
+          <span class="text-danger font-weight-bold">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="city"
+          placeholder="Enter City"
+          [(ngModel)]="warehouseObj.city"
+        />
+      </div>
+      <div class="col-6 mb-2">
+        <label for="api-key" class="form-label"
+          >Pincode
+          <span class="text-danger font-weight-bold">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="pincode"
+          placeholder="Enter Pincode"
+          [(ngModel)]="warehouseObj.pincode"
+        />
+      </div>
+    </div>
+    <div>
+      <button class="btn btn-sm btn-primary" (click)="onSubmit()">
+        Submit
+      </button>
+    </div>
+  </div>
+</div>

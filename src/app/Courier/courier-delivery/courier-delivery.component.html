@@ -1,0 +1,65 @@
+<div class="card">
+    <div class="card-head">
+        <div class="row">
+            <div class="col">
+                <h5>General Information</h5>
+                <div class="small text-muted mt-2">Follow these instructions on how to add courier.</div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 mb-2">
+                <label for="courier-name" class="form-label">Courier Name ID
+                    <span class="text-danger font-weight-bold">*</span>
+                </label>
+                <input type="text" class="form-control form-control-sm" id="courier-name" placeholder="Courier Name">
+            </div>
+            <div class="col-12 mb-2">
+                <label for="api-key" class="form-label">API KeyID
+                    <span class="text-danger font-weight-bold">*</span>
+                </label>
+                <input type="text" class="form-control form-control-sm" id="api-key" placeholder="Enter API key">
+            </div>
+            <div class="col-12 mb-2">
+                <label for="status" class="form-label">Status ID
+                    <span class="text-danger font-weight-bold">*</span>
+                </label>
+                <select class="form-select form-select-sm mb-2" id="status">
+                    <option selected>Select Status</option>
+                    <option value="1">Enable</option>
+                    <option value="2">Disable</option>
+                </select>
+            </div>
+            <div class="col-12 mb-2">
+                <label for="stop-tracking" class="form-label">Stop Tracking Stage</label>
+                <select class="form-select form-select-sm mb-2" id="stage">
+                    <option selected>Select Stages</option>
+                    <option value="1">Delivered</option>
+                    <option value="2">Exceptions</option>
+                    <option value="3">In Transit</option>
+                    <option value="4">Out for Delivery</option>
+                    <option value="5">Pending Pickup</option>
+                    <option value="6">RTO</option>
+                    <option value="7">RTO Delivered</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="col-12 form-switch mb-2">
+            <input class="form-check-input" type="checkbox" id="auto-pickup">
+            <label class="form-check-label" for="auto-pickup">Auto Pickup</label>
+        </div>
+        <div class="col-12 form-switch mb-2">
+            <input class="form-check-input" type="checkbox" id="is-reverse">
+            <label class="form-check-label" for="is-reverse">Is Reverse</label>
+        </div>
+        <div class="col-12 form-switch mb-2">
+            <input class="form-check-input" type="checkbox" id="is-qc-reverse">
+            <label class="form-check-label" for="is-qc-reverse">Is QC Reverse</label>
+        </div>
+        <div class="col-2 mt-3">
+            <button class="btn btn-sm btn-primary" (click) = "onSubmit()">Submit</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,52 @@
+<div class="card" [@fadeSlideInOut]>
+
+    <div class="card-head">
+        
+        <div class="row">
+            <div class="col">
+                <h3>Fetch AWB</h3>
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col d-none">
+                <label class="form-label">Courier ID <span class="text-danger font-weight-bold">*</span></label>
+                <input type="hidden" [(ngModel)] = "id" name="courierid" class="form-control " id="id">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Courier Name <span class="text-danger font-weight-bold">*</span></label>
+                <input type="text" [(ngModel)] = "name" name="firstName" class="form-control " id="fname" disabled>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="form-label">AWB Count <span class="text-danger font-weight-bold">*</span></label>
+                <input type="number"  [(ngModel)]="awbCount" class="form-control" (input)="validateAWBCount()" placeholder="Enter Count less than 10000" id="awbcount" max="1000">
+                <span *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="form-label">User Password <span class="text-danger font-weight-bold">*</span></label>
+                <input type="password" name="password" class="form-control " placeholder="Enter Password" id="password">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-2">
+                <button class="btn btn-outline-danger" (click)="closeDialog()">Close</button>
+            </div>
+            
+            <div class="col-2">
+                <button class="btn btn-primary ">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+<div class="card" [@fadeSlideInOut]>
+
+    <div class="card-head">
+
+        <div class="row" style="margin-bottom: 0px;">
+            <div class="col-8">
+                <h3>Courier Credentials</h3>
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 0px;">
+            <h6>{{ courierName }}</h6>
+        </div>
+
+    </div>
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped" style="font-size: 16px;">
+                <tbody>
+                    <tr>
+                        <td><span class="form-label" style="font-weight: 700;">Username</span></td>
+                        <td>{{username}}</td>
+                    </tr>
+                    <!-- <tr>
+                        <td><span class="form-label" style="font-weight: 700;">Password:</span></td>
+                        <td>********</td>
+                    </tr> -->
+                    <tr>
+                        <td><span class="form-label" style="font-weight: 700;">Customer ID</span></td>
+                        <td>{{customerId}}</td>
+                    </tr>
+                    <tr>
+                        <td><span class="form-label" style="font-weight: 700;">Contract ID</span></td>
+                        <td>{{contractId}}</td>
+                    </tr>
+                    <tr>
+                        <td><span class="form-label" style="font-weight: 700;">Identifier</span></td>
+                        <td>{{identifier}}</td>
+                    </tr>
+                    <tr>
+                        <td><span class="form-label" style="font-weight: 700;">Product Type</span></td>
+                        <td>{{productype}}</td>
+                    </tr>
+                    <tr>
+                        <td><span class="form-label" style="font-weight: 700;">Start Series</span></td>
+                        <td>{{startSeries}}</td>
+                    </tr>
+                    <tr>
+                        <td><span class="form-label" style="font-weight: 700;">End Series</span></td>
+                        <td>{{endSeries}}</td>
+                    </tr>
+                    <tr>
+                        <td><span class="form-label" style="font-weight: 700;">Expiry Date</span></td>
+                        <td>{{formattedDate}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+
+
+    </div>
+</div>  

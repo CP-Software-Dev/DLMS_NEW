@@ -1,0 +1,112 @@
+<div class="card p-4">
+    <div class="row mb-3">
+        <div class="col-md-6 col-sm-6">
+            <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black; font-size: 15px; margin-right: 10px;"></i>Article Details</h5>
+        </div>
+        <!-- <div class="col-md-6 col-sm-6" style="text-align: end;">
+            <button class=" btn btn-sm order-status" style="cursor: default;">{{order.orderStatus}}</button>
+        </div> -->
+    </div>
+
+
+    <div class="main-status-container" *ngFor="let order of orders">
+        <div class="row" style="margin: 1.8rem 0 0.8rem 0;">
+            <div class="col-md-12 col-sm-12">
+                <div class="order-metadata__list">
+                    <div class="order-metadata__item">
+                        <span class="label">SH ID:</span>
+                        <span>{{order.orderID}}</span>
+                    </div>
+                    <div class="order-metadata__item">
+                        <span class="label">Date:</span>
+                        <span>{{order.date}}</span>
+                    </div>
+                    <div class="order-metadata__item">
+                        <span class="label">Courier:</span>
+                        <span>{{order.courier}}</span>
+                    </div>
+                    <div class="order-metadata__item">
+                       <span class="label">AWB No:</span>
+                       <span>{{order.awb}}</span>
+                    </div>
+                    <div class="order-metadata__item">
+                        <span class="label">Order Status:</span>
+                        <span class="badge badge-success">{{order.orderStatus}}</span>
+                     </div>
+                    <div class="order-metadata__item">
+                        <span class="label">Shipment Status:</span>
+                        <span class="badge badge-success">{{order.shipmentStatus}}</span>
+                     </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row custom-row mt-3" >
+            <div class="seller-details card col-md-3">
+                <h4 class="font-primary">Seller Details</h4>
+                <div class="">
+                    <strong>Seller Name:</strong>
+                    <span>{{order.seller}}</span>
+                </div>
+                <div class="">
+                    <strong>Company:</strong>
+                    <a style="color: #004080;font-weight:bold;">
+                        <span>{{order.company}}</span>
+                    </a>
+                </div>
+            </div>
+            <div class="order card col-md-3">
+                <h4 class="font-primary">Order</h4>
+                <div class="">
+                    <strong>Order No:</strong>
+                    <span>{{order.orderID}}</span>
+                </div>
+                <div class="">
+                    <strong>Date:</strong>
+                    <span>{{order.date}}</span>
+                </div>
+                <div class="">
+                    <strong>Payment Type:</strong>
+                    <span>Prepaid</span>
+                </div>
+                <div class="">
+                    <strong>Order Weight:</strong>
+                    <span>{{order.weight}}</span>
+                </div>
+                <div class="">
+                    <strong>Dimension:</strong>
+                    <span>
+                        10 x 11 x 12 </span>
+                </div>
+                <hr>
+                <div>
+                    <strong>Courier:</strong>
+                    <span>{{order.courier}}</span><br>
+                    <strong>AWB:</strong>
+                    <span ><a class="text-info" target="blank" style="cursor: pointer;" (click)="navigateToAwbStatus(order.awb)">{{order.awb}}</a></span>
+                </div>
+            </div>
+            <div class="warehouse-details card col-md-3 mr-3">
+                <h4>Warehouse Details</h4>
+                <address class="m-t-10">
+                    {{order.warehouseName}}<br>
+                    {{order.warehoueseContact}}<br>
+                    {{order.warehoueseAddress}}<br>
+                    <br>
+                </address>
+            </div>
+            <div class="customer-details card col-md-3">
+                <h4>
+                    Customer Details
+                </h4>
+                <p>{{order.customer}}</p>
+                <address class="m-t-10" id="oldinfo">
+                    {{ getAddressTooltip(order) }}
+                </address>
+            </div>
+        </div>
+    </div>
+
+    
+    
+</div>

@@ -1,0 +1,166 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    background-color: #fff;
+    margin: 0.8rem 0 0.8rem 0;
+    box-shadow: 0 .25rem .5rem #e6edef;
+
+
+    .issues-part {
+        margin-right: 15px;
+        border-radius: 8px;
+        min-height: 500px;
+    }
+
+    .details-part {
+        border: 1px solid rgb(196, 194, 194);
+        border-radius: 8px;
+        min-height: 500px;
+    }
+
+    .scrollable-column {
+        max-height: 60vh;
+        /* Adjust as necessary */
+        overflow-y: auto;
+        padding: 5px 20px;
+        /* Optional: Adds some space to avoid clipping */
+    }
+
+    .card-head {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+
+
+        .btn-outline-dark {
+            box-shadow: none;
+            outline: none;
+            font-size: small;
+            padding: 0.1rem 0.35rem;
+        }
+
+        .form {
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px -5px 5px -3px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .form-label {
+            font-size: small;
+        }
+
+        .form-control-sm {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            box-shadow: none;
+        }
+
+        .form-select-sm {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+
+        .form-select:focus {
+            border-color: #747575;
+            box-shadow: none;
+            outline: none;
+        }
+
+
+
+    }
+
+
+    .example-form-field {
+        width: 105%;
+        border-radius: 6px;
+        font-size: smaller;
+        margin-left: -10px;
+        margin-bottom: -35px;
+    }
+
+    .example-form-field:focus {
+        border-color: #747575;
+    }
+
+    ::ng-deep .mdc-notched-outline {
+        padding: 11px;
+    }
+
+    ::ng-deep .mat-mdc-icon-button {
+        pointer-events: none;
+    }
+
+    .card-body {
+        padding: 1rem 1.5rem;
+
+        .btn-primary {
+            box-shadow: none;
+            outline: none;
+            font-size: small;
+            padding: 0.1rem 0.25rem;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-left: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+          }
+          .badge.open {
+            background-color: #c0392b;
+          }
+          .badge.in-progress {
+            background-color: rgb(13, 80, 134);
+          }
+          .badge.closed {
+            background-color: rgb(161, 159, 159);
+          }
+          .badge.resolved{
+            background-color: rgb(4, 122, 20);
+          }
+          
+
+        .table th {
+            font-size: small;
+            font-weight: 700;
+            padding-bottom: 15px;
+        }
+
+
+        .table td {
+            font-size: smaller;
+            font-weight: 400;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .form-select:focus {
+            border-color: #747575;
+            box-shadow: none;
+            outline: none;
+
+        }
+    }
+}
+
+@media (max-width: 872px) {
+    .table-row {
+        overflow-x: scroll;
+    }
+
+    .card-body .col-md-2.btn {
+        width: 100%;
+        margin: 0 10px 5px;
+    }
+
+    .card-body th,
+    .card-body td {
+        white-space: nowrap;
+        /* Prevent text wrapping */
+    }
+}

@@ -1,0 +1,27 @@
+<div class="card" [@fadeSlideInOut]>
+    <div class="card-head">
+        <div class="row">
+            <div class="col">
+                Change Status
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <select class="form-select form-select-sm mb-2" id="status" [(ngModel)]="changeRtostatusObj.newStatus">
+            <option value = "0" selected disabled>Choose Status</option>
+            <option *ngFor="let status of statusdata" [value]="status.id">
+                {{ status.shortName === 'Destroyed' ? 'Destroy' : status.shortName }}
+              </option>
+        </select>
+    </div>
+    <div class="card-footer">
+        <div class="row justify-content-end">
+            <button class="col-2 btn btn-primary me-3 btn-sm" (click)="changeStatus()"><b>Submit</b></button>
+            <button class="col-2 btn btn-danger btn-sm" (click)="closeDialog()"><b>Close</b></button>
+        </div>
+    </div>
+</div>

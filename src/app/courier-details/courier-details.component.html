@@ -1,0 +1,170 @@
+<div class="card">
+    <div class="card-head">
+        <div class="row">
+
+            <!-- Card-header tags  -->
+
+            <div class="col-md-6 col-sm-6 d-flex align-items-center">
+                <h5 class="mb-0 me-4"><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Invoice
+                    Data</h5>
+                <span style="font-weight: 500;">( {{startDate}} - {{endDate}} )</span>
+            </div>
+            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+                <!-- <button class="btn btn-outline-dark btn-sm me-3" [class.active]="isActive === 'Export'"
+                    (click)="exportToCSV()"><i class="ri-upload-2-line"></i> Export</button> -->
+                <button class="btn btn-outline-dark btn-sm me-3 d-flex align-items-center gap-2"
+                    [disabled]="isExporting" (click)="exportToCSV()">
+                    <ng-container *ngIf="!isExporting; else loadingTpl">
+                        <i class="ri-upload-2-line"></i> Export
+                    </ng-container>
+
+                    <ng-template #loadingTpl>
+                        <span class="spinner-border spinner-border-sm"></span>
+                        Exporting...
+                    </ng-template>
+                </button>
+                <button class="btn btn-outline-dark btn-sm me-3" [class.active]="isActive === 'buttonText'"
+                    (click)="toggleFiltersForm()"><i [class]="buttonIcon"></i> {{ buttonText
+                    }}</button>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="form" style="margin-top: 30px" *ngIf="showFiltersForm">
+            <div class="row">
+                <!-- Date Range  -->
+
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="courier" class="form-label">Courier:</label>
+                        <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="courierId">
+                            <option value="" selected>Select Courier</option>
+                            <option *ngFor="let courier of courierData" [value]="courier.id">
+                                {{ courier.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="mb-2 position-relative" #dropdownRef>
+
+                        <label class="form-label">Order Status:</label>
+
+                        <!-- Input Box -->
+                        <div class="form-control form-control-sm d-flex justify-content-between align-items-center cursor-pointer"
+                            (click)="toggleDropdown()">
+
+                            <span class="text-truncate">
+                                {{ selectedLabels.length ? selectedLabels.join(', ') : 'Select Order Status' }}
+                            </span>
+
+                            <i class="ri-arrow-down-s-line"></i>
+                        </div>
+
+                        <!-- Dropdown -->
+                        <div class="custom-dropdown shadow" *ngIf="isDropdownOpen">
+
+                            <!-- Select All -->
+                            <div class="dropdown-item">
+                                <input type="checkbox" [checked]="isAllSelected()" (change)="toggleSelectAll($event)" />
+                                <span>Select All</span>
+                            </div>
+
+                            <!-- Options -->
+                            <div class="dropdown-item" *ngFor="let item of orderTypes">
+                                <input type="checkbox" [checked]="selectedValues.includes(item.value)"
+                                    (change)="onItemChange($event, item.value)" />
+                                <span>{{ item.label }}</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="button-grp mb-2 d-flex justify-content-start">
+                        <button class="btn btn-outline-dark btn-sm me-3" type="button" style="
+                background-color: rgb(5, 114, 209);
+                font-size: small;
+                color: white;
+              " (click)="applyFilters()">
+                            Apply
+                        </button>
+                        <button class="btn btn-danger btn-sm me-3" style="font-size: small; box-shadow: none"
+                            (click)="clearFilters()">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+
+            <app-loader [loading]="loading"></app-loader>
+
+            <!-- Shipment data  -->
+
+            <div class="table-row" *ngIf="!loading">
+                <table class="table">
+                    <thead class="table-head-hover">
+                        <tr>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Kit Number</th>
+                            <th scope="col">Bank</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">OLD AWB</th>
+                            <th scope="col">Carrier<br><span style="font-size: 12px; font-weight: 500;">
+                                    <i class="ri-corner-down-right-line"></i>
+                                    AWB
+                                </span>
+                            </th>
+                            <th>Courier</th>
+                            <th scope="col">Shipment Status</th>
+                            <th>Zone</th>
+                            <th>TAT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let order of paginatedOrders">
+                            <td> <span style="cursor: pointer; color:#0b72c7
+                                ; font-weight: 700;" (click)="navigateToShipmentDetail(order.orderID)">{{ order.orderID
+                                    }}</span> </td>
+                            <td>{{ order.kitNumber}}</td>
+                            <td>{{ order.seller }}</td>
+                            <td>
+                                <span>
+                                    {{ order.customer.trim().length > 25 ? (order.customer.trim() | slice: 0: 19) +
+                                    '...' : order.customer.trim() }}
+                                </span>
+                            </td>
+                             <td>{{ order.oldAWB || '--' }}</td>
+                            <td><span style="font-weight: 600;">{{ order.courier }}</span><br><span style="cursor: pointer; color:#0b72c7
+                                 ; font-weight: 700;" (click)="navigateToAwbStatus(order.awb)" *ngIf="order.awb"><i
+                                        class="ri-corner-down-right-line"></i>{{ order.awb
+                                    }}</span>
+                            </td>
+                            <td>{{ order.courier || '--' }}</td>
+                            <td>
+                                <button class="btn btn-sm statusbtn" style="min-width: 80px;">{{
+                                    order.shipmentStatus }}</button>
+                            </td>
+                            <td>{{ order.zone || '--' }}</td>
+                            <td>{{order.tat || '--'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination  -->
+
+        <app-paginator [length]="totalOrders" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100 , 500 , 1000]"
+            [pageIndex]="pageIndex" (page)="handlePageEvent($event)">
+        </app-paginator>
+    </div>
+</div>

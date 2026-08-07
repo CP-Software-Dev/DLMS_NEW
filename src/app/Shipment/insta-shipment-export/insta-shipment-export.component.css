@@ -1,0 +1,126 @@
+
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    background-color: #fff;
+    margin: 1.25rem 0 1.25rem 0;
+    box-shadow: 0 .25rem .5rem #e6edef;
+
+    .card-head {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #edf1f7;
+        font-size: 1rem;
+        
+        .btn-outline-dark{
+            box-shadow: none;
+            outline: none;
+            font-size: small; 
+            padding: 0.1rem 0.35rem; 
+        }
+
+        .form {
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: -5px -5px 5px rgba(109, 109, 109, 0.2),
+                0 5px 5px rgba(109, 109, 109, 0.2),
+                -5px 5px 5px rgba(109, 109, 109, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .form-label {
+            font-size: small;
+        }
+
+        .form-control-sm {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            box-shadow: none;
+        }
+
+        .form-select-sm {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+
+        .form-select:focus , .form-control:focus {
+            border-color: #747575;
+            box-shadow: none;
+            outline: none;
+        }
+        
+    }
+
+    .custom-select{
+        width: 100%;
+        padding: 5px;
+        padding-left: 10px;
+        font-size: medium;
+        outline: none;
+        border: 1.5px solid rgb(73, 72, 72);
+        border-radius: 6px;
+    }
+
+    .custom-select:focus{
+        border: 2px solid;
+        border-color: #747575;
+        border-radius: 6px;
+        box-shadow: none;
+        outline: none;
+    }
+
+    .example-form-field {
+        width: 105%;
+        border-radius: 6px;
+        font-size: small;
+        margin-left: -10px;
+        margin-bottom: -30px;
+      }
+
+      .example-form-field:focus {
+        border-color: #747575;
+     }
+
+    ::ng-deep  .mdc-notched-outline{
+        padding: 11px;
+      }
+      
+      
+      ::ng-deep .mat-mdc-icon-button{
+          pointer-events: none;
+      }
+        
+
+    .card-body {
+        padding: 1rem 1.5rem;
+        .table th {
+            font-size: small;
+            font-weight: bold;
+            vertical-align: middle;
+            text-align: left;
+
+        }
+
+        .table td {
+            font-size: small;
+            font-weight: 400;
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd; 
+            vertical-align: middle;
+        }
+        
+    }
+}
+
+@media (max-width: 872px) {
+    .card-body{
+        overflow-x: scroll;
+    }
+    .card-body .col-md-2.btn {
+        width: 100%;
+        margin: 0 10px 5px;
+    }
+}
+

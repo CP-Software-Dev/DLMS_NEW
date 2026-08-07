@@ -1,0 +1,63 @@
+
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    background-color: #fff;
+    margin: 0.8rem 0 0.8rem 0;
+    box-shadow: 0 .25rem .5rem #e6edef;
+
+    .card-head {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #edf1f7;
+        font-size: 1rem;
+        
+
+
+        .btn-outline-dark{
+            box-shadow: none;
+            outline: none;
+            font-size: small; 
+            padding: 0.1rem 0.35rem; 
+        }
+        
+    }
+
+    .card-body {
+        padding: 1rem 1.5rem;
+
+        .btn-outline-dark{
+            box-shadow: none;
+            outline: none;
+            font-size: small; 
+            padding: 0.1rem 0.25rem; 
+        }
+ 
+
+        .table th {
+            font-size: small;
+            font-weight: 700;
+            background-color: #f9fbfd;
+        }
+
+
+        .table td {
+            font-size: smaller;
+            font-weight: 400;
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd; 
+        }
+    }
+}
+
+@media (max-width: 872px) {
+    .card-body{
+        overflow-x: scroll;
+    }
+    .card-body .col-md-2.btn {
+        width: 100%;
+        margin: 0 10px 5px;
+    }
+}
+

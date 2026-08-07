@@ -1,0 +1,330 @@
+<div class="card" style="border: none;">
+    <div class="card-head">
+        <div class="row">
+
+            <!--Seller & Daterange Filter-->
+
+            <div class="col-md-9 col-sm-3" style="vertical-align: middle;">
+                <div class="row">
+                    <div class="col-2 d-flex align-items-center" style="margin-top: -6px;">
+                        <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Dashboard</h5>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-sm dropdown" style="width: 100%;" type="button" id="moreDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false"
+                            [class.active]="isDropdownItemActive(selectedSeller)">
+                            {{ moreButtonText }}
+                            <i class="ri-arrow-down-s-fill dropdown-icon"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" style="width: 25%;" aria-labelledby="moreDropdown">
+                            <li *ngFor="let seller of sellerData">
+                                <button class="dropdown-item" [class.active]="isDropdownItemActive(seller.id)"
+                                    (click)="selectSeller(seller.id)">
+                                    {{ seller.name }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    @if(serviceType == 1){<div class="col-2">
+                        <button class="btn btn-sm dropdown" style="width: 100%;" type="button" id="typeDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+
+                            {{ selectedTypeLabel }}
+                            <i class="ri-arrow-down-s-fill dropdown-icon"></i>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end" style="width: 100%;" aria-labelledby="typeDropdown">
+                            <li>
+                                <button class="dropdown-item" [class.active]="selectedType === 2"
+                                    (click)="selectType(2, 'Perso')">
+                                    Perso
+                                </button>
+                            </li>
+
+                            <li>
+                                <button class="dropdown-item" [class.active]="selectedType === 3"
+                                    (click)="selectType(3, 'Insta')">
+                                    Insta
+                                </button>
+                            </li>
+                        </ul>
+                    </div>}
+
+                    <div class="col">
+                        <!-- <app-daterange (dateRangeSelected)="onDateRangeSelected($event)"></app-daterange> -->
+                         <app-date-picker-invoice [selectedRange]="selectedDateRange" (dateRangeSelected)="onDateRangeSelected($event)"></app-date-picker-invoice>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards with Count and Links -->
+
+            <div class="row sub-card g-2 mt-1">
+                <div class="col-3">
+                    <div class="card" style="border-left: 5px solid #247B8B; ">
+                        <div class="card-body row">
+                            <div class="col-3 icon-box">
+                                <i class="bi bi-box icon" style="color: #247B8B; "></i>
+                            </div>
+                            <div class="col-9">
+                                <div class="custom-text-wrapper">
+                                    <span class="custom-text">Total Orders</span>
+                                    <span class="custom-link-wrapper">
+                                        <a class="custom-link" (click)="totalOrders()">{{ getCardCount('Orders') }}</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card" style="border-left: 5px solid #0c9; ">
+                        <div class="card-body row">
+                            <div class="col-3 icon-box">
+                                <i class="bi bi-truck icon" style="color: #0c9;"></i>
+                            </div>
+                            <div class="col-9">
+                                <div class="custom-text-wrapper">
+                                    <span class="custom-text">Total Shipped</span>
+                                    <span class="custom-link-wrapper">
+                                        <a class="custom-link" (click)="shippedOrders()">{{ getCardCount('Shipped')
+                                            }}</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card" style="border-left: 5px solid #CD5C5C;">
+                        <div class="card-body row">
+                            <div class="col-3 icon-box">
+                                <i class="ri-government-line icon" style="color:#CD5C5C;"></i>
+                            </div>
+                            <div class="col-9">
+                                <div class="custom-text-wrapper">
+                                    <span class="custom-text">Total Delivered</span>
+                                    <span class="custom-link-wrapper">
+                                        <a class="custom-link" (click)="deliveredOrders()">{{ getCardCount('Delivered')
+                                            }}</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card" style="border-left: 5px solid #19b5fe;">
+                        <div class="card-body row">
+                            <div class="col-3 icon-box">
+                                <i class="ri-file-warning-fill icon" style="color: #19b5fe;"></i>
+                            </div>
+                            <div class="col-9">
+                                <div class="custom-text-wrapper">
+                                    <span class="custom-text">Total Exceptions</span>
+                                    <span class="custom-link-wrapper">
+                                        <a class="custom-link" (click)="exceptionOrders()">{{ getCardCount('Exception')
+                                            }}</a>
+                                    </span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card" style="border-left: 5px solid #4c66fb;">
+                        <div class="card-body row">
+                            <div class="col-3 icon-box">
+                                <i class="bi bi-bootstrap-reboot icon" style="color: #4c66fb;"></i>
+                            </div>
+                            <div class="col-9">
+                                <div class="custom-text-wrapper">
+                                    <span class="custom-text">Total RTO</span>
+                                    <span class="custom-link-wrapper">
+                                        <a class="custom-link" (click)="rtoOrders()">{{ getCardCount('RTO') }}</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card" style="border-left: 5px solid #f7bc06;">
+                        <div class="card-body row">
+                            <div class="col-3 icon-box">
+                                <i class="ri-takeaway-line icon" style="color:#f7bc06;"></i>
+                            </div>
+                            <div class="col-9">
+                                <div class="custom-text-wrapper">
+                                    <span class="custom-text">Couriers</span>
+                                    <ng-container *ngIf="isAdmin; else showCount">
+                                        <span class="custom-link-wrapper">
+                                            <a class="custom-link" (click)="totalCouriers()">{{ getCardCount('Couriers')
+                                                }}</a>
+                                        </span>
+                                    </ng-container>
+                                    <ng-template #showCount>
+                                        <span class="custom-link">{{ getCardCount('Couriers') }}</span>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card" style="border-left: 5px solid #87BCED;">
+                        <div class="card-body row">
+                            <div class="col-3 icon-box">
+                                <i class="bi bi-people-fill icon" style="color: #87BCED;"></i>
+                            </div>
+                            <div class="col-9">
+                                <div class="custom-text-wrapper">
+                                    <span class="custom-text">Users</span>
+                                    <ng-container *ngIf="isAdmin; else showCount">
+                                        <span class="custom-link-wrapper">
+                                            <a class="custom-link" (click)="totalUsers()">{{ getCardCount('Users')
+                                                }}</a>
+                                        </span>
+                                    </ng-container>
+                                    <ng-template #showCount>
+                                        <span class="custom-link">{{ getCardCount('Users') }}</span>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="card" style="border-left: 5px solid #2885D8;">
+                        <div class="card-body row">
+                            <div class="col-3 icon-box">
+                                <i class="ri-links-fill icon" style="color: #2885D8;"></i>
+                            </div>
+                            <div class="col-9">
+                                <div class="custom-text-wrapper">
+                                    <span class="custom-text">Webhooks</span>
+                                    <ng-container *ngIf="isAdmin; else showCount">
+                                        <span class="custom-link-wrapper">
+                                            <a class="custom-link" (click)="totalWebhook()">{{ getCardCount('Webhooks')
+                                                }}</a>
+                                        </span>
+                                    </ng-container>
+                                    <ng-template #showCount>
+                                        <span class="custom-link">{{ getCardCount('Users') }}</span>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Graphs Card -->
+
+<div class="row graph-card">
+    <div class="col">
+        <div class="card">
+            <div class="card-body" style="text-align: center;">
+                <div class="text-wrapper">
+                    <span class="custom-text">Order Status Tracker</span>
+                    <app-orders-graph></app-orders-graph>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-body" style="text-align: center;">
+                <div class="text-wrapper">
+                    <span class="custom-text">Shipment Status Tracker</span>
+                    <app-shipments-graph></app-shipments-graph>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-body" style="text-align: center;">
+                <div class="text-wrapper">
+                    <span class="custom-text">Courier Wise Status</span>
+                    <app-courier-graph></app-courier-graph>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tables -->
+
+<div class="row table-card">
+    <div class="col">
+        <div class="card">
+            <div class="card-head">Orders</div>
+            <div class="card-body">
+                <table class="table">
+                    <thead class="table-head-hover">
+                        <tr>
+                            <th scope="col">Bank</th>
+                            <th scope="col">Total Orders</th>
+                            <th scope="col">Requested</th>
+                            <th scope="col">Printed</th>
+                            <th scope="col">Personalized</th>
+                            <th scope="col">Ready to Dispatch</th>
+                            <th scope="col">Shipped</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let data of sellerwiseData">
+                        <tr>
+                            <td scope="col">{{data.name}}</td>
+                            <td scope="col">{{data.orders}}</td>
+                            <td scope="col">{{data.requested}}</td>
+                            <td scope="col">{{data.printed}}</td>
+                            <td scope="col">{{data.personalized}}</td>
+                            <td scope="col">{{data.readyToDispatch}}</td>
+                            <td scope="col">{{data.shipped}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-head">Shipments</div>
+            <div class="card-body">
+                <table class="table">
+                    <thead class="table-head-hover">
+                        <tr>
+                            <th scope="col">Bank</th>
+                            <th scope="col">Total Orders</th>
+                            <th scope="col">Pending Pickup</th>
+                            <th scope="col">In Transit</th>
+                            <th scope="col">Out for Delivery</th>
+                            <th scope="col">Delivered</th>
+                            <th scope="col">RTO</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let data of shipmentwiseData">
+                        <tr>
+                            <td scope="col">{{data.name}}</td>
+                            <td scope="col">{{data.orders}}</td>
+                            <td scope="col">{{data.pendingPickup}}</td>
+                            <td scope="col">{{data.inTransit}}</td>
+                            <td scope="col">{{data.ofd}}</td>
+                            <td scope="col">{{data.delivered}}</td>
+                            <td scope="col">{{data.rto}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

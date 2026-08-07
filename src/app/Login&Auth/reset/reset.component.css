@@ -1,0 +1,128 @@
+.parent{
+   height: 100vh;
+   width: 100vw;
+    background-image: radial-gradient(circle,rgb(170, 31, 224),rgb(235, 157, 13));
+}
+
+.left-box {
+   position: relative;
+   overflow: hidden;
+}
+
+
+
+.left-box-img {
+   object-fit: cover;
+   width: 100%;
+   height: 100%;
+   margin-left: -15px;
+   position: absolute;
+}
+
+.right-box
+{
+    width: 70%;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    padding: 40px;
+}
+
+.right-rounded {
+   border-top-right-radius: 80px; 
+   border-bottom-right-radius: 80px; 
+}
+
+.form-control
+{
+   min-width: 90%;
+   padding: 10px;
+   border: 1px solid rgb(207, 205, 205) ;
+   border-radius: 5px;
+   margin-bottom: 10px;
+}
+
+.form-control:focus {
+   border-color: #747575;
+   box-shadow: none;
+   outline: none;
+}
+
+.tooltip {
+   max-width: 10px !important; /* Ensure tooltip is not too wide */
+   white-space: normal !important; /* Allow text to wrap */
+   word-wrap: break-word !important; /* Breaks words if necessary */
+ }
+ 
+ .tooltip-inner {
+   max-width: 10px !important; /* Ensure tooltip content width matches */
+   text-align: left !important; /* Align text to the left */
+   padding: 8px 12px !important; /* Adjust padding for better readability */
+ }
+ 
+
+.forgot a {
+   text-decoration: none; 
+   color: rgb(51, 51, 134);
+   font-weight: 600;
+}
+
+.btn-reset
+{
+   background-color:  #28304e;
+   border: 1px solid  #28304e;
+   border: 1px solid  #28304e;
+   padding: 9px;
+   color: #fff;
+}
+
+.btn-reset:hover{
+   background-color:  #28304e;
+   border: 1px solid  #28304e;
+   color: #fff;
+}
+
+.btn-reset:focus {
+   box-shadow: none;
+   border: 1px solid  #28304e;
+   background-color:  #28304e;
+   color: #fff;
+}
+
+
+.form-text.text-muted {
+   font-size: 0.9rem;
+   margin-top: -8px;
+}
+
+.input-group.mb-1 {
+   margin-bottom: 0.5rem;
+}
+
+@media only screen and (max-width: 768px){
+
+
+   .left-box {
+       display: none;
+   }
+
+   .right-box {
+       padding: 50px;
+       width: 70%;
+       align-items: center;
+   }
+
+   .img-fluid {
+       width: 60%; 
+       margin-bottom: -20px;
+       margin-top: 10px;
+   }
+
+}
+
+@media only screen and (max-width: 420px) {
+
+   .right-box {
+       width: 80%;
+       padding: 20px; 
+   }
+}

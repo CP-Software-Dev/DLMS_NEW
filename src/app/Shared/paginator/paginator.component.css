@@ -1,0 +1,112 @@
+.paginator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.left-section {
+    display: flex;
+    align-items: center;
+}
+
+.paginator select {
+    padding: 5px 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+.pagination-info {
+    font-size: 16px;
+    margin-left: 20px;
+}
+
+.pagination-buttons {
+    display: flex;
+    align-items: center;
+
+}
+
+.pagination-buttons button {
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    border: 1px solid #2874A6 ;
+    background-color: #fff;
+    color: #2874A6 ;
+     border-radius: 10%; 
+    cursor: pointer;
+    transition: background-color 0.3s;
+    padding: 3px 10px;
+}
+
+.pagination-buttons button[disabled] {
+    background-color: #ccc;
+}
+
+.pagination-buttons button:not([disabled]):hover {
+    background-color: #2874A6;
+    color: #fff;
+}
+
+.pagination-buttons span {
+    min-width: 30px;
+    height: 30px;
+    font-weight: bold;
+    margin-left: 10px;
+    font-size: 14px;
+    padding: 7px;
+    cursor: pointer;
+    transition: color 0.3s;
+    border: 1px solid #2874A6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10%;
+    padding: 3px 10px;
+}
+
+.pagination-buttons span.active {
+    font-weight: bold;
+    color: #fff;
+    background-color: #2874A6;
+}
+
+.pagination-buttons span:hover {
+    color: #fff;
+    background-color: #2874A6;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+/* input[type=number] {
+  -moz-appearance: textfield;
+} */
+
+.page-input input , .page-input input:focus{
+    outline: none;
+    border:1px solid #616060;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.page-input button {
+    border:1px solid #2874A6;
+    background-color: #2874A6;
+    color: #fff;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+
+
+/* .page-input button:hover{
+    background-color: #2874A6;
+    color: #fff;
+} */

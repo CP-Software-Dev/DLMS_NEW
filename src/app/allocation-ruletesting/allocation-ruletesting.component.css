@@ -1,0 +1,35 @@
+.row {
+    display: flex;
+    margin-right: -15px;
+    margin-left: -15px;
+    flex-wrap: wrap;
+}
+
+.rule-testing-form
+{
+    display: block;
+    margin-left: 30px;
+}
+
+
+.form-label {
+    font-size: small;
+    line-height: 1.5;
+    margin-bottom: 5px;
+    padding-top: calc(.375rem + 1px);
+    padding-bottom: calc(.375rem + 1px);
+}
+
+.form-control{
+    width: 180%;
+    box-shadow: none;
+    padding: 20px;
+}
+
+
+.btn-primary{
+    padding: 9px;
+    border: 1px solid #4c66fb;
+    background-color: #4c66fb;
+    border-radius: 4px;
+}

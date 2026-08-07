@@ -1,0 +1,142 @@
+.parent{
+   height: 100vh;
+   width: 100vw;
+    background-image: radial-gradient(circle,rgb(170, 31, 224),rgb(235, 157, 13));
+}
+
+.left-box {
+   position: relative;
+   overflow: hidden;
+}
+
+
+.left-box-img {
+   object-fit: cover;
+   width: 100%;
+   height: 100%;
+   margin-left: -15px;
+   position: absolute;
+}
+
+
+
+
+.right-rounded {
+   border-top-right-radius: 80px; 
+   border-bottom-right-radius: 80px; 
+}
+
+.box-area{
+   width: 500px;
+   height: 500px;
+   border-radius: 20px;
+}
+
+.right-box{
+   align-items: center;
+   justify-content: center;
+}
+
+.form-control
+{
+   width: 100%;
+   padding: 10px;
+   border: 1px solid rgb(207, 205, 205);
+   border-radius: 6px;
+}
+
+.form-control:focus {
+   border-color: #747575;
+   box-shadow: none;
+   outline: none;
+}
+
+.forgot a {
+   text-decoration: none; 
+   color: rgb(51, 51, 134);
+   font-weight: 600;
+}
+
+.btn-login
+{
+   background-color:  #28304e;
+   border: 1px solid  #28304e;
+   border: 1px solid  #28304e;
+   padding: 9px;
+   color: #fff;
+}
+
+.btn-login:hover{
+   background-color:  #28304e;
+   border: 1px solid  #28304e;
+   color: #fff;
+}
+
+.btn-login:focus {
+   box-shadow: none;
+   border: 1px solid  #28304e;
+   background-color:  #28304e;
+   color: #fff;
+}
+
+.has-error input {
+   border-color: red;
+}
+
+@media only screen and (max-width: 760px){
+
+   .parent{
+      margin-top: -115px;
+   }
+
+   .left-box {
+       display: none;
+   }
+
+   .right-box {
+       padding: 50px;
+   }
+
+   .img-fluid {
+       width: 60%; 
+       margin-bottom: -20px;
+       margin-top: 10px;
+   }
+
+}
+
+@media only screen and (max-width: 580px) {
+
+   .left-box{
+      display: none;
+   }
+   .parent{
+      margin-top: -5.15rem;
+      margin-left: -5rem;
+   }
+   .right-box {
+       padding: 20px; 
+   }
+
+   form {
+       margin-top: -30px;
+   }
+
+   .forgot {
+       margin-top: 10px;
+   }
+}
+
+@media only screen and (max-width: 280px) {
+
+   .parent{
+      margin-top: -6.15rem;
+      margin-left: -6rem;
+   }
+   .right-box {
+       padding: 20px; 
+   }
+   .left-box{
+      display: none;
+   }
+}

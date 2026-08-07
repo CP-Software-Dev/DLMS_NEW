@@ -1,0 +1,215 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    background-color: #fff;
+    border: none;
+
+    .card-head {
+        padding: 0rem 1.5rem;
+        /* border-bottom: 1px solid #edf1f7; */
+        font-size: 1rem;
+
+        .col-2.btn {
+            font-size: small;
+            padding: 0%;
+            font-weight: 600;
+        }
+
+        .btn-outline-dark {
+            box-shadow: none;
+            outline: none;
+            font-size: small;
+            padding: 0.1rem 0.35rem;
+        }
+
+        .form {
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: -5px -5px 5px rgba(109, 109, 109, 0.2),
+                0 5px 5px rgba(109, 109, 109, 0.2),
+                -5px 5px 5px rgba(109, 109, 109, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .form-label {
+            font-size: small;
+        }
+
+        .form-control-sm {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            box-shadow: none;
+        }
+
+        .form-select-sm {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+
+        .form-select:focus,
+        .form-control:focus {
+            border-color: #747575;
+            box-shadow: none;
+            outline: none;
+        }
+    }
+
+    .example-form-field {
+        width: 105%;
+        border-radius: 6px;
+        margin-left: -10px;
+        margin-bottom: -30px;
+    }
+
+    .example-form-field:focus {
+        border-color: #747575;
+    }
+
+    ::ng-deep .mdc-notched-outline {
+        padding: 12px;
+    }
+
+
+    ::ng-deep .mat-mdc-icon-button {
+        pointer-events: none;
+    }
+
+    .card-body {
+        padding: 1rem 1.5rem;
+
+        .btn {
+            padding: 0.2rem 0.25rem;
+            box-shadow: 0 0 10px rgba(117, 117, 117, 0.5);
+        }
+
+        .btn.active {
+            background-color: #12263f;
+            border: #12263f;
+            color: #fff;
+        }
+
+
+
+        .table th {
+            font-size: small;
+            font-weight: 700;
+            background-color: #f9fbfd;
+            vertical-align: top;
+            text-align: left;
+        }
+
+
+        .table td {
+            font-size: smaller;
+            font-weight: 400;
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            vertical-align: middle;
+        }
+
+    }
+}
+
+.btn-group {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    /* Smooth transition for opacity */
+    box-shadow: none;
+}
+
+.button-group.show {
+    opacity: 1;
+}
+
+.btn-outline {
+    border: 0.5px solid #12263f;
+    background-color: #fff;
+    color: #12263f;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: none;
+    outline: none;
+    font-size: 15px;
+    padding: 0.4rem 0.35rem;
+}
+
+.btn-outline:hover {
+    background-color: #12263f;
+    color: #fff;
+}
+
+.statusbtn {
+    border: 1px solid #0d6efd;
+    color: #0d6efd;
+}
+
+.statusbtn:hover {
+    color: #0d6efd;
+    cursor: default;
+}
+
+.btn-outline:focus {
+    box-shadow: none;
+}
+
+@media (max-width: 872px) {
+    .table-row {
+        overflow-x: scroll;
+    }
+
+    .card-body .col-md-2.btn {
+        width: 100%;
+        margin: 0 10px 5px;
+    }
+
+
+    .card-body th,
+    .card-body td {
+        white-space: nowrap;
+        /* Prevent text wrapping */
+    }
+}
+
+.spin {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4); /* dim background */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: all; /* blocks clicks */
+}
+
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #4c66fb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

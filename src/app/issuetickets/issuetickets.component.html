@@ -1,0 +1,130 @@
+<div class="card">
+    <div class="card-head">
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Issue's List</h5>
+            </div>
+            <div class="col-md-6 col-sm-6" style="display: flex; justify-content: end;">
+                <div class="bank" style="width: 120px; ">
+                    <select class="form-select form-select-sm mb-2" name="institutionID" id="sellerName"
+                        (change)="onBankChange($event)">
+                        <option value="" selected>All</option>
+                        <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <!-- <div class="row g-3">
+            <div class="col-5 issues-part">
+                <div class="row p-2" style="border: 1px solid #e0dfdf; border-top-left-radius: 5px; border-top-right-radius: 5px;">
+                    <div class="col-md col-sm" style="display: flex; justify-content: end;">
+                        <div class="bank" style="width: 120px; ">
+                            <select class="form-select form-select-sm mb-2" name="institutionID" id="sellerName"
+                                (change)="onBankChange($event)">
+                                <option value="" selected>All</option>
+                                <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row scrollable-column" style="border: 1px solid #e0dfdf; border-top: none; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">
+                    <div class="col-12 " *ngFor="let issue of issuesList">
+                        <div class="issue-item" (click)="selectIssue(issue)"
+                            style="cursor: pointer; padding: 10px; border-bottom: 1px solid #ccc;">
+                            <div>
+                                <strong>{{ issue.subject }}</strong>
+                            </div>
+                            <div>
+                                <small>{{ issue.createdAt }}</small>
+                            </div>
+                            <div>
+                                <span>Status: {{ issue.status }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-6">
+                    <div *ngIf="selectedIssue">
+                        <div class="Subject" style="border: 1px solid rgb(226, 225, 225); border-radius: 5px; padding: 6px;">
+                            <span>{{ selectedIssue.subject }}</span>
+                        </div>
+                        <div class="details">
+                            <p><strong>Ticket ID:</strong> {{ selectedIssue.ticketId }}</p>
+                            <p><strong>Institution:</strong> {{ selectedIssue.institution }}</p>
+                            <p><strong>Username:</strong> {{ selectedIssue.username }}</p>
+                            <p><strong>Subject:</strong> {{ selectedIssue.subject }}</p>
+                            <p><strong>Description:</strong> {{ selectedIssue.issueDescription }}</p>
+                            <p><strong>Status:</strong> {{ selectedIssue.status }}</p>
+                            <p><strong>Priority:</strong> {{ selectedIssue.priority || 'N/A' }}</p>
+                            <p><strong>Created At:</strong> {{ selectedIssue.createdAt }}</p>
+                        </div>
+
+                    </div>
+                    <div *ngIf="!selectedIssue" style="display: flex; align-items: center; justify-content: center;" >
+                        <p><strong>Select an item to read</strong>selectedIssue</p>
+                    </div>
+            </div>
+        </div> -->
+        <div class="table-row">
+            <table class="table">
+                <thead class="table-head-hover">
+                    <tr>
+
+                        <th scope="col">Ticket ID</th>
+                        <th scope="col-2">Subject</th>
+                        <th scope="col">Institution</th>
+                        <th scope="col">Priority</th>
+                        <th scope="col">Creation Date</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Change Status</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    <tr *ngFor="let issue of issuesList">
+                        <td scope="col">{{issue.ticketId}}</td>
+                        <td scope="col-2">{{issue.subject}}</td>
+                        <td scope="col">{{issue.institution}}</td>
+                        <td scope="col">{{issue.priority}}</td>
+                        <td scope="col">{{issue.createdAt}}</td>
+                        <td scope="col">
+                            <button class="btn btn-sm btn-primary" (click)="viewDetails(issue)"><i
+                                    class="ri-eye-line"></i> View </button>
+                        </td>
+                        <td scope="col"> 
+                            <ng-container *ngIf="issue.status === 'Closed'; else showSelect">
+                                <select [(ngModel)]="issue.status" disabled (change)="onStatusChange(issue)"
+                                class="form-select" style="padding: 2px 10px; width: 70%;">
+                                <option value="Open">Open</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                            </ng-container>
+                            <ng-template #showSelect>
+                                <select [(ngModel)]="issue.status" (change)="onStatusChange(issue)"
+                                    class="form-select" style="padding: 2px 10px;  width: 70%;">
+                                    <option value="Open">Open</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Resolved">Resolved</option>
+                                    <option value="Closed">Closed</option>
+                                </select>
+                            </ng-template>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <app-paginator [length]="totalCount" [pageSize]="10" [pageSizeOptions]="[10, 20, 50]"
+            (page)="handlePageEvent($event)"></app-paginator>
+    </div>
+
+</div>

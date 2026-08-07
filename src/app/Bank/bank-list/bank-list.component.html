@@ -1,0 +1,43 @@
+<div class="card">
+    <div class="card-head">
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Customer Profile</h5>
+            </div>
+            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+                <button class="btn btn-outline-dark btn-sm me-3" (click)="openDialog()"> <i
+                        class="bi-plus"></i>
+                    Add Bank</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="table-row">
+            <table class="table">
+                <thead class="table-head-hover">
+                    
+                    <tr>
+                        <th scope="col">Bank ID</th>
+                        <th scope="col">Bank Name</th>
+                        <th scope="col">Sales Person</th>
+                        <th scope="col">Couriers</th>
+                        <th scope="col">Created By</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                      
+                </thead> 
+                <tbody>  
+                    <tr *ngFor="let data of bankData">
+                        <td>{{data.id}}</td>
+                        <td>{{data.name}}</td>
+                        <td>{{data.salesPersonName}}</td>
+                        <td>{{getCouriers(data.couriers)}}</td>
+                        <td>{{data.createdBy}}</td>
+                        <td><button class="btn btn-sm btn-outline-primary" (click)="editDetails(data)" ><i class="ri-pencil-fill"></i> Edit </button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

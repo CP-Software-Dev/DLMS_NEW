@@ -1,0 +1,46 @@
+<div class="card" [@fadeSlideInOut]>
+    <div class="card-head">
+        <div class="row">
+            <div class="col">
+                Zone Master Upload
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row mb-3">
+            <div class="col ">
+                    <label for="sellerName" class="form-label" style="font-weight: 600;">Courier </label>
+                    <select class="form-select form-select-sm mb-2" id="sellerName"  [(ngModel)]="courierId">
+                        <option value = "" selected>Select Courier</option>
+                        <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}</option>
+                    </select>
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col">
+                <div class="input-group">
+                    <input class="form-control" type="text" [value]="selectedFileName" readonly>
+                    <input #fileInput type="file" style="display:none;" (change)="onFileSelected($event)">
+                    <button class="btn btn-browse" type="button" (click)="fileInput.click()">Select File</button>
+                </div>
+                <div *ngIf="fileInvalid" class="text-danger mt-2">Invalid file format. Please select a .csv file.</div>
+            </div>
+        </div>
+        
+        
+        <div class="row justify-content-end">
+            <button class="col-2 btn btn-outline-success btn-sm" (click)="uploadFile()" [disabled]="!fileSelected"><b>Upload</b></button>
+            <button class="col-2 btn btn-outline-danger btn-sm" (click)="closeDialog()"><b>Close</b></button>
+        </div>
+        <div class="row download-csv">
+            
+            <a href="/assets/File_format/Sample_Zone_Master.csv" download="Sample_Zone_Master.csv"><i  class="ri-download-2-fill"></i> Download CSV Format</a>
+        </div>
+    </div>
+</div>

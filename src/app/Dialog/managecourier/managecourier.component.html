@@ -1,0 +1,171 @@
+<div class="card" [@fadeSlideInOut]>
+
+    <div class="card-head">
+
+        <div class="row" style="margin-bottom: 0px;">
+            <div class="col-8">
+                <h3>Manage Credentials</h3>
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 0px;">
+            <h6>{{ courierName }}</h6>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-8">
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">Username <span class="text-danger font-weight-bold">*</span></label>
+                        <input type="text" name="username" [ngClass]="{'is-invalid': isInvalid.username}"
+                            class="form-control" [(ngModel)]="username" placeholder="Enter User Name" autocomplete="off"
+                            maxlength="15" (keypress)="allowOnlyAlphanumeric($event)" [disabled]="isDataPresent">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Password <span class="text-danger font-weight-bold">*</span></label>
+                        <input type="password" name="password" class="form-control"
+                            [ngClass]="{'is-invalid': isInvalid.password}" [(ngModel)]="password"
+                            placeholder="Enter Password" autocomplete="new-password" [disabled]="isDataPresent">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">Customer ID <span
+                                class="text-danger font-weight-bold">*</span></label>
+                        <input type="text" name="customerId" class="form-control"
+                            [ngClass]="{'is-invalid': isInvalid.customerId}" [(ngModel)]="customerId"
+                            placeholder="Enter Customer Id" autocomplete="off" maxlength="15"
+                            (keypress)="allowOnlyAlphanumeric($event)" [disabled]="isDataPresent">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Contract ID <span
+                                class="text-danger font-weight-bold">*</span></label>
+                        <input type="text" name="contract-id" class="form-control"
+                            [ngClass]="{'is-invalid': isInvalid.contractId}" [(ngModel)]="contractId"
+                            placeholder="Enter Contract ID" autocomplete="off" maxlength="15"
+                            (keypress)="allowOnlyAlphanumeric($event)" [disabled]="isDataPresent">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">Identifier<span class="text-danger font-weight-bold">*</span></label>
+                        <input type="text" name="identifier" class="form-control"
+                            [ngClass]="{'is-invalid': isInvalid.identifier}" [(ngModel)]="identifier"
+                            placeholder="Enter Identifier" autocomplete="off" maxlength="15"
+                            (keypress)="allowOnlyAlphanumeric($event)" [disabled]="isDataPresent">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Product Type <span
+                                class="text-danger font-weight-bold">*</span></label>
+                        <select class="form-select form-select-sm mb-2" [ngClass]="{'is-invalid': isInvalid.productype}"
+                            [(ngModel)]="productype" id="status" [disabled]="isDataPresent">
+                            <option selected disabled>Select Product Type</option>
+                            <option value="SP">SP</option>
+                            <option value="BP">BP</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <ng-container *ngIf="stock?.length; else noData">
+
+                        <div class="col-12">
+                            <table class="table table-bordered stock-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Start Series</th>
+                                        <th>End Series</th>
+                                        <th>Expiry Date</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let item of stock; let i = index">
+                                        <td>{{ i + 1 }}</td>
+                                        <td>{{ item.startSeries || '--' }}</td>
+                                        <td>{{ item.endSeries || '--' }}</td>
+                                        <td>{{ item.expireAt | date:'dd/MM/yyyy' }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </ng-container>
+
+                    <ng-template #noData>
+                        <div class="no-stock text-center">
+                            No stock information available
+                        </div>
+                    </ng-template>
+                </div>
+
+
+
+            </div>
+            <div class="col-4" style="border-left: 1px solid rgb(216, 214, 214);">
+                <div class="row">
+                    <div class="col">
+                        <label for="status" class="form-label">Expiry Date
+                            <span class="text-danger font-weight-bold">*</span>
+                        </label>
+                        <input type="text" maxlength="10" placeholder="DD/MM/YYYY" (input)="onDateInput($event)"
+                            [(ngModel)]="formattedDate" [ngClass]="{'is-invalid': isInvalid.expireAt}"
+                            class="date-input form-control" (keypress)="allowOnlyNumeric($event)" />
+
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="form-label">Barcode Series<span class="text-danger font-weight-bold">*</span></label>
+                    <div class="form-container"
+                        style="border: 1px solid rgb(204, 201, 201); margin-left: 13px; border-radius: 5px; padding: 18px; width: 90%;">
+                        <i class="bi bi-info-circle position-absolute"
+                            style="top: 32%; right: 19px; transform: translateY(-50%); cursor: pointer;"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            title="Numeric value without check digit."></i>
+
+
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" name="startSeries" class="form-control"
+                                    [ngClass]="{'is-invalid': isInvalid.startSeries}" [(ngModel)]="startSeries"
+                                    placeholder="Enter Sart Series" autocomplete="off" maxlength="8"
+                                    (keypress)="allowOnlyNumeric($event)">
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" name="endSeries" class="form-control"
+                                    [ngClass]="{'is-invalid': isInvalid.endSeries}" [(ngModel)]="endSeries"
+                                    placeholder="Enter End Series" autocomplete="off" maxlength="8"
+                                    (keypress)="allowOnlyNumeric($event)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card-footer" style="background:none; border: none;">
+            <div class="row" style="display: flex; justify-content: end; align-items: center;">
+                <div class="col-1 d-flex justify-content-end">
+                    <button class="btn btn-outline-danger " (click)="closeDialog()">Close</button>
+                </div>
+
+                <div class="col-1 d-flex justify-content-end">
+                    <button class="btn btn-outline-primary" (click)="saveCredentials()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

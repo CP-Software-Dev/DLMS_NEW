@@ -1,0 +1,128 @@
+<div class="parent-card card">
+    <div class="header-row row">
+        <div class="col-md-6 col-sm-6">
+            <h5><i class="ri-checkbox-blank-fill"
+                    style="border: 2px solid black; font-size: 15px; margin-right: 10px;"></i>Article Details</h5>
+        </div>
+    </div>
+
+    <div class="main-status-container" *ngFor="let order of orders; let i = index" >
+        <div class="row" style="margin: 1.8rem 0 0.8rem 0;">
+            <div class="col-md-12 col-sm-12">
+                <div class="order-metadata__list">
+                    <div class="order-metadata__item">
+                        <span class="label">Order ID:</span>
+                        <span>{{order.orderID}}</span>
+                    </div>
+                    <div class="order-metadata__item">
+                        <span class="label">Date:</span>
+                        <span>{{order.date}}</span>
+                    </div>
+                    <div class="order-metadata__item">
+                        <span class="label">Weight:</span>
+                        <span>{{order.weight}} gm</span>
+                    </div>
+                    <div class="order-metadata__item">
+                       <span class="label">Dimensions:</span>
+                       <span>10 x 12 x 11cm</span>
+                    </div>
+                    <div class="order-metadata__item">
+                        <span class="label">Order Status:</span>
+                        <span class="badge badge-warning">{{order.orderStatus}}</span>
+                    </div>
+                    <div class="order-metadata__item">
+                        <span class="label">Shipment Status:</span>
+                        <span class="badge badge-warning">{{order.shipmentStatus}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row"  >
+            <div class="col-md-3 col-sm-3">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="customer-details card">
+                            <div class="card-header">
+                                <i class="bi bi-person-fill" style="margin-right: 10px; font-size: 22px;"></i>
+                                <span>Customer</span>
+                            </div>
+                            <div class="card-body">
+                                <span>{{order.customer}}</span>
+                                <br>
+                                <span>{{order.contact}}</span>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-md-12 col-sm-12">
+                        <div class="shipping-address card">
+                            <div class="card-header">
+                                <i class="ri-truck-line" style="margin-right: 10px; font-size: 22px;"></i>
+                                <span>Shipping Address</span>
+                            </div>
+                            <div class="card-body">
+                                <span>{{order.customer}}</span>
+                                <br>
+                                <span>{{order.address1}}</span>
+                                <br>
+                                <span>{{order.address2}}</span>
+                                <br>
+                                <span>{{order.city}} , {{order.state}}</span>
+                                <br>
+                                <span>{{order.pincode}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 col-sm-8">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="warehouse-details card">
+                            <div class="card-header" style="border-bottom: none;">
+                                <i class="ri-building-line" style="margin-right: 10px; font-size: 22px;"></i>
+                                <span>Warehouse Details</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6">
+                                        <div class="pickup-address card">
+                                            <div class="card-header">
+                                                <i class="ri-truck-line" style="margin-right: 10px; font-size: 22px;"></i>
+                                                <span>Pickup Address</span>
+                                            </div>
+                                            <div class="card-body">
+                                                <span><span style="font-weight: 500;">Name :- </span>{{order.warehouseName}}</span>
+                                                <br>
+                                                <span><span style="font-weight: 500;">Phone :- </span>{{order.warehoueseContact}}</span>
+                                                <br>
+                                                <span><span style="font-weight: 500;">Address :- </span>{{order.warehoueseAddress}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <div class="return-address card">
+                                            <div class="card-header">
+                                                <i class="ri-truck-line" style="margin-right: 10px; font-size: 22px;"></i>
+                                                <span>Return Address</span>
+                                            </div>
+                                            <div class="card-body">
+                                                <span><span style="font-weight: 500;">Name :- </span>{{order.rWarehouseName}}</span>
+                                                <br>
+                                                <span><span style="font-weight: 500;">Phone :- </span>{{order.rWarehoueseContact}}</span>
+                                                <br>
+                                                <span><span style="font-weight: 500;">Address :- </span>{{order.rWarehoueseAddress}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

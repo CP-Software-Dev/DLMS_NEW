@@ -1,0 +1,249 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    background-color: #fff;
+    margin: 0.8rem 0 0.8rem 0;
+
+
+     .card-head {
+        padding: 1.25rem 1rem 0rem 1.5rem;
+        font-size: small;
+    }
+
+    .sub-card .card {
+        border: 1px solid rgb(238, 234, 234);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+        .card-body {
+            padding: 11px 25px;
+            overflow: hidden;
+
+            .icon-box{
+                display: flex; 
+                align-items: center;
+                justify-content: left;
+                
+                .icon{
+                    font-size: 50px; 
+                    margin-right: 15px;
+                }
+            }
+            .custom-text-wrapper {
+                display: flex;
+                flex-direction: column;
+                
+                .custom-text{
+                    font-size: 24px; 
+                    font-weight: 600;
+                    font-family: "Solway", serif;
+                }
+
+                .custom-text {
+                    margin-right: 5px; /* Adjust as needed */
+                    font-size: 24px;
+                    font-weight: 600;
+                    font-family: "Solway", serif;
+                }
+                
+                .custom-link-wrapper {
+                    display: inline-block;
+                }
+                
+                .custom-link {
+                    color: #278ff0; /* Adjust as needed */
+                    font-size: 20px;
+                    cursor: pointer;
+                    font-family: "Solway", serif;
+                }
+            }
+        }
+    }
+
+    .example-form-field {
+        width: 50%;
+        margin-top: -5px;
+        margin-bottom: -30px;
+    }
+
+    ::ng-deep .mdc-notched-outline {
+        padding: 11px;
+    }
+
+    ::ng-deep .mat-mdc-icon-button {
+        background: transparent;
+    }
+
+    ::ng-deep .mat-mdc-icon-button {
+        pointer-events: none;
+    }
+}
+
+
+.table-card .card {
+    border: 1px solid rgb(119, 116, 116);
+    border-radius: 4px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    .card-head {
+        padding: 10px;
+        border-bottom: 1px solid #12263f;
+        font-weight: 600;
+        color: #e6edef;
+        background-color: #12263f;
+    }
+
+    .card-body {
+        padding: 1rem 1.5rem;
+
+        .table th {
+            font-size: small;
+            font-weight: 600;
+            background-color: #f9fbfd;
+
+        }
+
+        .table td {
+            font-size: smaller;
+            font-weight: 400;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+    }
+}
+
+.graph-card .card {
+    border: 1px solid rgb(119, 116, 116);
+    border-radius: 4px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    min-height: 400px;
+
+    .card-body {
+        padding: 1rem 1.5rem;
+
+        .text-wrapper{
+            display: flex;
+            flex-direction: column;
+
+            .custom-text{
+                font-weight: 700;
+                font-size: xx-large;
+                font-family: "Solway", serif;
+            }
+        }
+    }
+}
+
+
+.custom-style {
+    background-color: #e7e5e5;
+    color: #5a636b;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.custom-style:hover {
+    background-color: #5a636b;
+    color: #ffffff;
+}
+
+
+
+@media (max-width: 872px) {
+    .card-body {
+        overflow-x: scroll;
+    }
+    .sub-card .col-3 {
+        flex: 0 0 100%;
+    }
+    .card-body .col-md-2.btn {
+        width: 100%;
+        margin: 0 10px 5px;
+    }
+
+    .example-form-field {
+        width: 80%;
+        margin-bottom: -30px;
+    }
+}
+
+@media (max-width: 1400px) and (min-width: 873px) {
+    .card-body {
+        overflow-x: scroll;
+    }
+    .sub-card .col-3 {
+        flex: 0 0 50%;
+    }
+    .card-body .col-md-2.btn {
+        width: 100%;
+        margin: 0 10px 5px;
+    }
+
+    .example-form-field {
+        width: 80%;
+        margin-bottom: -30px;
+    }
+}
+
+
+.btn {
+    display: block;
+    width: 330px;
+}
+
+.btn-sm.dropdown {
+    background-color: #fff;
+    color: #12263f;
+    font-weight: 500;
+    border: 1px solid #12263f;
+    font-size: 0.9rem;
+    border-radius: 0.25rem;
+    text-align: left;
+}
+
+.dropdown-menu {
+    width: 100px;
+    padding-top: 20px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: #f4f6f8;
+    color: black;
+}
+
+.dropdown-item:hover {
+    background-color: #c0c8f7ee;
+    color: #fff;
+}
+
+.btn-sm.dropdown.active {
+    background-color: #c0c8f7ee;
+    border-color: #c0c8f7ee;
+}
+
+.btn-sm.dropdown:focus,
+.btn-sm.dropdown:active {
+    outline: none;
+    box-shadow: none;
+}
+
+.dropdown-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}

@@ -1,0 +1,124 @@
+<div class="card">
+  <div class="card-head">
+    <!-- Card-header elements -->
+
+    <div class="row">
+      <div class="col-md-6 col-sm-6">
+        <h5>
+          <i class="ri-checkbox-blank-fill" style="border: 2px solid black"></i>
+          Manual IP awb Data
+        </h5>
+      </div>
+      <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+        <button class="btn btn-outline-dark btn-sm me-3" (click)="exportToCSV()" [disabled]="isExporting">
+          <!-- <i class="ri-export-fill"></i>Export -->
+
+          <span *ngIf="!isExporting">
+            <i class="ri-export-fill"></i> Export
+          </span>
+
+          <span *ngIf="isExporting">
+            <i class="ri-loader-4-line spin"></i> Exporting...
+          </span>
+        </button>
+
+        <button class="btn btn-outline-dark btn-sm me-3" (click)="toggleFiltersForm()">
+          <i [class]="buttonIcon"></i> {{ buttonText }}
+        </button>
+      </div>
+    </div>
+
+    <div class="form" *ngIf="showFiltersForm" style="margin-top: 30px">
+      <div class="row align-items-end">
+
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label class="form-label">From Date:</label>
+            <app-date-picker-invoice [selectedRange]="selectedDateRange"
+              (dateRangeSelected)="onDateRangeSelected($event)"></app-date-picker-invoice>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label class="form-label">Kit Number:</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="kitnumber"
+              placeholder="Enter Kit Number" />
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label class="form-label">Order ID:</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="lotID" placeholder="Enter Order ID" />
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="button-grp mb-2 d-flex justify-content-start">
+            <button class="btn btn-outline-dark btn-sm me-3" type="button" style="
+            background-color: rgb(5, 114, 209);
+            font-size: small;
+            color: white;
+          " (click)="applyFilters()">
+              Apply
+            </button>
+
+            <button class="btn btn-danger btn-sm" style="font-size: small; box-shadow: none" (click)="clearFilters()">
+              Clear
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+        <div class="table-row">
+          <table class="table">
+            <thead class="table-head-hover">
+              <th scope="col">ID</th>
+              <th scope="col">Order ID</th>
+              <th scope="col">Card ID</th>
+              <th scope="col">Kit Number</th>
+              <th scope="col">Lot</th>
+              <th scope="col">Company</th>
+              <th scope="col">Awb No.</th>
+              <th scope="col">Created By</th>
+              <th scope="col">Created At</th>
+              <th scope="col">Remarks</th>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let data of rejectedData; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.orderID }}</td>
+                <td>{{ data.cardID }}</td>
+                <td>{{ data.kitNumber }}</td>
+                <td>{{ data.lotId }}</td>
+                <td>{{ data.company }}</td>
+                <td>{{ data.awb }}</td>
+                <td>{{ data.createdBy }}</td>
+                <td>{{ data.date.split(" ")[0] }}</td>
+                <td style="
+                  max-width: 150px;
+                  white-space: normal;
+                  word-wrap: break-word;
+                  overflow-wrap: break-word;
+                ">
+                  {{ data.errorMsg }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pagination  -->
+
+      <app-paginator [length]="totalOrders" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+        [pageIndex]="pageIndex" (page)="handlePageEvent($event)">
+      </app-paginator>
+    </div>
+  </div>

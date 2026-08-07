@@ -1,0 +1,48 @@
+<div class="card">
+  <div class="card-head">
+    <div class="row">
+      <div class="col-md-6 col-sm-6">
+        <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Employees</h5>
+      </div>
+      <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+        <button class="btn btn-outline-dark btn-sm me-3" (click)="openDialog()"> <i class="bi-plus"></i>
+          New User</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div>
+      <table class="table">
+        <thead class="table-head-hover">
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Contact</th>
+            <th scope="col">Created By</th>
+            <th scope="col">Permissions</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of EmployeeData">
+            <td scope="col">{{user.firstName}} {{user.lastName}}</td>
+            <td scope="col">{{user.emailAddress}}</td>
+            <td scope="col">{{user.contact}}</td>
+            <td scope="col">{{user.createdBy}}</td>
+            <td scope="col">
+              {{ getDisplayText(user) }}
+            </td>
+            <td scope="col"><button class="btn btn-sm btn-outline-primary" style="min-width: 80px;"
+                (click)="editDetails(user)">Edit</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <app-paginator [length]="totalOrders" [pageSize]="pageSize" [pageSizeOptions]="[10,20,50,100,200]"
+    (page)="handlePageEvent($event)">
+  </app-paginator>
+
+
+</div>

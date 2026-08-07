@@ -1,0 +1,43 @@
+<div class="card">
+  <div class="card-head">
+    <div class="row">
+      <div class="col-md-6 col-sm-6">
+        <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Couriers</h5>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div>
+      <table class="table">
+        <thead class="table-head-hover">
+          <tr>
+            <th scope="col">Courier ID</th>
+            <th scope="col">Courier Name</th>
+            <th scope="col">Courier Code</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of getCourierEntriesForCurrentPage()">
+            <td>{{entry.courierId}}</td>
+            <td>{{ entry.name }}</td>
+            <td>{{ entry.code }}</td>
+            <td>Active</td>
+            <td>
+              <button class="btn btn-sm btn-primary" style="margin-right: 5px;" [disabled]="entry.isEditable != 1"
+                (click)="openDialog(entry)"><i class="ri-add-line"></i> Add </button>
+              <button class="btn btn-sm btn-primary" [disabled]="entry.isEditable != 1" (click)="openDialog1(entry)"><i
+                  class="ri-pencil-fill"></i> Edit </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <app-paginator [length]="courierEntries.length" [pageSize]="pageSize" [pageSizeOptions]="[10,20,50,100,200]"
+    (page)="handlePageEvent($event)">
+  </app-paginator>
+
+
+</div>

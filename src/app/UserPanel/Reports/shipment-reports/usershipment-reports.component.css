@@ -1,0 +1,234 @@
+.reports-container {
+  display: flex;
+  padding: 20px;
+  gap: 20px; /* Add some space between the columns */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin: 0.8rem 0 0.8rem 0;
+  border-radius: 8px;
+}
+
+.created-reports-list {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  flex: 2.5; /* Use 2.5 parts of the flex container */
+}
+
+.create-report {
+  border-radius: 5px;
+  padding: 20px;
+  flex: 7.5; 
+}
+
+.title {
+  font-size: 1.5em;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 1em;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.report-category {
+  margin-bottom: 20px;
+}
+
+
+
+ul {
+  list-style-type: disc;
+  padding-left: 0;
+}
+
+.report-icon{
+  margin-right: 5px;
+}
+li {
+  margin-bottom: 5px;
+  margin-left: 30px;
+  font-size: .9em;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.create-report p {
+  margin-bottom: 20px;
+}
+
+.create-report {
+  border-radius: 5px;
+  padding: 20px;
+  flex: 7.5;
+}
+
+h4{
+  margin-bottom: 30px;
+}
+
+
+.form-group{
+  display: flex;
+  align-items: center;
+}
+.form-check-input{
+  margin-top: 5px;
+}
+
+
+.report-label{
+  font-size: 1em;
+  font-weight: 500;
+}
+.form-control , .form-select:focus , .form-check-input{
+  border: 1px solid #cccc;
+  box-shadow: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selected-statuses {
+  display: inline-block;
+  max-width: calc(100% - 20px); /* Adjust as necessary to leave space for the icon */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.dropbtn span {
+  order: 1;
+}
+
+.dropbtn i {
+  margin-left: 5px;
+  order: 2;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  margin-top: 5px;
+  min-width: 250px;
+  height: 250px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.dropdown-content::-webkit-scrollbar {
+  width: 2px !important; /* Use !important to ensure the style is applied */
+}
+
+.dropdown-content::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+  border-radius: 7px !important;
+}
+
+.dropdown-content::-webkit-scrollbar-thumb {
+  background: #888 !important;
+  border-radius: 7px !important;
+}
+
+.dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #555 !important;
+}
+
+.dropdown-content::-webkit-scrollbar-button {
+  display: none !important;
+}
+.dropdown-content {
+  scrollbar-width: thin; 
+  scrollbar-color: #888 #f1f1f1; 
+}
+
+.dropdown-content {
+  -ms-overflow-style: -ms-autohiding-scrollbar; 
+}
+.dropdown-content.show {
+  display: block;
+}
+
+.dropdown-content .searchfield {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 1px solid gray;
+  margin-bottom: 8px;
+}
+
+.dropdown-content label {
+  display: block;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dropdown-content label:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-content input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+
+.example-form-field {
+  width: 470px;
+  margin-top: -5px;
+  margin-bottom: -25px;
+  margin-left: -10px;
+}
+
+.example-form-field:focus {
+  border-color: #747575;
+}
+
+::ng-deep .mdc-notched-outline {
+  padding: 12px;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--outlined.mdc-text-field--no-label{
+  padding:4px 0px;
+}
+
+::ng-deep .mat-date-range-input-container{
+  margin-left: 50px;
+}
+
+::ng-deep .mat-mdc-form-field-icon-suffix{
+  margin-right:15px;
+}

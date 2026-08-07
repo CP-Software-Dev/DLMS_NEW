@@ -1,0 +1,179 @@
+
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    background-color: #fff;
+    margin: 0.8rem 0 0.8rem 0;
+    box-shadow: 0 .25rem .5rem #e6edef;
+
+    .card-head {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+
+        .btn-outline-dark{
+            box-shadow: none;
+            outline: none;
+            font-size: small; 
+            padding: 0.25rem 0.35rem; 
+        }
+
+        .form{
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px -5px 5px -3px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .form-label{
+            font-size: small;
+        }
+
+        .form-control-sm {
+            font-size: 0.875rem; 
+            padding: 0.25rem 0.5rem; 
+            box-shadow: none;
+        }
+
+        .form-select-sm {
+            font-size: 0.875rem; 
+            padding: 0.25rem 0.5rem; 
+        }
+        
+
+        .form-select:focus {
+            border-color: #747575;
+            box-shadow: none;
+            outline: none;
+         }
+        
+    }
+
+
+    .example-form-field {
+        width: 105%;
+        border-radius: 6px;
+        font-size: smaller;
+        margin-left: -10px;
+        margin-bottom: -35px;
+      }
+
+      .example-form-field:focus {
+        border-color: #747575;
+     }
+
+    ::ng-deep  .mdc-notched-outline{
+        padding: 11px;
+      }
+      
+      ::ng-deep .mat-mdc-icon-button{
+          pointer-events: none;
+      }
+
+    .card-body {
+        padding: 1rem 1.5rem;
+
+        .btn-primary{
+            box-shadow: none;
+            outline: none;
+            font-size: small; 
+            padding: 0.1rem 0.25rem; 
+        }
+ 
+        .table th {
+            font-size: small;
+            font-weight: 700;
+            padding-bottom: 15px;
+        }
+
+
+        .table td {
+            font-size: smaller;
+            font-weight: 400;
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd; 
+        }
+        
+    }
+}
+
+.column {
+    width: 30%;
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+}
+
+@media (max-width: 872px) {
+    .table-row{
+        overflow-x: scroll;
+    }
+    .card-body .col-md-2.btn {
+        width: 100%;
+        margin: 0 10px 5px;
+    }
+    .card-body th,
+    .card-body td {
+        white-space: nowrap;
+    }
+}
+
+
+
+.btn-action {
+    display: block;
+    width: 330px;
+    text-align: center;
+}
+
+.btn-sm.dropdown {
+    background-color: #fff;
+    color: #12263f;
+    font-weight: 500;
+    border: 1px solid #12263f;
+    font-size: 0.9rem;
+    border-radius: 0.25rem;
+    text-align: left;
+}
+
+.dropdown-menu {
+    width: 100px;
+    padding-top: 20px;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: #f4f6f8;
+    color: black;
+}
+
+.dropdown-item:hover {
+    background-color: #c0c8f7ee;
+    color: #fff;
+}
+
+.btn-sm.dropdown.active {
+    background-color: #c0c8f7ee;
+    border-color: #c0c8f7ee;
+}
+
+.btn-sm.dropdown:focus,
+.btn-sm.dropdown:active {
+    outline: none;
+    box-shadow: none;
+}
+
+.dropdown-icon {
+    position: absolute;
+    right: 3%;
+    /* Adjust as needed */
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}

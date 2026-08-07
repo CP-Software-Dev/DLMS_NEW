@@ -1,0 +1,128 @@
+<div class="card" [@fadeSlideInOut]>
+
+    <div class="card-head">
+
+        <div class="row">
+            <div class="col">
+                <h3>Add User</h3>
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-7">
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">First Name <font color="red">*</font></label>
+                        <input type="text" [(ngModel)]="registerObj.firstName" name="firstName" class="form-control "
+                            placeholder="Enter Your First Name" id="fname" autocomplete="off" maxlength="30" (keypress)="allowOnlyAlphanumeric($event)">
+                            <span *ngIf="registerObj?.firstName && registerObj.firstName.length >= 30" class="text-danger">
+                                Maximum character limit of 30 reached.
+                            </span>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Last Name <font color="red">*</font> </label>
+                        <input type="text" [(ngModel)]="registerObj.lastName" name="lastName" class="form-control "
+                            placeholder="Enter Your Last Name" id="lname" autocomplete="off" maxlength="30" (keypress)="allowOnlyAlphanumeric($event)">
+                            <span *ngIf="registerObj?.lastName && registerObj.lastName.length >= 30" class="text-danger">
+                                Maximum character limit of 30 reached.
+                            </span>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">Email <font color="red">*</font></label>
+                        <input type="email" [(ngModel)]="registerObj.emailAddress" name="email-user"
+                            class="form-control " placeholder="Enter Email id" id="email" autocomplete="off" maxlength="100">
+                        <span *ngIf="invalidemail" class="invalid-email text-danger">
+                            Invalid Email.
+                        </span>
+                        <span *ngIf="registerObj?.emailAddress && registerObj.emailAddress.length >= 100" class="text-danger">
+                            Maximum character limit of 100 reached.
+                        </span>
+                    </div>
+
+                    <div class="col">
+                        <label class="form-label">Contact No. <font color="red">*</font></label>
+                        <input type="text" [(ngModel)]="registerObj.contact" name="contact" class="form-control "
+                            placeholder="Enter Your Number" id="phone" autocomplete="off" maxlength="15" (keypress)="allowOnlyNumeric($event)">
+                        <span *ngIf="invalidphone" class="invalid-email text-danger" >
+                            Invalid Contact Number.
+                        </span>
+                        <span *ngIf="registerObj?.contact && registerObj.contact.length >= 15" class="text-danger">
+                            Maximum character limit of 15 reached.
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                   
+                    <div class="col">
+                        <label class="form-label">User Code <font color="red">*</font></label>
+                        <input type="text" [(ngModel)]="registerObj.username" (ngModelChange)="validateInput()"
+                            name="username" class="form-control " placeholder="Enter Your User Code" id="usercode"
+                            autocomplete="off" maxlength="30">
+                        <div *ngIf="invalidInput" class="text-danger">Username must start with a letter and contain only lowercase letters and numbers.
+                        </div>
+                        <span *ngIf="registerObj?.username && registerObj.username.length >= 30" class="text-danger">
+                            Maximum character limit of 30 reached.
+                        </span>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">User Role <font color="red">*</font></label>
+                        <select class="form-select form-select-sm" [(ngModel)]="roleId">
+                            <option value="" selected disabled>Select Role</option>
+                            <option *ngFor="let role of userRole" id="company" [value]="role.id">{{ role.role }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-5" style="border-left: 1px solid #cccbcb;">
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">Bank Name <font color="red">*</font></label>
+                        <select class="form-select form-select-sm" [(ngModel)]="institutionId"
+                            (ngModelChange)="onBankChange($event)">
+                            <option value="" selected disabled>Select Bank</option>
+                            <option *ngFor="let bank of banks" id="company" [value]="bank.id">{{ bank.name }}</option>
+                        </select>
+                        <div *ngIf="invalidBankSelection" class="text-danger">Select Bank.</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col" *ngIf="selectedBankID !== null">
+                        <label class="form-label">Sales Person Associated</label>
+                        <input type="text" name="contact" class="form-control" id="SalesPerson"
+                            [(ngModel)]="selectedSalesPersonName" disabled>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col" *ngIf="selectedBankID !== null">
+                        <label class="form-label">Couriers Allotted</label>
+                        <ul style="max-height: 100px; overflow-y: auto;">
+                            <li *ngFor="let courier of selectedCouriers">{{ courier.name }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer" style="background:none; border: none;">
+        <div class="row" style="display: flex; justify-content: end; align-items: center;">
+            <div class="col-1 d-flex justify-content-end">
+                <button class="btn btn-outline-danger " (click)="closeDialog()">Close</button>
+            </div>
+
+            <div class="col-1 d-flex justify-content-end">
+                <button class="btn btn-outline-primary " [disabled]="isSaving" (click)="user()"> {{ isSaving ? 'Saving...' : 'Save' }}</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+<div class="reports-container">
+    <!-- <div class="created-reports-list">
+      <span class="title">Created Reports List</span>
+      <div class="report-category">
+        <span class="subtitle">Order Reports:</span>
+        <ul>
+          <li><i class="ri-file-text-fill report-icon"></i><a href="#">Ayush Demo</a></li>
+          <li><i class="ri-file-text-fill report-icon"></i><a href="#">Demo</a></li>
+          <li><i class="ri-file-text-fill report-icon"></i><a href="#">rupesh</a></li>
+        </ul>
+      </div>
+      <div class="report-category">
+        <span class="subtitle">Shipment Reports:</span>
+        <ul>
+          <li><i class="ri-file-text-fill report-icon"></i><a href="#">Pr report</a></li>
+          <li><i class="ri-file-text-fill report-icon"></i><a href="#">rupesh4</a></li>
+          <li><i class="ri-file-text-fill report-icon"></i><a href="#">Test Report 2</a></li>
+        </ul>
+      </div>
+      <div class="report-category">
+        <span class="subtitle">Warehouse Reports:</span>
+        <ul>
+          <li><i class="ri-file-text-fill report-icon"></i><a href="#">Test Table Report</a></li>
+          <li><i class="ri-file-text-fill report-icon"></i><a href="#">Test Graph Report</a></li>
+        </ul>
+      </div>
+    </div> -->
+    <div class="create-report">
+        <h4>Warehouse Report</h4>
+        
+        
+  
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label report-label" for="reportName">Report Name <font color="red">*</font></label>
+            <div class="col-sm-6">
+                <input class="form-control" style="width: 100%;" type="text" id="reportName" name="reportName" required>
+            </div>
+        </div>
+  
+        <div class="form-group row">
+            <label for="dateRange" class="col-sm-2 col-form-label report-label">Date range: <font color="red">*</font></label>
+            <div class="col-sm-6">
+                <app-daterange></app-daterange>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label report-label">Report Type <font color="red">*</font></label>
+            <div class="col-sm-6">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="barGraph" name="report-type" value="Bar Graph" (change)="onReportTypeChange($event)" required>
+                    <label class="form-check-label type-label" for="barGraph">Bar Graph</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="pieChart" name="report-type" value="Pie Chart" (change)="onReportTypeChange($event)" required>
+                    <label class="form-check-label type-label" for="pieChart">Pie Chart</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="tableView" name="report-type" value="Table View" (change)="onReportTypeChange($event)" required>
+                    <label class="form-check-label type-label" for="tableView">Table View</label>
+                </div>
+            </div>
+        </div>
+  
+        <div *ngIf="selectedReportType === 'Table View'" class=" row">
+            <div class="col-sm-2 col-form-label report-label">
+                <label for="table-columns">Warehouse Columns<font color="red" >*</font> </label>
+            </div>
+            <div class="col-sm-9">
+                <div class="row">
+                    <div class="col">
+                      <input type="checkbox" id="SelectAllWarehouse" [(ngModel)]="selectAllWarehouseChecked"
+                      (change)="selectAllWarehouseCheckboxChanged()" class="mx-3" name="SelectAllWarehouse" />
+                  <label for="SelectAllWarehouse">Select All</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                      <ng-container *ngFor="let checkbox of warehouseCheckboxes; let i = index;">
+                        <div class="col-4 mb-1" style="display: inline-block;">
+                          <input type="checkbox" [id]="checkbox.id" [(ngModel)]="checkbox.checked"
+                              (change)="checkboxChanged()" class="mx-1" [name]="checkbox.id" />
+                          <label [for]="checkbox.id" class="mx-1 checkbox-label-small">{{ checkbox.label }}</label>
+                      </div>
+                      <div *ngIf="(i + 1) % 6 === 0" class="w-100"></div>
+                    </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions" style="margin-top: 50px;">
+            <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Create</button>
+            <button type="submit" class="btn btn-secondary" (click)="navigatetoReports()">Cancel</button>
+        </div>
+    </div>
+  
+    
+    
+  </div>
+          

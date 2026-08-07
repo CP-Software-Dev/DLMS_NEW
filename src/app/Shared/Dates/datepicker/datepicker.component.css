@@ -1,0 +1,66 @@
+.daterange-container {
+  display: flex;
+  justify-content: space-between;
+  width: 320px;  
+  border: 1px solid #dadcdf;
+  border-radius: 4px;
+  padding: 3px; /* Add padding to make room for the border */
+}
+
+.daterange-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.daterange-input {
+  width: 100%;
+  padding-right: 30px; /* Add padding to the right to make room for the icon */
+  border: none; 
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: border-color 0.3s;  
+}
+
+.daterange-input:focus {
+  border-color: #007bff;  
+  outline: none; 
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* Ensure the icon doesn't interfere with input interaction */
+  font-size: 16px;
+  color: #12263f; /* Adjust the color as needed */
+}
+
+.daterangepicker {
+  position: absolute;
+  min-width: 700px !important; 
+}
+
+.daterangepicker .calendar-table {
+  width: auto !important;
+}
+
+::ng-deep .md-drppicker {
+  min-width: 600px;
+}
+
+::ng-deep .md-drppicker {
+  font-size: 12px; 
+}
+
+::ng-deep .md-drppicker .calendar,
+::ng-deep .md-drppicker .calendar-table,
+::ng-deep .md-drppicker .calendar-table table,
+::ng-deep .md-drppicker .calendar-table th,
+::ng-deep .md-drppicker .calendar-table td {
+  font-size: inherit; 
+}
+
+::ng-deep .md-drppicker .btn {
+  font-size: 12px; 
+} 

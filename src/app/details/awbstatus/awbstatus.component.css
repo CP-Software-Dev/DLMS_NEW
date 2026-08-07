@@ -1,0 +1,133 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: .5rem;
+  /* padding: 10px 15px; */
+  /* position: relative; */
+  background-color: #fff;
+  z-index: 0;
+
+
+
+  .details-card,
+  .tracking-card {
+    padding: 0%;
+    border-radius: 4px;
+
+    .card-header {
+      background-color: #2d517c;
+      color: #fff;
+
+      span {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .badge-success {
+        font-size: 16px;
+      }
+
+    }
+
+
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      max-height: 100%;
+      overflow-y: auto;
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .label {
+          text-align: left;
+          flex: 1;
+          font-size: 16px;
+          font-weight: 700;
+        }
+
+        .value {
+          text-align: right;
+          flex: 1;
+          font-size: 16px;
+          font-weight: 500;
+        }
+      }
+
+      
+
+      .status-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .circle-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+      }
+
+      .circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 1px solid #52BE80;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .circle.active {
+        background-color: #52BE80;
+      }
+
+      .circle i {
+        font-size: 20px;
+        color: #52BE80;
+      }
+
+      .line {
+        width: 8px;
+        height: calc(65px + 10px);
+        background-color: #52BE80;
+        position: absolute;
+        top: 48px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .status-info {
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+      }
+
+      .status-name {
+        font-weight: bold;
+      }
+
+      .status-instruction
+      {
+        font-size: 12px;
+        font-weight: 600;
+        color: #666;
+      }
+      .status-date {
+        font-size: 12px;
+        color: #666;
+      }
+
+      .hidden-line {
+        display: none;
+      }
+
+    }
+  }
+}
+

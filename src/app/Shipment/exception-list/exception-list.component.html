@@ -1,0 +1,300 @@
+<div class="loader-overlay" *ngIf="isLoading">
+  <div class="loader"></div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <div class="form" *ngIf="showFiltersForm" style="margin-top: 30px">
+      <div class="row">
+        <!-- Daterange -->
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label for="filterCriteriaFromDate" class="form-label"
+              >From Date:</label
+            >
+            <!-- <app-datepicker (dateRangeSelected)="onDateRangeSelected($event)"></app-datepicker> -->
+            <app-date-picker-invoice
+              [selectedRange]="selectedDateRange"
+              (dateRangeSelected)="onDateRangeSelected($event)"
+            ></app-date-picker-invoice>
+          </div>
+        </div>
+        <!-- Order Id -->
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label for="orderIds" class="form-label">Order ID(s):</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              id="orderIds"
+              [(ngModel)]="orderIds"
+              placeholder="Enter Order Id separated by comma"
+            />
+          </div>
+        </div>
+        <!-- AWB -->
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label for="awbNos" class="form-label">AWB NO(s):</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              id="awbNos"
+              [(ngModel)]="awbnumber"
+              placeholder="Enter AWB no(s) separated by comma"
+            />
+          </div>
+        </div>
+        <!-- Kit Number -->
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label for="awbNos" class="form-label">Kit Number:</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              id="awbNos"
+              [(ngModel)]="kitnumber"
+              placeholder="Enter Kit Number"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Bank  -->
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label for="sellerName" class="form-label">Bank Name</label>
+            <select
+              class="form-select form-select-sm mb-2"
+              id="sellerName"
+              [(ngModel)]="sellerId"
+            >
+              <option value="" selected>Select Bank</option>
+              <option *ngFor="let seller of sellerData" [value]="seller.id">
+                {{ seller.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <!-- Couriers  -->
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label for="courier" class="form-label">Courier:</label>
+            <select
+              class="form-select form-select-sm mb-2"
+              id="sellerName"
+              [(ngModel)]="courierId"
+            >
+              <option value="" selected>Select Courier</option>
+              <option *ngFor="let courier of courierData" [value]="courier.id">
+                {{ courier.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <!-- Buttons  -->
+        <div class="col-md-3 d-flex align-items-end">
+          <div class="button-grp mb-2 d-flex justify-content-start">
+            <button
+              class="btn btn-outline-dark btn-sm me-3"
+              type="button"
+              style="
+                background-color: rgb(5, 114, 209);
+                font-size: small;
+                color: white;
+              "
+              (click)="applyFilters()"
+            >
+              Apply
+            </button>
+            <button
+              class="btn btn-danger btn-sm me-3"
+              style="font-size: small; box-shadow: none"
+              (click)="clearFilters()"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <!-- Status Buttons  -->
+
+      <div class="col-sm-12 col-md-12">
+        <button
+          class="col-md-2 btn btn-sm mb-4 me-4"
+          [class.active]="isActive === 'All'"
+          (click)="applyStatusFilter(null)"
+        >
+          All
+        </button>
+        <button
+          *ngFor="let button of statusData"
+          class="col-md-2 btn btn-sm mb-4 me-4"
+          [class.active]="isActive === button.id.toString()"
+          (click)="applyStatusFilter(button.id)"
+        >
+          {{ button.name }} ({{ getCountByStatusId(button.id) }})
+        </button>
+      </div>
+
+      <!-- Exception Status Dailog  -->
+
+      <app-loader [loading]="loading"></app-loader>
+
+      <div class="row" style="width: 25%">
+        <div
+          class="btn-group col p-1"
+          style="border-top: 1px solid black"
+          [@fadeInOut]
+          *ngIf="getSelectedCount() > 0"
+          role="group"
+          aria-label="Basic outlined example"
+          style="margin-bottom: 20px"
+        >
+          <button
+            type="button"
+            style="pointer-events: none"
+            class="btn btn-outline"
+          >
+            <b>{{ getSelectedCount() }}</b> selected
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline"
+            (click)="confirmRto()"
+            *ngIf="isActive == '14'"
+          >
+            <i class="ri-check-double-fill"></i> Confirm RTO
+          </button>
+          <button type="button" class="btn btn-outline" (click)="openDialog1()">
+            <i class="bi bi-chat-left-fill"></i> Change Status
+          </button>
+        </div>
+      </div>
+
+      <!-- Exceptions Data -->
+
+      <div class="table-row" *ngIf="!loading">
+        <table class="table">
+          <thead class="table-head-hover">
+            <tr>
+              <th scope="col" *ngIf="isActive !== 'All'">
+                <input
+                  type="checkbox"
+                  id="selectAllCheckbox"
+                  name="selectAll"
+                  [(ngModel)]="isSelectAllChecked"
+                  (click)="toggleAllCheckboxes($event)"
+                />
+              </th>
+              <th scope="col">Order</th>
+              <th scope="col">Kit Number</th>
+              <th scope="col">Date</th>
+              <th scope="col">Bank</th>
+              <th scope="col">Product</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Weight</th>
+
+              <th scope="col">
+                Carrier<br /><span style="font-size: 12px; font-weight: 500">
+                  <i class="ri-corner-down-right-line"></i>
+                  AWB
+                </span>
+              </th>
+              <th scope="col">Webhook</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of paginatedOrders">
+              <td *ngIf="isActive !== 'All'">
+                <ng-container
+                  *ngIf="isActive == '14' && order.isRto == '1'; else checkbox"
+                >
+                  &nbsp;
+                </ng-container>
+                <ng-template #checkbox>
+                  <input
+                    type="checkbox"
+                    [id]="'checkbox' + order.order"
+                    [name]="'checkbox' + order.order"
+                    [(ngModel)]="order.selected"
+                    (ngModelChange)="updateSelectAllCheckbox()"
+                  />
+                </ng-template>
+              </td>
+              <td>
+                <span
+                  style="cursor: pointer; color: #0b72c7; font-weight: 700"
+                  (click)="navigateToShipmentDetail(order.orderID)"
+                  >{{ order.orderID }}</span
+                >
+              </td>
+              <td>{{ order.kitNumber }}</td>
+              <td>{{ order.date }}</td>
+              <td>{{ order.company }}</td>
+              <td>{{ order.product }}</td>
+              <td>
+                <span
+                  [matTooltip]="getAddressTooltip(order)"
+                  matTooltipPosition="right"
+                  matTooltipClass="multiline-tooltip"
+                >
+                  <!-- {{ order.customer.length > 25 ? (order.customer | slice:0:19) + '...' : order.customer }} -->
+                  {{
+                    order.customer.trim().length > 25
+                      ? (order.customer.trim() | slice: 0 : 19) + "..."
+                      : order.customer.trim()
+                  }}
+                </span>
+              </td>
+              <td>{{ order.weight }} <span>g</span></td>
+
+              <td>
+                <span style="font-weight: 600">{{ order.courier }}</span
+                ><br /><span
+                  style="cursor: pointer; color: #0b72c7; font-weight: 700"
+                  (click)="navigateToAwbStatus(order.awb)"
+                  *ngIf="order.awb"
+                  ><i class="ri-corner-down-right-line"></i
+                  >{{ order.awb }}</span
+                >
+              </td>
+              <td>
+                <span style="visibility: hidden">llll</span>
+                <i
+                  class="ri-eye-line"
+                  style="font-size: 20px; color: #0b72c7; cursor: pointer"
+                  matTooltip="View Webhook"
+                  matTooltipPosition="above"
+                  matTooltipClass="multiline-tooltip"
+                  (click)="openDialog(order.orderID)"
+                ></i>
+              </td>
+              <td>
+                <button class="btn btn-sm statusbtn" style="min-width: 80px">
+                  {{ order.shipmentStatus }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+
+    <app-paginator
+      [length]="totalOrders"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+      [pageIndex]="pageIndex"
+      (page)="handlePageEvent($event)"
+    >
+    </app-paginator>
+  </div>
+</div>

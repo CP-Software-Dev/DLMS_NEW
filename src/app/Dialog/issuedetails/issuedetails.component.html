@@ -1,0 +1,43 @@
+<div class="card" [@fadeSlideInOut]>
+
+    <div class="card-head">
+
+        <div class="row" style="margin-bottom: 0px;">
+            <div class="col-8">
+                <h3>{{subject}}</h3>
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+        
+
+    </div>
+    <div class="card-body">
+
+        <div class="bank:">
+            <strong>Institution:</strong>
+            {{institution}}
+        </div>
+
+        <div class="date">
+            <strong>Created Date:</strong>
+            {{ createdDate}}
+        </div>
+
+        <div class="status">
+            <strong>Status:</strong>
+            <span [ngClass]="'badge ' + getStatusClass(status)">
+                {{ status }}
+              </span>
+        </div>
+
+        <div class="description">
+            <strong>Description:</strong>
+            <div class="description-content">
+                {{description}}
+            </div>
+           
+        </div>
+    </div>
+</div>  

@@ -1,0 +1,230 @@
+::ng-deep .mat-mdc-dialog-panel{
+    width:50%;
+    height: 70%;
+    border-radius: 10px;
+}
+
+.card {
+    height: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .custom-btn{
+    width: 15%;
+    min-width: 150px;
+  }
+
+  .auto-btn{
+    width: 25%;
+    min-width: 100px;
+  }
+  
+  
+  .select-container{
+    margin-bottom: 30px;
+    width: 100%;
+  }
+
+  .select-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.form-select:focus{
+    box-shadow: none;
+}
+
+.cards-container{
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 10px;
+}
+.radio-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.radio-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    position: relative;
+}
+
+.courier-card{
+    background-color: #c9f8dd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    position: relative;
+}
+
+.priority-number {
+    display: inline-block;
+    width: 25px;          
+    height: 25px;
+    line-height: 25px;    
+    text-align: center;   
+    border: 2px solid #fff; 
+    background-color: #fff;
+    border-radius: 50%;  
+    margin-right: 10px; 
+    font-weight: bold;
+  }
+  
+
+input[type="radio"] {
+    display: none;
+}
+
+.radio-card:hover {
+    background-color: #f0f0f0;
+}
+
+.radio-card::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 1px solid #ccc; /* Add a border for visibility */
+}
+
+input[type="radio"]:checked + .radio-card::after {
+    content: '\2713';  /* Unicode for check mark */
+    color: white;
+    background-color: #2ecc71;
+    border: none; /* No border when checked */
+}
+
+
+
+  .card-head {
+    padding: 5px;
+    font-size: 16px;
+    font-weight: 700;
+    /* border-bottom: 1px solid #ccc; */
+  }
+  
+  .card-body {
+    padding: 20px;
+
+  }
+  
+  .close-form{
+    text-align: end;
+    cursor: pointer;
+  }
+
+  .close-icon{
+    font-size: 30px;
+    font-weight: 200;
+    background-color: rgb(231, 231, 230);
+    border-radius: 50%;
+  }
+
+  
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-group input[type="file"] {
+    display: none;
+}
+
+.input-group input[type="text"] {
+    flex: 1;
+    border: 1px solid #ced4da; 
+    height: 38px;
+    box-shadow: none;
+}
+
+.input-group button {
+    margin-left: 5px;
+    box-shadow: none;
+    height: 38px;
+}
+
+.card-body .btn-browse{
+    box-shadow: none;
+    margin-right: 5px;
+    background-color: #4c66fb;
+    color: #fff;
+}
+
+.card-body .btn{
+    box-shadow: none;
+    margin-right: 5px;
+}
+
+.card-footer{
+    padding: 10px;
+    background-color: #fff;
+}
+
+.card-footer .d-flex {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 90%;
+    }
+}
+
+
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4); /* dim background */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: all; /* blocks clicks */
+}
+
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #4c66fb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,82 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    background-color: #fff;
+    margin: 0.8rem 0 0.8rem 0;
+    z-index: 0;
+    box-shadow: 0 .25rem .5rem #e6edef;
+
+    .card-head {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #edf1f7;
+        font-size: 1rem;
+
+
+        .btn-outline-dark {
+            box-shadow: none;
+            outline: none;
+            font-size: small;
+            padding: 0.1rem 0.35rem;
+        }
+
+    }
+}
+
+
+.task-tabs {
+    display: flex;
+    gap: 12px;
+}
+
+.tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 0.375rem;
+    border: 1px solid;
+    border-color: #1D3A5F;
+    background: #fff;
+    color: #3c3d3f;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+    border-color: #1D3A5F;
+    color: #1D3A5F;
+}
+
+.tab-btn.active {
+    background: #1D3A5F;
+    border-color: #1D3A5F;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.tab-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.275rem 0.55rem;
+    font-size: 0.875rem;
+    border: 1px solid #1D3A5F;
+    border-radius: 0.375rem;
+    color: #1D3A5F;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.toolbar-btn:hover {
+    background-color: #1D3A5F;
+    color: white;
+}

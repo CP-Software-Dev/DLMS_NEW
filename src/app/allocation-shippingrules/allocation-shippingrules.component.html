@@ -1,0 +1,144 @@
+<div class="row">
+    <div class="col-sm-6 ">
+        <div class="row" style="justify-content: end; padding-right: 12px;">
+            <div class="col-sm-4 form-group">
+                <select class="form-select form-select-sm mb-2" name="institutionID" id="sellerName"
+                    (change)="onBankChange($event)">
+                    <option value="" selected>All</option>
+                    <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 scrollable-column">
+                <div class="row">
+                    <div class="col-6" *ngFor="let priority of courierPriority">
+                        <div class="card-body priority-card">
+                            <div class="form-row">
+                                <div class="col-sm-8">
+                                    <h5><b>{{ priority.name }}</b>
+                                        <a (click)="onEditPriority(priority)" class="btn btn-link">
+                                            <i class="ri-edit-line"></i>
+                                        </a>
+                                    </h5>
+                                    <span>{{ priority.institution }}</span>
+                                </div>
+                                <div class="col-sm-4" style=" display: flex; justify-content: end;">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                            [checked]="priority.isActive === 'Active'"
+                                            (change)="onPriorityStatusChange($event,priority.id)">
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-row">
+                                <div class="col-sm-12">
+                                    <h6><b>Courier Priority</b></h6>
+                                </div>
+                                <div class="col-sm-12">
+                                    <b style="color: #28a745;">Priority 1:</b> {{ priority.firstPriority }}
+                                </div>
+                                <div class="col-sm-12">
+                                    <b style="color: #28a745;">Priority 2:</b> {{ priority.secondPriority }}
+                                </div>
+                                <div class="col-sm-12">
+                                    <b style="color: #28a745;">Priority 3:</b> {{ priority.thirdPriority }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!courierPriority || courierPriority.length === 0" class="col-12 text-center" style="margin-top: 50px;">
+                        <img src="assets\Images\Graph.gif" alt="No Data Available" class="img-fluid">
+                        <p>No data available</p>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="col-sm-6">
+        <form action="" class="create_new_order_filter_form">
+            <div class="card">
+                <div class="card-head">
+                    <h6>Add New Shipping Rule</h6>
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-sm-6 form-group" style="margin-bottom: 1rem;">
+                            <label for="Rule-name" class="form-label">Rule Name
+                                <span class="text-danger font-weight-bold">*</span>
+                            </label>
+                            <input type="text" [(ngModel)]="name" name="name" class="form-control "
+                                placeholder="Enter Your First Name" id="fname" autocomplete="off">
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label for="sellerName" class="form-label">Bank Name</label>
+                            <select class="form-select form-select-sm mb-2" name="sellerId" id="sellerName"
+                                [(ngModel)]="sellerId">
+                                <option value="" selected disabled>Select Bank</option>
+                                <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-row mb-10">
+                        <div class="col-sm-12 d-inline-flex">
+                            <h6>Courier Priority</h6>
+                            <span class="text-danger font-weight-bold">*</span>
+                        </div>
+                    </div>
+
+                    <div class="card-body" style="background-color: #e3ebf6;">
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <label for="courier" class="form-label">Priority 1</label>
+                                <select class="form-select form-select-sm mb-2" name="firstPriority" id="sellerName"
+                                    [(ngModel)]="firstPriority">
+                                    <option value="" selected disabled>Select Courier</option>
+                                    <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="courier" class="form-label">Priority 2</label>
+                                <select class="form-select form-select-sm mb-2" name="secondPriority" id="sellerName"
+                                    [(ngModel)]="secondPriority">
+                                    <option value="" selected disabled>Select Courier</option>
+                                    <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="courier" class="form-label">Priority 3</label>
+                                <select class="form-select form-select-sm mb-2" name="thirdPriority" id="sellerName"
+                                    [(ngModel)]="thirdPriority">
+                                    <option value="" selected disabled>Select Courier</option>
+                                    <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer text-right" style="padding: 20px;">
+                    <button class="btn btn-sm btn-primary" style="margin-right: 10px; box-shadow: none;"
+                        (click)="saveReport()">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

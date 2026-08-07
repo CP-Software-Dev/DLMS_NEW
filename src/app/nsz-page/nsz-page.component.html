@@ -1,0 +1,21 @@
+<div class="card">
+    <div class="card-head">
+        <div class="row">
+            <!-- Card-header tags  -->
+            <div class="col-md-6 col-sm-6">
+                <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i>  NSZ</h5>
+            </div>
+            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="col-md-8 col-sm-12 nsz">
+            <label for="orderIds" class="form-label">Enter Order IDs (comma-separated) <span style="color: red;">*</span></label>
+            <input type="text" class="form-control" id="orderIds" [(ngModel)]="orderIds" placeholder="e.g. 123, 456, 789">
+            <button type="button" class="btn btn-primary" (click)="handleOrderIds()">Update</button>
+        </div>
+
+        
+    </div>
+</div>

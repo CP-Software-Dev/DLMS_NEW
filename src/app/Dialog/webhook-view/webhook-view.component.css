@@ -1,0 +1,89 @@
+.card {
+    width: 750px; 
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .card-head {
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .card-body {
+    padding: 20px;
+    max-height: 350px;
+    overflow-y: auto;
+
+    .table th {
+        font-size: small;
+        font-weight: 700;
+        background-color: #f9fbfd;
+         vertical-align: text-top; 
+        text-align: left;
+    }
+
+    .table td {
+        font-size: smaller;
+        font-weight: 400;
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        vertical-align: middle;
+    }
+
+    .sent {
+      border-left: 3px solid #52be80;
+  }
+  
+  .not-sent {
+      border-left: 3px solid #ff0000;
+  }
+  }
+  
+  
+  .close-form{
+    text-align: end;
+    cursor: pointer;
+  }
+
+  .close-icon{
+    font-size: 30px;
+    font-weight: 200;
+    background-color: rgb(231, 231, 230);
+    border-radius: 50%;
+  }
+
+  .empty-input{
+    border-color: red;
+  }
+
+  .export-btn{
+    background-color: #fff;
+    color: black;
+    cursor: pointer;
+    border: 1px solid #3f3e3e;
+    border-radius: 3px;
+    outline: none;
+    font-size: 14px;
+  }
+
+  .export-btn:hover{
+    color: #fff;
+    background-color: #3f3e3e;
+  }
+
+  .statusbtn {
+    border: 1px solid #0d6efd;
+    color: #0d6efd;
+}
+
+.statusbtn:hover {
+    color: #0d6efd;
+    cursor: default;
+}

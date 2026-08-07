@@ -1,0 +1,10 @@
+  <div class="card">
+    <div class="card-body">
+      <div *ngIf="!noData" class="chart-container">
+        <canvas id="sellerOrder-chart"></canvas>
+      </div>
+      <div *ngIf="noData" class="no-data-message">
+        <img src="assets\Images\Graph.gif" alt="No Data Available" class="img-fluid">
+      </div>
+    </div>
+  </div>

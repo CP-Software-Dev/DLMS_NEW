@@ -1,0 +1,29 @@
+<div class="card">
+    <div class="card-head">
+        <div class="row">
+            <div class="col">
+                <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Order Allocation Engine </h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <nav style="margin-top: 10px; margin-bottom: 25px;">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="Shipping-tab" data-bs-toggle="tab" data-bs-target="#Shipping"
+                    type="button" role="tab" aria-controls="Shipping" aria-selected="true">Shipping Rules</button>
+                <button class="nav-link" id="Rules-tab" data-bs-toggle="tab" data-bs-target="#Rules" type="button"
+                    role="tab" aria-controls="Rules-profile" aria-selected="false">Rule Testing</button>
+            </div>
+        </nav>
+
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="Shipping" role="tabpanel" aria-labelledby="Shipping-tab">
+                <app-allocation-shippingrules></app-allocation-shippingrules>
+            </div>
+            <div class="tab-pane fade" id="Rules" role="tabpanel" aria-labelledby="Rules-tab">
+                <app-allocation-ruletesting></app-allocation-ruletesting>
+            </div>
+        </div>
+    </div>
+</div>

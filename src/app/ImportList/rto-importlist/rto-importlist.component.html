@@ -1,0 +1,93 @@
+<div class="card">
+    <div class="card-head">
+
+        <div class="row">
+
+            <div class="col-md-6 col-sm-6">
+                <h4><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"> </i> Import List</h4>
+            </div>
+            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+
+                <button class="btn btn-outline-dark btn-sm me-3" (click)="navigateToOrders()"
+                    onclick="makeActive(this)"><i class="ri-add-line"></i> More Import</button>
+                <button class="btn btn-outline-dark btn-sm " [class.active]="isActive === 'buttonText'"
+                    (click)="makeActive('buttonText')" (click)="toggleFiltersForm()"> <i [class]="buttonIcon"></i> {{
+                    buttonText }}</button>
+
+            </div>
+        </div>
+
+        <div class="form" style="margin-top: 30px;" *ngIf="showFiltersForm">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="filterCriteria" class="form-label">From Date:</label>
+                        <app-datepicker (dateRangeSelected)="onDateRangeSelected($event)"></app-datepicker>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-2">
+                        <label for="sellerName" class="form-label">Seller Name</label>
+                        <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="sellerId">
+                            <option value="" selected disabled>Select Seller</option>
+                            <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="button-grp mb-2 d-flex justify-content-start">
+                        <button class="btn btn-outline-dark btn-sm me-3" type="button"
+                            style="background-color: rgb(5, 114, 209); font-size: small; color: white;"
+                           (click)="applyFilters()" >Apply</button>
+                        <button class="btn btn-danger btn-sm me-3" style="font-size: small; box-shadow: none;"
+                           (click)="clearFilters()" >Clear</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+               
+            </div>
+        </div>
+
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Import ID</th>
+                        <th scope="col">File Name</th>
+                        <th scope="col">Institution</th>
+                        <th scope="col">Total Record</th>
+                        <th scope="col">Processed Record</th>
+                        <th scope="col">Failed Record</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let file of importList">
+                        <td>{{file.rowNum}}</td>
+                        <td>{{file.filename}}</td>
+                        <td>{{file.institution}}</td>
+                        <td>{{file.totalCount}}</td>
+                        <td>{{file.processedCount}}</td>
+                        <td [ngClass]="{'text-red': (file.totalCount - file.processedCount) > 0}">
+                            {{file.totalCount - file.processedCount }}
+                        </td>
+                        <td>
+                            <button class="btn btn-success btn-sm"
+                               style="box-shadow: none; " (click)="exportFile(file.fileID)">Export</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div>
+        <app-paginator [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="[10,20,50,100,200]"
+            (page)="handlePageEvent($event)">
+        </app-paginator>
+    </div>
+</div>

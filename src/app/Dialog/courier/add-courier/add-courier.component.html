@@ -1,0 +1,61 @@
+<div class="card" [@fadeSlideInOut]>
+
+    <div class="card-head">
+        
+        <div class="row">
+            <div class="col">
+                <h3>Add Courier</h3>
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Courier Name <span class="text-danger font-weight-bold">*</span></label>
+                <input type="text" [(ngModel)] = "name" name="courierName" class="form-control " placeholder="Enter Courier Name" id="couriername" autocomplete="off" [disabled]="isDataPresent">
+            </div>
+            <div class="col">
+                <label class="form-label">Courier Code <span class="text-danger font-weight-bold">*</span></label>
+                <input type="text" [(ngModel)] = "code"  name="courierCode" class="form-control " placeholder="Enter Courier Code" id="couriercode" autocomplete="off" [disabled]="isDataPresent">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="form-label">API User ID <span class="text-danger font-weight-bold">*</span></label>
+                <input type="text" name="userid" class="form-control " placeholder="Enter User Id" id="apiuser-id" autocomplete="off">
+            </div>
+            <div class="col">
+                <label class="form-label">API Password <span class="text-danger font-weight-bold">*</span></label>
+                <input type="password" name="password" class="form-control " placeholder="Enter Password" id="courier-password" autocomplete="new-password">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="status" class="form-label">Status ID
+                    <span class="text-danger font-weight-bold">*</span>
+                </label>
+                <select class="form-select form-select-sm mb-2" id="status">
+                    <option selected>Select Status</option>
+                    <option value="1">Enable</option>
+                    <option value="2">Disable</option>
+                </select>
+            </div>
+        <div class="row">
+            <span><input type="checkbox" id="CheckboxId"> By submitting this form, you agree to Colorplast User Privacy Statement.</span>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <button class="btn btn-outline-danger" (click)="closeDialog()">Close</button>
+            </div>
+            
+            <div class="col-2">
+                <button class="btn btn-primary ">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

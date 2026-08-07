@@ -1,0 +1,70 @@
+<div class="card" [@fadeSlideInOut]>
+
+    <div class="card-head">
+
+        <div class="row">
+            <div class="col-8">
+                <h3>Add New Institution</h3>
+            </div>
+            <div class="col close-form">
+                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Bank Name</label>
+                <input type="text" name="Name" [(ngModel)]="bankName" class="form-control "
+                    placeholder="Enter Bank Name" id="name" [disabled]="isBankNameDisabled" autocomplete="off"
+                    maxlength="30" (keypress)="allowOnlyAlphanumeric($event)">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Sales Person</label>
+                <select class="form-select form-select-sm mb-2" [(ngModel)]="personID">
+                    <option value="" selected>Select Sales Person</option>
+                    <option *ngFor="let person of salesPerson" [value]="person.id">{{ person.name }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Plan</label>
+                <select class="form-select form-select-sm mb-2" id="activeplan" [(ngModel)]="activeplan">
+                    <option value="0" disabled selected>Select Plan:</option>
+                    <option value="1">Insta & Perso</option>
+                    <option value="2">Perso</option>
+                    <option value="3">Insta</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" *ngFor="let row of courierRows">
+            <div class="col-md-6" *ngFor="let courierItem of row">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [id]="'courier' + courierItem.id"
+                        [value]="courierItem.id" (change)="onCourierCheckboxChange($event)"
+                        [checked]="isCourierSelected(courierItem.id)">
+                    <label class="form-check-label" [for]="'courier' + courierItem.id">
+                        {{ courierItem.name }}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <button class="btn btn-outline-danger " (click)="closeDialog()">Close</button>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-primary" (click)="addBank()">Save</button>
+            </div>
+        </div>
+
+    </div>
+</div>

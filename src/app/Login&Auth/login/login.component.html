@@ -1,0 +1,59 @@
+<div class="parent">
+
+    <div class="container d-flex justify-content-center align-items-center">
+
+        <div class="row min-vh-100 min-vw-100">
+
+            <div class="col-md-6 left-box">
+
+                <img src="assets\Images\CP2.png" alt="" class="left-box-img right-rounded">
+            </div>
+
+            <div class="col-sm-12 col-md-6 d-flex justify-content-center align-items-center">
+
+                <div class="container-fluid d-flex align-items-center justify-content-center">
+                    <div class="row box-area right-box text-center"
+                        style="background-color: #fff; padding: 20px;">
+                        <div class="col-sm-12 col-md-12">
+                            <img src="assets\Images\CP1.png" alt="" class="img-fluid"
+                                style="width: 40%; margin-bottom: -30px; margin-top: 15px;">
+
+                        </div>
+
+                        <div class="col-sm-12 col-md-11 align-items-center justify-content-center"
+                            style="margin-top: 20px;">
+                            <h3>Welcome Back!</h3>
+                            <p>Sign in to Your Account</p>
+                            <hr class="my-1" style="width: 100%;">
+                            <form class="mt-4">
+                                <div class="input-group mb-3">
+                                    <input type="email" [(ngModel)]="loginObj.UserID" name="UserID" class="form-control form-control-lg  fs-6" placeholder="Enter Email or Username" id="email">
+                                </div>
+                                                            
+                                <div class="input-group mb-4">
+                                    <input type="password" [(ngModel)]="loginObj.Password" name="Password" class="form-control form-control-lg fs-6" placeholder="Enter Password" id="password">
+                                </div> 
+                            
+                                <div class="forgot mb-4 text-end">
+                                    <small><a routerLink='/forgot'>Forgot Password?</a></small>
+                                </div>
+                            
+                                <div class="input-group mb-1">
+                                    <a id="loginbutton" class="btn btn-login w-100 fs-6" (click)="login()">Login</a>
+                                </div>
+                            
+                                <span *ngIf="invalidCredentials" class="invalid-credentials text-danger">
+                                    Invalid credentials.
+                                </span>
+                            </form>
+              
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+              
+    </div>
+</div>

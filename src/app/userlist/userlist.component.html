@@ -1,0 +1,188 @@
+<div class="card">
+  <div class="card-head">
+    <div class="row">
+      <div class="col-md-6 col-sm-6">
+        <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Users</h5>
+      </div>
+      <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+        <button class="btn btn-outline-dark btn-sm me-3" (click)="openDialog()"> <i class="bi-plus"></i>
+          New User</button>
+        <button class="btn btn-outline-dark btn-sm me-3" [class.active]="isActive === 'Export'" (click)="exportToCSV()">
+          <i class="ri-upload-2-line"></i> Export</button>
+        <button class="btn btn-outline-dark btn-sm me-3" [class.active]="isActive === 'buttonText'"
+          (click)="toggleFiltersForm()"> <i [class]="buttonIcon"></i> {{ buttonText
+          }}</button>
+      </div>
+    </div>
+
+
+
+    <div class="form" *ngIf="showFiltersForm" style="margin-top: 30px;">
+      <div class="row">
+
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label for="sellerName" class="form-label">Bank Name</label>
+            <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="sellerId">
+              <option value="" selected disabled>Select Bank</option>
+              <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label for="shippingPhone" class="form-label">Phone</label>
+            <input type="text" class="form-control form-control-sm" id="phone" [(ngModel)]="phone"
+              placeholder="User Phone here">
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label for="shippingPhone" class="form-label">Email</label>
+            <input type="text" class="form-control form-control-sm" id="phone" [(ngModel)]="email"
+              placeholder="User email here">
+          </div>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end">
+          <div class="button-grp mb-2 d-flex justify-content-start">
+            <button class="btn btn-outline-dark btn-sm me-3" type="button"
+              style="background-color: rgb(5, 114, 209); font-size: small; color: white;"
+              (click)="applyFilters()">Apply</button>
+            <button class="btn btn-danger btn-sm me-3" style="font-size: small; box-shadow: none;"
+              (click)="clearFilters()">Clear</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card-body">
+
+    <button class="col-md-2 btn btn-sm mb-4 me-4" [class.active]="isActive === 'All'"
+      (click)="applyStatusFilter(null)">All</button>
+    <button *ngFor="let button of statusData" class="col-md-2 btn btn-sm mb-4 me-4"
+      [class.active]="isActive === button.id.toString()" (click)="applyStatusFilter(button.id)">
+      {{ button.name }}
+
+    </button>
+
+    <div class="tab-content" id="myTabContent">
+      <div>
+        <table class="table">
+          <thead class="table-head-hover">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Username</th>
+              <th scope="col">Bank Details</th>
+              <th scope="col">Verified Date</th>
+              <th scope="col">Sales Person</th>
+              <th scope="col">Created By</th>
+              <th scope="col" style="text-align: center;">User Type</th>
+              <th scope="col" style="text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of paginatedUsers">
+              <td scope="col">{{ user.rowNum }}</td>
+              <td scope="col">{{ user.username }}</td>
+              <td scope="col">
+                <span *ngIf="user.firstName || user.lastName">
+                  {{ user.firstName }} {{ user.lastName }}
+                </span>
+                <br *ngIf="user.firstName || user.lastName">
+
+                <b *ngIf="user.companyName">{{ user.companyName }}</b>
+                <br *ngIf="user.companyName">
+
+                <span *ngIf="user.emailAddress">{{ user.emailAddress }}</span>
+                <br *ngIf="user.emailAddress">
+
+                <span *ngIf="user.contact">{{ user.contact }}</span>
+              </td>
+
+              <td scope="col">{{ user.createdAt}}</td>
+              <td scope="col">{{ user.salesPerson }}</td>
+              <td scope="col">{{ user.createdBy }}</td>
+              <td scope="col" style="text-align: center;">
+                <ng-container *ngIf="user.roleId === 1">
+                  <span matTooltip="Super Admin" matTooltipPosition="right"
+                    style="background-color: #4c66fb; font-size: 12px;" class="badge badge-success">SA</span>
+                </ng-container>
+                <ng-container *ngIf="user.roleId === 2 && user.status.trim().toLowerCase() != 'junk'">
+                  <span matTooltip="Admin" matTooltipPosition="right" style="background-color: #0c9; font-size: 12px;"
+                    class="badge badge-success">A</span>
+                </ng-container>
+                <ng-container *ngIf="user.roleId === 2 && user.status.trim().toLowerCase() == 'junk'">
+                  <span matTooltip="Junk" matTooltipPosition="right" style="background-color: #f83029; font-size: 12px;"
+                    class="badge badge-success">J</span>
+                </ng-container>
+                <ng-container *ngIf="user.roleId === 3 && user.status.trim().toLowerCase() != 'junk'">
+                  <span matTooltip="Primary" matTooltipPosition="right"
+                    style="background-color: #87BCED; font-size: 12px;" class="badge badge-success">P</span>
+                </ng-container>
+                <ng-container *ngIf="user.roleId === 3 && user.status.trim().toLowerCase() == 'junk'">
+                  <span matTooltip="Junk" matTooltipPosition="right" style="background-color: #f83029; font-size: 12px;"
+                    class="badge badge-success">J</span>
+                </ng-container>
+                <ng-container *ngIf="user.roleId === 4 && user.status.trim().toLowerCase() != 'junk'">
+                  <span matTooltip="Secondary" matTooltipPosition="right"
+                    style="background-color: #b3e8f1; font-size: 12px;" class="badge badge-success">S</span>
+                </ng-container>
+                <ng-container *ngIf="user.roleId === 4 && user.status.trim().toLowerCase() == 'junk'">
+                  <span matTooltip="Junk" matTooltipPosition="right" style="background-color: #f83029; font-size: 12px;"
+                    class="badge badge-success">J</span>
+                </ng-container>
+              </td>
+
+              <td scope="col" style="text-align: center;">
+                <!-- <a *ngIf="user.roleId != 1 && user.status.trim().toLowerCase() !== 'junk'"
+                  (click)="userStatus(user.username)" style="text-decoration: none;">
+                  <i [class.ri-user-forbid-line]="user.activeStatus" [class.ri-user-follow-line]="!user.activeStatus"
+                    style="font-size: 20px; cursor: pointer;"></i>
+                </a> -->
+                <a *ngIf="user.roleId != 1 && user.status.trim().toLowerCase() !== 'junk'"
+                  (click)="userStatus(user.username)" style="text-decoration: none;">
+
+                  <i [class.ri-user-forbid-line]="user.activeStatus" [class.ri-user-follow-line]="!user.activeStatus"
+                    style="font-size: 20px; cursor: pointer;"
+                    matTooltipPosition="right"
+                    matTooltip="{{ user.activeStatus ? 'Deactivate' : 'Activate' }}">
+                  </i>
+                </a>
+
+                <!-- <ng-container *ngIf="user.status.trim().toLowerCase() !== 'junk'; else junkStatus">
+                  <a *ngIf="user.roleId != 1"
+                    (click)="userStatus(user.username)" style="text-decoration: none;">
+                    <i [class.ri-user-forbid-line]="user.activeStatus" 
+                       [class.ri-user-follow-line]="!user.activeStatus"
+                       style="font-size: 20px; cursor: pointer;"></i>
+                  </a>
+                  
+                </ng-container>
+                <ng-template #junkStatus>
+                  <span></span>
+                </ng-template> -->
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <app-paginator [length]="totalUsers" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100]"
+    [pageIndex]="pageIndex" (page)="handlePageEvent($event)">
+  </app-paginator>
+
+
+</div>

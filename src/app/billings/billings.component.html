@@ -1,0 +1,289 @@
+<div class="card">
+  <div class="card-head">
+    <!-- <div class="row">
+
+      <div class="col-md-6 col-sm-6">
+        <h5>
+          <i class="ri-checkbox-blank-fill" style="border: 2px solid black"></i>
+          Invoice
+        </h5>
+      </div>
+      <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
+        <button class="btn btn-outline-dark btn-sm me-3" [class.active]="isActive === 'Export'" (click)="export()"><i
+            class="ri-upload-2-line"></i> Generate Report</button>
+        <button class="btn btn-outline-dark btn-sm me-3" [class.active]="isActive === 'buttonText'"
+          (click)="toggleFiltersForm()">
+          <i [class]="buttonIcon"></i> {{ buttonText }}
+        </button>
+      </div>
+    </div> -->
+
+    <div class="row">
+      <div class="col-md-7 col-sm-7 d-flex align-items-center">
+        <h5 class="mb-0 me-4"><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Invoice
+        </h5>
+        @if(serviceType === 1){<div class="task-tabs">
+
+          <button class="tab-btn" [class.active]="activeTab === 'perso'" (click)="setTab('perso')">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Perso</span>
+          </button>
+
+          <button class="tab-btn" [class.active]="activeTab === 'insta'" (click)="setTab('insta')">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <circle cx="3" cy="6" r="1"></circle>
+              <circle cx="3" cy="12" r="1"></circle>
+              <circle cx="3" cy="18" r="1"></circle>
+            </svg>
+            <span>Insta</span>
+          </button>
+
+        </div>}
+      </div>
+
+      <div class="col-md-5 col-sm-5 d-flex justify-content-end align-items-center">
+        <!-- <button class="btn btn-outline-dark btn-sm me-3" [class.active]="isActive === 'Export'" (click)="export()"><i
+            class="ri-upload-2-line"></i> Generate Report</button> -->
+        <button class="btn btn-outline-dark btn-sm me-3" [class.active]="isActive === 'buttonText'"
+          (click)="toggleFiltersForm()">
+          <i [class]="buttonIcon"></i> {{ buttonText }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Form -->
+
+    <div class="form" style="margin-top: 30px" *ngIf="showFiltersForm">
+      <div class="row">
+        <!-- Date Range  -->
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label for="filterCriteria" class="form-label">From Date:</label>
+            <app-date-picker-invoice [selectedRange]="selectedDateRange"
+              (dateRangeSelected)="onDateRangeSelected($event)"></app-date-picker-invoice>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label for="courier" class="form-label">Courier:</label>
+            <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="courierId">
+              <option value="" selected>Select Courier</option>
+              <option *ngFor="let courier of courierData" [value]="courier.id">
+                {{ courier.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <!-- Bank  -->
+        <div class="col-md-3">
+          <div class="mb-2">
+            <label for="sellerName" class="form-label">Bank Name</label>
+            <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="sellerId">
+              <option value="" selected>Select Bank</option>
+              <option *ngFor="let seller of sellerData" [value]="seller.id">
+                {{ seller.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <div class="button-grp mb-2 d-flex justify-content-start">
+            <button class="btn btn-outline-dark btn-sm me-3" type="button" style="
+                background-color: rgb(5, 114, 209);
+                font-size: small;
+                color: white;
+              " (click)="applyFilters()">
+              Apply
+            </button>
+            <button class="btn btn-danger btn-sm me-3" style="font-size: small; box-shadow: none"
+              (click)="clearFilters()">
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <app-loader [loading]="loading"></app-loader>
+
+      <!-- Shipment data  -->
+
+      <div class="table-row" *ngIf="!loading">
+        <table class="table">
+          <thead class="table-head-hover">
+            <tr>
+              <th scope="col">Bank</th>
+              <th scope="col">Valid Records</th>
+              <th scope="col">Processed Count</th>
+              <th scope="col">Un-Processed Count</th>
+              <th scope="col">Shipped Count</th>
+              <th scope="col">RTO Recieved</th>
+              <th scope="col">RTO Re-Dispatch</th>
+              <th scope="col">Destroy Count</th>
+              <th scope="col">NSZ Count</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of paginatedOrders">
+              <td style="
+                      color: #444343;
+                      font-weight: 700;
+                    ">{{ data.institutionName }}</td>
+
+              <td>
+                <ng-container *ngIf="data.validRecords > 0; else novalidRecords">
+                  <span style="
+                      cursor: pointer;
+                      color: #0b72c7;
+                      font-weight: 700;
+                    ">
+                    {{ data.validRecords }}
+                  </span>
+                </ng-container>
+                <ng-template #novalidRecords>
+                  <span style="cursor: pointer; color: #0b72c7; font-weight: 700">{{ data.validRecords }}</span>
+                </ng-template>
+              </td>
+
+              <td>
+                <ng-container *ngIf="data.processedCount > 0; else noprocessedCount">
+                  <span style="
+                      cursor: pointer;
+                      color: #0b72c7;
+                      font-weight: 700;
+                      
+                    ">
+                    {{ data.processedCount }}
+                  </span>
+                </ng-container>
+                <ng-template #noprocessedCount>
+                  <span style="cursor: pointer; color: #0b72c7; font-weight: 700">{{ data.processedCount }}</span>
+                </ng-template>
+              </td>
+
+              <td>
+                <ng-container *ngIf="data.unProcessedCount > 0; else nounprocessedCount">
+                  <span style="
+                      cursor: pointer;
+                      color: #0b72c7;
+                      font-weight: 700;
+                      
+                    ">
+                    {{ data.unProcessedCount }}
+                  </span>
+                </ng-container>
+                <ng-template #nounprocessedCount>
+                  <span style="cursor: pointer; color: #0b72c7; font-weight: 700">{{ data.unProcessedCount }}</span>
+                </ng-template>
+              </td>
+
+              <td>
+                <ng-container *ngIf="data.shippedCount > 0; else noshippedCount">
+                  <span style="
+                      cursor: pointer;
+                      color: #0b72c7;
+                      font-weight: 700;
+                      
+                    ">
+                    {{ data.shippedCount }}
+                  </span>
+                </ng-container>
+                <ng-template #noshippedCount>
+                  <span style="cursor: pointer; color: #0b72c7; font-weight: 700">{{ data.shippedCount }}</span>
+                </ng-template>
+              </td>
+
+              <td>
+                <ng-container *ngIf="data.rtoReceived > 0; else nortoReceived">
+                  <span style="
+                      cursor: pointer;
+                      color: #0b72c7;
+                      font-weight: 700;
+                      
+                    ">
+                    {{ data.rtoReceived }}
+                  </span>
+                </ng-container>
+                <ng-template #nortoReceived>
+                  <span style="cursor: pointer; color: #0b72c7; font-weight: 700">{{ data.rtoReceived }}</span>
+                </ng-template>
+              </td>
+
+              <td>
+                <ng-container *ngIf="data.rtoRedispatch > 0; else nortoRedispatch">
+                  <span style="
+                      cursor: pointer;
+                      color: #0b72c7;
+                      font-weight: 700;
+                      
+                    ">
+                    {{ data.rtoRedispatch }}
+                  </span>
+                </ng-container>
+                <ng-template #nortoRedispatch>
+                  <span style="cursor: pointer; color: #0b72c7; font-weight: 700">{{ data.rtoRedispatch }}</span>
+                </ng-template>
+              </td>
+
+              <td>
+                <ng-container *ngIf="data.destroyCount > 0; else nodestroyCount">
+                  <span style="
+                      cursor: pointer;
+                      color: #0b72c7;
+                      font-weight: 700;
+                      
+                    ">
+                    {{ data.destroyCount }}
+                  </span>
+                </ng-container>
+                <ng-template #nodestroyCount>
+                  <span style="cursor: pointer; color: #0b72c7; font-weight: 700">{{ data.destroyCount }}</span>
+                </ng-template>
+              </td>
+
+              <td>
+                <ng-container *ngIf="data.nszCount > 0; else nonszCount">
+                  <span style="
+                      cursor: pointer;
+                      color: #0b72c7;
+                      font-weight: 700;
+                      
+                    ">
+                    {{ data.nszCount }}
+                  </span>
+                </ng-container>
+                <ng-template #nonszCount>
+                  <span style="cursor: pointer; color: #0b72c7; font-weight: 700">{{ data.nszCount }}</span>
+                </ng-template>
+              </td>
+
+              <td>
+                <button class="btn btn-sm btn-outline-primary custom-view-btn"
+                  (click)="onStatusClick_new(data.institutionID)">
+                  <i class="ri-eye-line"></i> View
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pagination  -->
+
+    <app-paginator [length]="totalOrders" [pageSize]="pageSize" [pageSizeOptions]="[ 50, 100, 500, 1000]"
+      [pageIndex]="pageIndex" (page)="handlePageEvent($event)">
+    </app-paginator>
+  </div>
+</div>

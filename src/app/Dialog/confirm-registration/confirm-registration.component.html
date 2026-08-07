@@ -1,0 +1,51 @@
+<div class="parent">
+
+    <div class="container d-flex justify-content-center align-items-center">
+
+        <div class="row min-vh-100 min-vw-100">
+
+            <div class="col-md-6 left-box">
+
+                <img src="assets\Images\CP2.png" alt="" class="left-box-img right-rounded">
+                
+            </div>
+
+            <div class="col-sm-12 col-md-6 d-flex justify-content-center align-items-center">
+
+                <div class="container-fluid right-box">
+                   
+                        <div class="col-sm-12 col-md-12">
+
+                            <h3 class="mb-3">Create Password</h3>
+                            <hr class="my-1" style="width: 100%;">
+                            
+                            <div class="mt-4">
+                                <div class="position-relative mb-3">
+
+                                    <input type="password" class="form-control form-control-lg bg-light fs-6"
+                                    placeholder="New Password" [(ngModel)]="newpassword" id="newpassword" />
+                                <i class="bi bi-info-circle position-absolute"
+                                    style="top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer;"
+                                    data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                    title="Password must be at least 8 characters long, alphanumeric, with at least one uppercase letter, one lowercase letter, one special character, and no spaces."></i>
+                                    
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <input type="password" class="form-control form-control-lg bg-light fs-6" placeholder="Confirm Password" [(ngModel)]="confirmpassword" id="confirmpassword">
+                                </div>
+                                
+                                <div class="input-group mb-3">
+                                    <button type="submit" class="btn btn-reset w-100 fs-6" (click) = "create()" >Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+</div>
