@@ -1,173 +1,275 @@
-<div class="reports-container">
-  <!-- <div class="created-reports-list">
-    <span class="title">Created Reports List</span>
-    <div class="report-category">
-      <span class="subtitle">Order Reports:</span>
-      <ul>
-        <li><i class="ri-file-text-fill report-icon"></i><a href="#">Ayush Demo</a></li>
-        <li><i class="ri-file-text-fill report-icon"></i><a href="#">Demo</a></li>
-        <li><i class="ri-file-text-fill report-icon"></i><a href="#">rupesh</a></li>
-      </ul>
-    </div>
-    <div class="report-category">
-      <span class="subtitle">Shipment Reports:</span>
-      <ul>
-        <li><i class="ri-file-text-fill report-icon"></i><a href="#">Pr report</a></li>
-        <li><i class="ri-file-text-fill report-icon"></i><a href="#">rupesh4</a></li>
-        <li><i class="ri-file-text-fill report-icon"></i><a href="#">Test Report 2</a></li>
-      </ul>
-    </div>
-    <div class="report-category">
-      <span class="subtitle">Warehouse Reports:</span>
-      <ul>
-        <li><i class="ri-file-text-fill report-icon"></i><a href="#">Test Table Report</a></li>
-        <li><i class="ri-file-text-fill report-icon"></i><a href="#">Test Graph Report</a></li>
-      </ul>
-    </div>
-  </div> -->
-  <div class="create-report">
-    <h4>Shipments Report</h4>
+<div class="rp-page">
+  <div class="rp-grid">
+    <!-- ============ NEW REPORT ============ -->
+    <section class="rp-card">
+      <div class="rp-card-head">New Shipment report</div>
 
+      <div class="rp-card-body">
+        <div class="rp-row-2" [class.rp-single]="!isAdmin">
+          <div class="rp-field">
+            <label for="reportName">Report name</label>
+            <input
+              id="reportName"
+              type="text"
+              name="reportName"
+              [(ngModel)]="reportName"
+              placeholder="Enter report name"
+              required
+            />
+          </div>
 
-
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label report-label" for="reportName">Report Name <font color="red">*</font>
-        </label>
-      <div class="col-sm-6">
-        <input class="form-control" style="width: 100%;" type="text" id="reportName" placeholder="Enter Report Name"
-          name="reportName" [(ngModel)]="reportName" required>
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label report-label" for="reportName">Bank Name <font color="red">*</font></label>
-      <div class="col-sm-6">
-        <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="sellerId"
-          style="width: 100%; font-size: 16px; padding: 4px;">
-          <option value="" selected>Select Bank</option>
-          <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <label for="dateRange" class="col-sm-2 col-form-label report-label">Date Range: <font color="red">*</font></label>
-      <div class="col-sm-6">
-        <app-datepicker (dateRangeSelected)="onDateRangeSelected($event)"></app-datepicker>
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label report-label">
-        Order Category <font color="red">*</font>
-      </label>
-
-      <div class="col-sm-6">
-
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="orderCategory" id="perso" [value]="2"
-            [(ngModel)]="orderCategoryType" />
-          <label class="form-check-label" for="perso">Perso</label>
-        </div>
-
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="orderCategory" id="insta" [value]="3"
-            [(ngModel)]="orderCategoryType" />
-          <label class="form-check-label" for="insta">Insta</label>
-        </div>
-
-
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label report-label">Report Type <font color="red">*</font></label>
-      <div class="col-sm-6">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="barGraph" name="report-type" value="Bar"
-            [(ngModel)]="selectedReportType" disabled>
-          <label class="form-check-label type-label" for="barGraph">Bar Graph</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="pieChart" name="report-type" value="Pie"
-            [(ngModel)]="selectedReportType" disabled>
-          <label class="form-check-label type-label" for="pieChart">Pie Chart</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="tableView" name="report-type" value="Table"
-            [(ngModel)]="selectedReportType" required>
-          <label class="form-check-label type-label" for="tableView">Table View</label>
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="selectedReportType === 'Table'" class=" row">
-      <div class="col-sm-2 col-form-label report-label">
-        <label for="table-columns">Shipment Columns<font color="red">*</font> </label>
-      </div>
-      <div class="col-sm-9">
-        <div class="row">
-          <div class="col">
-            <input type="checkbox" id="selectAllShipment" [(ngModel)]="selectAllShipmentChecked"
-              (change)="selectAllShipmentCheckboxChanged()" class="mx-3" name="SelectAllShipment" />
-            <label for="selectAllShipment">Select All</label>
+          <div class="rp-field" *ngIf="isAdmin">
+            <label for="sellerName">Bank</label>
+            <select id="sellerName" name="sellerName" [(ngModel)]="sellerId">
+              <option value="" disabled>Select bank</option>
+              <option *ngFor="let seller of sellerData" [value]="seller.id">
+                {{ seller.name }}
+              </option>
+            </select>
           </div>
         </div>
-        <div class="row">
-          <div class="col">
-            <ng-container *ngFor="let checkbox of shipmentCheckboxes; let i = index;">
-              <div class="col-4 mb-1" style="display: inline-block;">
-                <input type="checkbox" [id]="checkbox.id" [(ngModel)]="checkbox.checked" (change)="checkboxChanged()"
-                  class="mx-1" [name]="checkbox.id" />
-                <label [for]="checkbox.id" class="mx-1 checkbox-label-small">{{ checkbox.label }}</label>
-              </div>
-              <div *ngIf="(i + 1) % 6 === 0" class="w-100"></div>
-            </ng-container>
+
+        <div class="rp-row-2">
+          <div class="rp-field">
+            <label for="fromDate">From</label>
+            <input
+              id="fromDate"
+              type="date"
+              name="fromDate"
+              [(ngModel)]="fromDate"
+              [max]="toDate"
+            />
+          </div>
+          <div class="rp-field">
+            <label for="toDate">To</label>
+            <input
+              id="toDate"
+              type="date"
+              name="toDate"
+              [(ngModel)]="toDate"
+              [min]="fromDate"
+            />
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label report-label" for="status">Filter Shipment Status <font color="red">*</font>
-        </label>
-      <div class="dropdown col-sm-6" id="statusFilterDropdown" style="margin-right:10px;">
-        <button class="dropbtn" type="button" (click)="toggleDropdown()"
-          [title]="selectedStatusNames.length > 0 ? selectedStatusNames.join(', ') : 'Order Status'">
-          <span class="selected-statuses">
-            {{ selectedStatusNames.length > 0 ? selectedStatusNames.join(', ') : 'Shipment Status' }}
-          </span>
-          <i class="bi bi-chevron-down" style="margin-left:5px;"></i>
-        </button>
-        <div class="dropdown-content" [ngClass]="{'show': dropdownOpen}">
-          <label>
-            <input type="checkbox" [checked]="allSelected" (change)="toggleSelectAll($event)">
-            Select All
-          </label>
-          <label *ngFor="let status of filteredStatuses">
-            <input type="checkbox" [value]="status.id" [checked]="selectedStatusIds.includes(status.id)"
-              (change)="toggleSelection(status)">
-            {{ status.name }}
-          </label>
+        <!-- Order category: admin always, user only when serviceType is 1 -->
+        <ng-container *ngIf="showOrderCategory">
+          <div class="rp-section"><span>Shipment category</span></div>
+          <div class="rp-segment" role="radiogroup" aria-label="Order category">
+            <button
+              type="button"
+              role="radio"
+              [attr.aria-checked]="orderCategoryType === 2"
+              [class.active]="orderCategoryType === 2"
+              (click)="orderCategoryType = 2"
+            >
+              Perso
+            </button>
+            <button
+              type="button"
+              role="radio"
+              [attr.aria-checked]="orderCategoryType === 3"
+              [class.active]="orderCategoryType === 3"
+              (click)="orderCategoryType = 3"
+            >
+              Insta
+            </button>
+          </div>
+        </ng-container>
+
+        <!-- Output -->
+        <div class="rp-section"><span>Output</span></div>
+        <div class="rp-segment" role="radiogroup" aria-label="Output type">
+          <button
+            type="button"
+            role="radio"
+            [attr.aria-checked]="selectedReportType === 'Table'"
+            [class.active]="selectedReportType === 'Table'"
+            (click)="selectedReportType = 'Table'"
+          >
+            Table
+          </button>
+          <button
+            type="button"
+            role="radio"
+            [attr.aria-checked]="selectedReportType === 'Bar'"
+            [class.active]="selectedReportType === 'Bar'"
+            (click)="selectedReportType = 'Bar'"
+          >
+            Bar chart
+          </button>
+          <button
+            type="button"
+            role="radio"
+            [attr.aria-checked]="selectedReportType === 'Pie'"
+            [class.active]="selectedReportType === 'Pie'"
+            (click)="selectedReportType = 'Pie'"
+          >
+            Pie chart
+          </button>
+        </div>
+
+        <ng-container *ngIf="selectedReportType === 'Table'">
+          <!-- Columns -->
+          <div class="rp-section">
+            <span>Columns</span>
+            <button
+              type="button"
+              class="rp-link"
+              (click)="
+                selectAllShipmentChecked = !selectAllShipmentChecked;
+                selectAllShipmentCheckboxChanged()
+              "
+            >
+              Toggle all
+            </button>
+          </div>
+          <div class="rp-checks">
+            <label class="rp-check rp-check-sm">
+              <input
+                type="checkbox"
+                name="selectAllShipment"
+                [(ngModel)]="selectAllShipmentChecked"
+                (change)="selectAllShipmentCheckboxChanged()"
+              />
+              <span>Select all</span>
+            </label>
+            <label class="rp-check" *ngFor="let c of shipmentCheckboxes">
+              <input
+                type="checkbox"
+                [name]="c.id"
+                [(ngModel)]="c.checked"
+                (change)="checkboxChanged()"
+              />
+              <span>{{ c.label }}</span>
+            </label>
+          </div>
+
+          <!-- Shipment statuses -->
+          <div class="rp-section">
+            <span>Shipment statuses</span>
+          </div>
+          <div class="rp-checks">
+            <label class="rp-check rp-check-sm">
+              <input
+                type="checkbox"
+                name="selectAllStatus"
+                [checked]="allSelected"
+                (change)="toggleSelectAll($event)"
+              />
+              <span>Select all</span>
+            </label>
+            <label class="rp-check" *ngFor="let status of filteredStatuses">
+              <input
+                type="checkbox"
+                [name]="'status-' + status.id"
+                [checked]="selectedStatusIds.includes(status.id)"
+                (change)="toggleSelection(status)"
+              />
+              <span>{{ status.name }}</span>
+            </label>
+          </div>
+        </ng-container>
+
+        <div class="rp-actions">
+          <button
+            type="button"
+            class="rp-btn-primary"
+            (click)="createReport()"
+            [disabled]="isCreating"
+          >
+            {{ isCreating ? "Creating…" : "Create report" }}
+          </button>
+          <button
+            type="button"
+            class="rp-btn-ghost"
+            (click)="navigatetoReports()"
+          >
+            Cancel
+          </button>
         </div>
       </div>
+    </section>
 
-    </div>
+    <!-- ============ SAVED REPORTS ============ -->
+    <section class="rp-card rp-saved">
+      <div class="rp-card-head">Saved reports</div>
 
-    <div class="form-actions" style="margin-top: 50px;">
-      <button type="submit" class="btn btn-primary" style="margin-right: 10px;" (click)="createReport()" [disabled]="isCreating">
-         <span *ngIf="!isCreating">
-          Create
-        </span>
+      <table class="rp-table">
+        <thead>
+          <tr>
+            <th>Report</th>
+            <th>Created</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of pagedReports">
+            <td>
+              <div class="rp-name">{{ r.name }}</div>
+              <div class="rp-sub">{{ r.type }} · {{ r.bank }}</div>
+            </td>
+            <td class="rp-date">{{ r.createdAt | date: "dd MMM yyyy" }}</td>
+            <td>
+              <button type="button" class="rp-run" (click)="runSavedReport(r)">
+                Run
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="savedReports.length === 0">
+            <td colspan="3" class="rp-empty">
+              No saved reports yet. Create one to see it here.
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-        <span *ngIf="isCreating">
-          Creating...
-        </span>
-      </button>
-      <button type="submit" class="btn btn-secondary" (click)="navigatetoReports()">Cancel</button>
-    </div>
+      <div class="rp-pager">
+        <div class="rp-rows">
+          <span>Rows</span>
+          <select
+            [(ngModel)]="savedPageSize"
+            name="savedPageSize"
+            (change)="savedPage = 1"
+          >
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="100">100</option>
+          </select>
+          <span class="rp-range"
+            >{{ rangeStart }}–{{ rangeEnd }} of
+            <b>{{ savedReports.length }}</b></span
+          >
+        </div>
+
+        <div class="rp-pages">
+          <button
+            type="button"
+            class="rp-page-btn"
+            [disabled]="savedPage === 1"
+            (click)="savedPage = savedPage - 1"
+          >
+            Prev
+          </button>
+          <button
+            type="button"
+            class="rp-page-num"
+            *ngFor="let p of pageNumbers"
+            [class.active]="p === savedPage"
+            (click)="savedPage = p"
+          >
+            {{ p }}
+          </button>
+          <button
+            type="button"
+            class="rp-page-btn"
+            [disabled]="savedPage === totalPages"
+            (click)="savedPage = savedPage + 1"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </section>
   </div>
-
-
-
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger,state, transition, style, animate } from '@angular/animations';
+import { trigger, state, transition, style, animate } from '@angular/animations';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -18,18 +18,18 @@ declare var bootstrap: any;
     trigger('fadeSlideInOut', [
       state('void', style({
         opacity: 0,
-        transform: 'translateY(-50%)'
+        transform: 'translateX(100%)'
       })),
       transition('void => *', [
-        animate('700ms ease', style({
+        animate('350ms ease-out', style({
           opacity: 1,
-          transform: 'translateY(0)'
+          transform: 'translateX(0)'
         }))
       ]),
       transition('* => void', [
-        animate('300ms ease', style({
+        animate('250ms ease-in', style({
           opacity: 0,
-          transform: 'translateY(-50%)'
+          transform: 'translateX(100%)'
         }))
       ])
     ])

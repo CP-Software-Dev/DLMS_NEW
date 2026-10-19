@@ -1,39 +1,39 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import {
   trigger,
   state,
   style,
   animate,
   transition,
-} from "@angular/animations";
-import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute } from "@angular/router";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { Router } from "@angular/router";
-import { Subscription } from "rxjs";
-import { ToastrService } from "ngx-toastr";
-import { ApiService } from "../../services/api.service";
-import { RefreshService } from "../../services/refresh.service";
-import { OrderStateService } from "../../services/States/Orders/order-state.service";
-import { BranchMasterFileUploadComponent } from "../../Dialog/branch-master-file-upload/branch-master-file-upload.component";
+} from '@angular/animations';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { ApiService } from '../../services/api.service';
+import { RefreshService } from '../../services/refresh.service';
+import { OrderStateService } from '../../services/States/Orders/order-state.service';
+import { BranchMasterFileUploadComponent } from '../../Dialog/branch-master-file-upload/branch-master-file-upload.component';
 
 @Component({
-  selector: "app-branch-master",
-  templateUrl: "./branch-master.component.html",
-  styleUrl: "./branch-master.component.css",
+  selector: 'app-branch-master',
+  templateUrl: './branch-master.component.html',
+  styleUrl: './branch-master.component.css',
 })
 export class BranchMasterComponent {
   pageIndex: number = 0;
   pageSize: number = 10;
   pincodeData: any[] = [];
   totalOrders: number = 0;
-  buttonText: string = "Filters";
-  buttonIcon: string = "ri-filter-fill";
+  buttonText: string = 'Filters';
+  buttonIcon: string = 'ri-filter-fill';
   showFiltersForm: boolean = false;
-  pincode: string = "";
+  pincode: string = '';
   sellerData: any[] = [];
-  sellerId: string = "";
+  sellerId: string = '';
 
   private refreshSubscription?: Subscription;
 
@@ -45,7 +45,7 @@ export class BranchMasterComponent {
     private router: Router,
     private toastr: ToastrService,
     private ordersStateService: OrderStateService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -59,7 +59,7 @@ export class BranchMasterComponent {
     this.refreshSubscription = this.refreshservice.refreshNeeded.subscribe(
       () => {
         this.fetchData(this.pageIndex, this.pageSize);
-      }
+      },
     );
   }
 
@@ -78,13 +78,18 @@ export class BranchMasterComponent {
 
   toggleFiltersForm() {
     this.showFiltersForm = !this.showFiltersForm;
-    this.buttonText = this.showFiltersForm ? "Close" : "Filters";
-    this.buttonIcon = this.showFiltersForm ? "ri-close-fill" : "ri-filter-fill";
+    this.buttonText = this.showFiltersForm ? 'Close' : 'Filters';
+    this.buttonIcon = this.showFiltersForm ? 'ri-close-fill' : 'ri-filter-fill';
   }
 
   openDialog(): void {
     this.dialog.open(BranchMasterFileUploadComponent, {
-      panelClass: "rounded-dialog",
+      panelClass: 'credentials-drawer',
+      backdropClass: 'blur-backdrop',
+      width: '540px',
+      maxWidth: 'calc(100vw - 32px)',
+      enterAnimationDuration: '0ms',
+      exitAnimationDuration: '250ms',
     });
   }
 
@@ -93,7 +98,7 @@ export class BranchMasterComponent {
   }
 
   clearFilters() {
-    this.sellerId = "";
+    this.sellerId = '';
     this.fetchData(this.pageIndex, this.pageSize);
   }
 
@@ -106,11 +111,11 @@ export class BranchMasterComponent {
 
   fetchData(pageIndex: number, pageSize: number) {
     let params = new HttpParams()
-      .set("pageNumber", (pageIndex + 1).toString())
-      .set("pageSize", pageSize.toString());
+      .set('pageNumber', (pageIndex + 1).toString())
+      .set('pageSize', pageSize.toString());
 
     if (this.sellerId) {
-      params = params.set("institutionId", Number(this.sellerId));
+      params = params.set('institutionId', Number(this.sellerId));
     }
 
     this.http.get(this.apiservice.BranchMaster, { params }).subscribe(
@@ -118,7 +123,15 @@ export class BranchMasterComponent {
         this.pincodeData = res.data.records;
         this.totalOrders = res.data.totalRecords;
       },
-      (error) => {}
+      (error) => {},
     );
+  }
+
+  copyToClipboard(value: string): void {
+    if (!value) return;
+    navigator.clipboard
+      .writeText(value)
+      .then(() => this.toastr.success('Copied', 'Success'))
+      .catch(() => this.toastr.error('Copy failed', 'Failure'));
   }
 }

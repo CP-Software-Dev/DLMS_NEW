@@ -1,8 +1,32 @@
+<!-- <ng-container *ngIf="shouldShowSideNav()">
+  <app-user-sidenav
+    (onToggleSideNav)="onToggleSideNav($event)"
+    *ngIf="isUserPage()"
+  ></app-user-sidenav>
+  <app-sidenav
+    (onToggleSideNav)="onToggleSideNav($event)"
+    *ngIf="!isUserPage()"
+  ></app-sidenav>
+
+  <app-header
+    *ngIf="!isLoginPage() && !isForgotPage() && !isOtpPage() && !isResetPage()"
+    [collapsed]="isSideNavCollapsed"
+    [screenWidth]="screenWidth"
+  ></app-header>
+</ng-container>
+<app-body
+  [collapsed]="isSideNavCollapsed"
+  [screenWidth]="screenWidth"
+></app-body> -->
+
+
 <ng-container *ngIf="shouldShowSideNav()">
-    <app-user-sidenav (onToggleSideNav)="onToggleSideNav($event)" *ngIf="isUserPage()"></app-user-sidenav>
-    <app-sidenav (onToggleSideNav)="onToggleSideNav($event)" *ngIf="!isUserPage() "></app-sidenav>
-  
-    <app-header *ngIf="!isLoginPage() && !isForgotPage() && !isOtpPage() && !isResetPage()" [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth"></app-header>
-    
-  </ng-container>
-  <app-body [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth"></app-body>
+  <app-sidenav (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav>
+
+  <app-header
+    *ngIf="!isLoginPage() && !isForgotPage() && !isOtpPage() && !isResetPage()"
+    [collapsed]="isSideNavCollapsed"
+    [screenWidth]="screenWidth"
+  ></app-header>
+</ng-container>
+<app-body [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth"></app-body>

@@ -1,74 +1,72 @@
-<div class="card">
-    <div class="card-head">
-        <div class="row">
-            <div class="col-md-7 col-sm-7 d-flex align-items-center">
-                <h5 class="mb-0 me-4"><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Shipments
-                </h5>
-                @if(serviceType === 1){<div class="task-tabs">
+<div class="card orders-card">
+  <div class="card-head">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div class="d-flex flex-column">
+        <h5 class="mb-0">Shipments List</h5>
+        <p>Personalised kits on their way to customers.</p>
+      </div>
 
-                    <button class="tab-btn" [class.active]="activeTab === 'perso'" (click)="setTab('perso')">
-                        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        <span>Perso</span>
-                    </button>
+      <div class="ms-auto">
+        <div class="d-flex justify-content-end align-items-center flex-wrap gap-2 link_items">
 
-                    <button class="tab-btn" [class.active]="activeTab === 'insta'" (click)="setTab('insta')">
-                        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="8" y1="6" x2="21" y2="6"></line>
-                            <line x1="8" y1="12" x2="21" y2="12"></line>
-                            <line x1="8" y1="18" x2="21" y2="18"></line>
-                            <circle cx="3" cy="6" r="1"></circle>
-                            <circle cx="3" cy="12" r="1"></circle>
-                            <circle cx="3" cy="18" r="1"></circle>
-                        </svg>
-                        <span>Insta</span>
-                    </button>
+          @if (serviceType === 1) {
+            <div class="task-tabs">
+              <button
+                class="tab-btn"
+                [class.active]="activeTab === 'perso'"
+                (click)="setTab('perso')"
+              >
+                <span>Perso</span>
+              </button>
 
-                </div>}
+              <button
+                class="tab-btn"
+                [class.active]="activeTab === 'insta'"
+                (click)="setTab('insta')"
+              >
+                <span>Insta</span>
+              </button>
             </div>
-           
-            <div class="col-md-5 col-sm-5 d-flex justify-content-end align-items-center">
+          }
 
-                @if(activeTab=== 'insta'){<button class="btn btn-outline-dark btn-sm me-3" (click)="instaExportToCSV()"
-                    [disabled]="isExportingInsta">
-                    <span *ngIf="!isExportingInsta">
-                        <i class="ri-export-fill"></i> Export
-                    </span>
+          @if (activeTab === "insta") {
+            <button
+              class="btn btn-outline-dark btn-sm"
+              (click)="instaExportToCSV()"
+              [disabled]="isExportingInsta"
+            >
+              <span *ngIf="!isExportingInsta">
+                <i class="bi bi-download"></i> Export
+              </span>
+              <span *ngIf="isExportingInsta">
+                <i class="ri-loader-4-line spin"></i> Exporting...
+              </span>
+            </button>
+          }
 
-                    <span *ngIf="isExportingInsta">
-                        <i class="ri-loader-4-line spin"></i> Exporting...
-                    </span>
-                </button>}
-                @if(activeTab=== 'perso'){<button class="btn btn-outline-dark btn-sm me-3" (click)="persoExportToCSV()"
-                    [disabled]="isExportingPerso">
-
-                    <span *ngIf="!isExportingPerso">
-                        <i class="ri-export-fill"></i> Export
-                    </span>
-
-                    <span *ngIf="isExportingPerso">
-                        <i class="ri-loader-4-line spin"></i> Exporting...
-                    </span>
-                </button>}
-                @if(activeTab=== 'insta'){<button class="btn btn-outline-dark btn-sm me-3" (click)=" onInstaFilters()">
-                    <i [class]="buttonIcon"></i> Filter
-                </button>
-                }
-                @if(activeTab=== 'perso'){<button class="btn btn-outline-dark btn-sm me-3" (click)="onPersoFilters()">
-                    <i [class]="buttonIcon"></i> Filter
-                </button>}
-            </div>
+          @if (activeTab === "perso") {
+            <button
+              class="btn btn-outline-dark btn-sm"
+              (click)="persoExportToCSV()"
+              [disabled]="isExportingPerso"
+            >
+              <span *ngIf="!isExportingPerso">
+                <i class="bi bi-download"></i> Export
+              </span>
+              <span *ngIf="isExportingPerso">
+                <i class="ri-loader-4-line spin"></i> Exporting...
+              </span>
+            </button>
+          }
         </div>
+      </div>
     </div>
+  </div>
 
-    @if(activeTab == 'perso'){
+  @if (activeTab == "perso") {
     <app-shipment-list #persoShipments></app-shipment-list>
-    }
-    @if(activeTab == 'insta'){
+  }
+  @if (activeTab == "insta") {
     <app-insta-shipment #instaShipments></app-insta-shipment>
-    }
+  }
 </div>

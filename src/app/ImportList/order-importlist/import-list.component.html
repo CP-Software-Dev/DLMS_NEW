@@ -2,153 +2,165 @@
   <div class="card-head">
     <div class="row">
       <div class="col-md-6 col-sm-6">
-        <h4>
-          <i class="ri-checkbox-blank-fill" style="border: 2px solid black">
-          </i>
-          Import List
-        </h4>
-      </div>
-      <div
-        class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center"
-      >
-        <button
-          class="btn btn-outline-dark btn-sm me-3"
-          (click)="navigateToOrders()"
-          onclick="makeActive(this)"
-        >
-          <i class="ri-add-line"></i> More Import
-        </button>
-        <button
-          class="btn btn-outline-dark btn-sm"
-          [class.active]="isActive === 'buttonText'"
-          (click)="makeActive('buttonText')"
-          (click)="toggleFiltersForm()"
-        >
-          <i [class]="buttonIcon"></i> {{ buttonText }}
-        </button>
+        <h4 class="import-title">Import list</h4>
       </div>
     </div>
 
-    <div class="form" style="margin-top: 30px" *ngIf="showFiltersForm">
-      <div class="row">
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="filterCriteria" class="form-label">From Date:</label>
-            <!-- <app-datepicker (dateRangeSelected)="onDateRangeSelected($event)"></app-datepicker> -->
-            <app-date-picker-invoice
-              [selectedRange]="selectedDateRange"
-              (dateRangeSelected)="onDateRangeSelected($event)"
-            ></app-date-picker-invoice>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="orderIds" class="form-label">File ID:</label>
-            <input
-              type="text"
-              class="form-control form-control-sm"
-              id="fileid"
-              [(ngModel)]="FileId"
-              placeholder="Enter File ID"
-            />
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="sellerName" class="form-label">Seller Name</label>
-            <select
-              class="form-select form-select-sm mb-2"
-              id="sellerName"
-              [(ngModel)]="sellerId"
-            >
-              <option value="" selected>Select Seller</option>
-              <option *ngFor="let seller of sellerData" [value]="seller.id">
-                {{ seller.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="sellerName" class="form-label">Seller Name</label>
-            <select
-              class="form-select form-select-sm mb-2"
-              id="status"
-              [(ngModel)]="status"
-            >
-              <option value="" disabled selected>Select Status:</option>
-              <option value="Completed">Completed</option>
-              <option value="Partial Upload">Partial Upload</option>
-              <option value="Failed">Failed</option>
-            </select>
-          </div>
-        </div>
+    <div class="order-header">
+      <div class="order-description">
+        Every file the bank dropped on SFTP or someone uploaded, with what got
+        in and what was <br />
+        rejected. A file is only ever processed once.
       </div>
 
-      <div class="row">
-        <div class="col-md-3 d-flex align-items-end">
-          <div class="button-grp mb-2 d-flex justify-content-start">
-            <button
-              class="btn btn-outline-dark btn-sm me-3"
-              type="button"
-              style="
-                background-color: rgb(5, 114, 209);
-                font-size: small;
-                color: white;
-              "
-              (click)="applyFilters()"
-            >
-              Apply
-            </button>
-            <button
-              class="btn btn-danger btn-sm me-3"
-              style="font-size: small; box-shadow: none"
-              (click)="clearFilters()"
-            >
-              Clear
-            </button>
-          </div>
-        </div>
-      </div>
+      <button
+        class="back_order_button"
+        (click)="navigateToOrders()"
+        onclick="makeActive(this)"
+      >
+        <i class="ri-arrow-right-s-line"></i>
+        Back to orders
+      </button>
     </div>
   </div>
+
   <div class="card-body">
     <div class="row">
+      <!-- input filter based on id and name -->
+      <div class="filter-wrapper">
+        <div class="d-flex gap-3 align-items-center bg-white filter_container">
+          <div class="search-box">
+            <i class="ri-search-line search-icon"></i>
+            <input
+              type="text"
+              class="search-input"
+              name="searchInput"
+              id="searchInput"
+              placeholder="File name or import id"
+              [(ngModel)]="searchTerm"
+              (ngModelChange)="onSearchChange()"
+            />
+          </div>
+
+          <!-- Active filter chips -->
+          <div class="active-filters" *ngIf="getActiveFiltersList().length > 0">
+            <span class="filter-chip" *ngFor="let f of getActiveFiltersList()">
+              {{ f.label }}
+              <i
+                class="ri-close-line chip-close"
+                (click)="removeFilter(f.key)"
+              ></i>
+            </span>
+          </div>
+
+          <button
+            class="btn-filters"
+            [class.active]="isActive === 'buttonText'"
+            (click)="makeActive('buttonText')"
+            (click)="toggleFiltersForm()"
+          >
+            <i [class]="buttonIcon"></i> {{ buttonText }}
+            <span
+              class="filter-count"
+              *ngIf="getActiveFiltersList().length > 0"
+            >
+              · {{ getActiveFiltersList().length }}
+            </span>
+          </button>
+
+          <span
+            class="clear-all-link"
+            *ngIf="getActiveFiltersList().length > 0"
+            (click)="clearAllFilters()"
+          >
+            Clear all
+          </span>
+        </div>
+
+        <div class="filter-popover" *ngIf="showFiltersForm">
+          <h6 class="filter-title">Filter Import List</h6>
+
+          <div class="filter-grid">
+            <div class="filter-field">
+              <label for="sellerName" class="form-label">Bank</label>
+              <select
+                class="form-select form-select-sm"
+                id="sellerName"
+                [(ngModel)]="sellerId"
+              >
+                <option value="" selected >Any</option>
+                <option *ngFor="let seller of sellerData" [value]="seller.id">
+                  {{ seller.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="filter-field">
+              <label for="status" class="form-label">Status</label>
+              <select
+                class="form-select form-select-sm"
+                id="status"
+                [(ngModel)]="status"
+              >
+                <option value="" selected >Any</option>
+                <option value="Completed">Completed</option>
+                <option value="Partial Upload">Partial Upload</option>
+                <option value="Failed">Failed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="filter-actions">
+            <button class="btn-clear" (click)="clearFilters()">Clear</button>
+            <button class="btn-apply" (click)="applyFilters()">Apply</button>
+          </div>
+        </div>
+      </div>
       <table class="table">
         <thead>
           <tr>
             <th scope="col">Import ID</th>
-            <th scope="col">File Name</th>
-            <th scope="col">TOTAL RECORD</th>
-            <th scope="col">PROCESSED RECORD</th>
-            <th scope="col">REJECTED RECORD</th>
+            <th scope="col">File</th>
+            <th scope="col">Received</th>
+            <th scope="col">Rows</th>
+            <th scope="col">Accepted</th>
+            <th scope="col">REJECTED</th>
+            <th scope="col">Intake</th>
             <th scope="col">STATUS</th>
+            <th scope="col">Kind</th>
+            <th scope="col">Sales Person</th>
             <th scope="col">CREATED AT</th>
-            <th scope="col">Export</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let file of importList">
+          <tr *ngFor="let file of filteredImportList">
             <td>{{ file.id }}</td>
-            <td>{{ file.name }}</td>
-            <td>{{ file.totalCount || "--" }}</td>
-            <td>{{ file.processedCount || "--" }}</td>
-            <td>
+            <td class="file_name">{{ file.name }}</td>
+            <td class="created_date">{{ file.createdAt }}</td>
+            <td class="rows">{{ file.totalCount || "--" }}</td>
+            <td class="rows">{{ file.processedCount || "--" }}</td>
+            <td class="rejected">
               {{
                 file.totalCount != null && file.processedCount != null
                   ? file.totalCount - file.processedCount
                   : "--"
               }}
             </td>
-            <td>{{ file.status }}</td>
-            <td>{{ file.createdAt }}</td>
-            <!-- <td>
-                            <button class="btn btn-success btn-sm" (click)="exportFile(file.id)"
-                                style="box-shadow: none;">Export</button>
-
-                                <button class="btn btn-success btn-sm" (click)="exportFile(file.id)"
-                                style="box-shadow: none;">Export Shipment</button>
-                        </td> -->
+            <td class="intake"><div></div></td>
+            <td
+              [ngClass]="{
+                'status-completed': file.status === 'Completed',
+                'status-partial': file.status === 'Partial Upload',
+                'status-processing': file.status === 'Processing',
+              }"
+            >
+              <div class="status-badge">
+                <span class="dot"></span>
+                <span>{{ file.status }}</span>
+              </div>
+            </td>
+            <td>kind</td>
+            <td>Bablu Sarkar</td>
             <td>
               <div class="d-flex gap-2">
                 <button
@@ -169,7 +181,6 @@
                   >
                     Shipments
                   </button>
-
                 } @else {
                   <button
                     class="btn btn-secondary btn-sm"

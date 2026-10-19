@@ -17,6 +17,7 @@ import { RefreshService } from '../../services/refresh.service';
 import { Subscription } from 'rxjs';
 import { ExceptionStateService } from '../../services/States/Exceptions/exception-state.service';
 import { WebhookViewComponent } from '../../Dialog/webhook-view/webhook-view.component';
+import { SellerService } from '../../services/seller.service';
 
 interface StatusData {
   id: number;
@@ -59,6 +60,10 @@ export class InstaExceptionsComponent implements OnInit {
   damaged: number = 0;
   rtoLost: number = 0;
   rtoDamaged: number = 0;
+  // NEW: counts that the API returns but were not being read earlier
+  inTransit: number = 0;
+  pendingPickup: number = 0;
+  rtoOutForDelivery: number = 0;
   pageIndex: number = 0;
   pageSize: number = 10;
   sellerId: string = '';
@@ -76,6 +81,15 @@ export class InstaExceptionsComponent implements OnInit {
   };
   isExporting: boolean = false;
 
+  // -------------- admin / user (client) ek hi component --------------
+  // user-ndr ki tarah: login se seller milta hai (sellerService).
+  // Seller ho AUR admin route na ho -> user (sirf apni seller ka data).
+  // Admin route par kabhi user view/filter nahi lagta (admin pehle jaisa).
+  seller: any = null;
+  get isUser(): boolean {
+    return !!this.seller && !this.router.url.startsWith('/admin');
+  }
+
   constructor(
     private router: Router,
     private apiservice: ApiService,
@@ -87,6 +101,7 @@ export class InstaExceptionsComponent implements OnInit {
     private refreshservice: RefreshService,
     private exceptionStateService: ExceptionStateService,
     private dialog: MatDialog,
+    private sellerService: SellerService,
   ) {
     const endDate = new Date(); // Today
     const startDate = new Date(); // Clone today
@@ -99,6 +114,7 @@ export class InstaExceptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.seller = this.sellerService.getItem('seller'); // sabse pehle
     this.isSelectAllChecked = false;
     this.route.queryParams.subscribe((params) => {
       this.initializeFiltersFromParams(params);
@@ -117,7 +133,9 @@ export class InstaExceptionsComponent implements OnInit {
 
     this.applyFilters();
     this.fetchOrders(this.pageIndex, this.pageSize);
-    this.loadSellerData();
+    if (!this.isUser) {
+      this.loadSellerData();
+    }
     this.loadCourierData();
     this.loadStatus();
     this.refreshSubscription = this.refreshservice.refreshNeeded.subscribe(
@@ -267,6 +285,10 @@ export class InstaExceptionsComponent implements OnInit {
     if (filters.sellerId) {
       params = params.set('sellerId', filters.sellerId);
     }
+    // user/client: hamesha sirf apni seller ka data
+    if (this.isUser && this.seller) {
+      params = params.set('sellerId', this.seller);
+    }
 
     if (filters.kitnumber) {
       params = params.set('kitnumber', filters.kitnumber);
@@ -314,6 +336,10 @@ export class InstaExceptionsComponent implements OnInit {
           this.damaged = res.data.damaged || 0;
           this.rtoLost = res.data.rtoLost || 0;
           this.rtoDamaged = res.data.rtoDamaged || 0;
+          // NEW
+          this.inTransit = res.data.inTransit || 0;
+          this.pendingPickup = res.data.pendingPickup || 0;
+          this.rtoOutForDelivery = res.data.rtoOutForDelivery || 0;
           this.paginatedOrders = this.orders;
         }
         this.loading = false;
@@ -396,6 +422,149 @@ export class InstaExceptionsComponent implements OnInit {
     this.showFiltersForm = !this.showFiltersForm;
     this.buttonText = this.showFiltersForm ? 'Close' : 'Filters';
     this.buttonIcon = this.showFiltersForm ? 'ri-close-fill' : 'ri-filter-fill';
+  }
+
+  // =====================================================
+  // New pill-filter UI helpers (added; existing methods untouched)
+  // =====================================================
+  searchTerm: string = '';
+
+  // Search box filters the current page by AWB / Order / Kit / Lot / Branch Head
+  get filteredOrders(): any[] {
+    const term = this.searchTerm ? this.searchTerm.trim().toLowerCase() : '';
+    if (!term) {
+      return this.paginatedOrders;
+    }
+    return this.paginatedOrders.filter((order) =>
+      [
+        order.awb,
+        order.orderID,
+        order.kitNumber,
+        order.lotId,
+        order.customer,
+      ].some((v) => (v || '').toString().toLowerCase().includes(term)),
+    );
+  }
+
+  // "All Exceptions" card total + base for progress bars.
+  // FIXED: ab inTransit, pendingPickup, rtoOutForDelivery bhi shamil hain,
+  // isse ye API ke `total` ke barabar aayega.
+  get baseTotal(): number {
+    return (
+      this.exception +
+      this.ofd +
+      this.delivered +
+      this.rtoTransit +
+      this.rtoDelivered +
+      this.lost +
+      this.damaged +
+      this.rtoLost +
+      this.rtoDamaged +
+      this.inTransit +
+      this.pendingPickup +
+      this.rtoOutForDelivery
+    );
+  }
+
+  getPercentage(count: number): number {
+    if (!this.baseTotal) {
+      return 0;
+    }
+    const pct = (count / this.baseTotal) * 100;
+    return pct > 100 ? 100 : pct;
+  }
+
+  getLabelOpacity(count: number): number {
+    if (count === 0) {
+      return 0.65;
+    }
+    const opacity = this.getPercentage(count) / 100;
+    return Math.max(opacity, 0.4);
+  }
+
+  getDaysAgo(orderDate: string | Date): number {
+    const diffTime = new Date().getTime() - new Date(orderDate).getTime();
+    return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  }
+
+  // Status pill colors (keyword match on status name)
+  getStatusColor(status: string): { bg: string; color: string } {
+    const s = (status || '').toLowerCase();
+    if (s.includes('damaged')) return { bg: '#fde9ed', color: '#c93a55' };
+    if (s.includes('lost')) return { bg: '#fde8ec', color: '#f2637e' };
+    if (s.includes('rto') && s.includes('delivered'))
+      return { bg: '#eceff4', color: '#64748b' };
+    if (s.includes('rto')) return { bg: '#fdeaf2', color: '#f0679a' };
+    if (s.includes('exception')) return { bg: '#fceae4', color: '#f0876b' };
+    if (s.includes('out for delivery'))
+      return { bg: '#dff6f1', color: '#26b99a' };
+    if (s.includes('delivered')) return { bg: '#e7f9ef', color: '#16a34a' };
+    return { bg: '#f4f5f7', color: '#8a8f98' };
+  }
+
+  getActiveFiltersList(): { key: string; label: string }[] {
+    const list: { key: string; label: string }[] = [];
+
+    if (this.orderIds) {
+      list.push({ key: 'orderIds', label: `Order: ${this.orderIds}` });
+    }
+    if (this.awbnumber) {
+      list.push({ key: 'awbnumber', label: `AWB: ${this.awbnumber}` });
+    }
+    if (this.kitnumber) {
+      list.push({ key: 'kitnumber', label: `Kit: ${this.kitnumber}` });
+    }
+    if (this.courierId) {
+      const courier = this.courierData.find(
+        (c) => c.id?.toString() === this.courierId?.toString(),
+      );
+      list.push({
+        key: 'courierId',
+        label: `Courier: ${courier?.name || this.courierId}`,
+      });
+    }
+    if (this.sellerId) {
+      const seller = this.sellerData.find(
+        (s) => s.id?.toString() === this.sellerId?.toString(),
+      );
+      list.push({
+        key: 'sellerId',
+        label: `Bank: ${seller?.name || this.sellerId}`,
+      });
+    }
+    return list;
+  }
+
+  removeFilter(key: string): void {
+    switch (key) {
+      case 'orderIds':
+        this.orderIds = '';
+        break;
+      case 'awbnumber':
+        this.awbnumber = '';
+        break;
+      case 'kitnumber':
+        this.kitnumber = '';
+        break;
+      case 'courierId':
+        this.courierId = '';
+        break;
+      case 'sellerId':
+        this.sellerId = '';
+        break;
+    }
+    this.searchTerm = '';
+    this.applyFilters();
+  }
+
+  // clearFilters() ends with toggleFiltersForm(); close the popover again
+  // so the outside "Clear all" link doesn't leave it open.
+  clearAllFilters(): void {
+    this.searchTerm = '';
+    this.clearFilters();
+    if (this.showFiltersForm) {
+      this.toggleFiltersForm();
+    }
   }
 
   openDialog1(): void {
@@ -519,6 +688,9 @@ export class InstaExceptionsComponent implements OnInit {
       if (this.currentFilters.sellerId) {
         params = params.set('sellerId', this.currentFilters.sellerId);
       }
+      if (this.isUser && this.seller) {
+        params = params.set('sellerId', this.seller);
+      }
       if (this.currentFilters.courierId) {
         params = params.set('courierId', this.currentFilters.courierId);
       }
@@ -630,11 +802,14 @@ export class InstaExceptionsComponent implements OnInit {
   }
 
   navigateToAwbStatus(awb: string): void {
-    this.router.navigate(['admin/status', awb]);
+    this.router.navigate([this.isUser ? 'user/status' : 'admin/status', awb]);
   }
 
   navigateToShipmentDetail(orderID: string): void {
-    this.router.navigate(['/admin/ndr/details', orderID]);
+    this.router.navigate([
+      this.isUser ? '/user/ndr/details' : '/admin/ndr/details',
+      orderID,
+    ]);
   }
 
   openDialog(orderID: number) {
@@ -644,4 +819,20 @@ export class InstaExceptionsComponent implements OnInit {
       },
     });
   }
+
+  //   openDialog(orderID: number): void {
+  //   this.dialog.open(WebhookViewComponent, {
+  //     data: {
+  //       order: orderID,
+  //     },
+  //     position: { right: '1%', top: '1%' },
+  //       height: '95vh',
+  //       maxHeight: '100vh',
+  //       width: '700px',
+  //       maxWidth: '700px',
+  //       panelClass: 'right-slide-panel',
+  //       backdropClass: 'remake-blur-backdrop',
+  //       hasBackdrop: true,
+  //   });
+  // }
 }

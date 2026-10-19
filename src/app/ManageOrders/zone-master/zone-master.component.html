@@ -1,118 +1,90 @@
 <div class="card">
-  <div class="card-head">
-    <!-- Card-header elements -->
-
-    <div class="row">
-      <div class="col-md-6 col-sm-6">
-        <h5>
-          <i class="ri-checkbox-blank-fill" style="border: 2px solid black"></i>
-          Zone Master
-        </h5>
-      </div>
-      <div
-        class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center"
-      >
-        <button class="btn btn-outline-dark btn-sm me-3" (click)="openDialog()">
-          <i class="ri-upload-2-line"></i> CSV Upload
-        </button>
-        <button
-          class="btn btn-outline-dark btn-sm me-3"
-          (click)="toggleFiltersForm()"
-        >
-          <i [class]="buttonIcon"></i> {{ buttonText }}
-        </button>
-      </div>
+  <div class="page-head">
+    <div class="page-head_text">
+      <h2 class="page-title">Zone Master</h2>
     </div>
 
-    <div class="form" *ngIf="showFiltersForm" style="margin-top: 30px">
-      <div class="row">
-        <!-- Phone -->
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="sellerName" class="form-label">Courier</label>
-            <select
-              class="form-select form-select-sm mb-2"
-              id="sellerName"
-              [(ngModel)]="courierId"
-            >
-              <option value="" selected>Select Courier</option>
-              <option *ngFor="let courier of courierData" [value]="courier.id">
-                {{ courier.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="pin" class="form-label">Pincode:</label>
-            <input
-              type="text"
-              class="form-control form-control-sm"
-              id="pin"
-              [(ngModel)]="pincode"
-              placeholder="Enter Pincode"
-            />
-          </div>
-        </div>
-
-        <div class="col-md-3 d-flex align-items-end">
-          <div class="button-grp mb-2 d-flex justify-content-start">
-            <button
-              class="btn btn-outline-dark btn-sm me-3"
-              type="button"
-              style="
-                background-color: rgb(5, 114, 209);
-                font-size: small;
-                color: white;
-              "
-              (click)="applyFilters()"
-            >
-              Apply
-            </button>
-            <button
-              class="btn btn-danger btn-sm me-3"
-              style="font-size: small; box-shadow: none"
-              (click)="clearFilters()"
-            >
-              Clear
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <button type="button" class="btn-upload" (click)="openDialog()">
+      <i class="ri-upload-2-line"></i> CSV Upload
+    </button>
   </div>
 
   <div class="card-body">
-    <div class="row">
-      <div class="table-row">
-        <table class="table">
-          <thead class="table-head-hover">
-            <th scope="col">ID</th>
+    <div class="filter-bar">
+      <div class="filter-field">
+        <label for="sellerName" class="form-label">Courier</label>
+        <select
+          class="form-select form-select-sm"
+          id="sellerName"
+          [(ngModel)]="courierId"
+        >
+          <option value="" selected>Select Courier</option>
+          <option *ngFor="let courier of courierData" [value]="courier.id">
+            {{ courier.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label for="pin" class="form-label">Pincode:</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="pin"
+          [(ngModel)]="pincode"
+          placeholder="Enter Pincode"
+        />
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn-apply" type="button" (click)="applyFilters()">
+          Apply
+        </button>
+        <button class="btn-clear" type="button" (click)="clearFilters()">
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <div class="table-row">
+      <table class="table table-borderless zone-table">
+        <thead class="table-head-hover">
+          <tr>
             <th scope="col">Courier</th>
             <th scope="col">Pincode</th>
             <th scope="col">Zone</th>
             <th scope="col">TAT</th>
-            <th scope="col">Created By</th>
-            <th scope="col">Created At</th>
-          </thead>
+            <th scope="col">Serviceable</th>
+            <th scope="col">Updated</th>
+          </tr>
+        </thead>
 
-          <tbody>
-            <tr *ngFor="let data of pincodeData; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ data.courierName }}</td>
-              <td>{{ data.pin }}</td>
-              <td>{{ data.zone }}</td>
-              <td>{{ data.tat }}</td>
-              <td>{{ data.createdBy }}</td>
-              <td>{{ data.createdAt | date: "dd-MM-yyyy" }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <tbody>
+          <tr *ngFor="let data of pincodeData; let i = index">
+            <td>
+              <span class="cell-main">{{ data.courierName }}</span>
+            </td>
+            <td>
+              <span class="cell-code">{{ data.pin }}</span>
+            </td>
+            <td>
+              <span class="cap-pill" *ngIf="data.zone">{{ data.zone }}</span>
+            </td>
+            <td>
+              <span class="cell-muted">{{ data.tat }}</span>
+            </td>
+            <td>
+              <span class="cell-muted">not yet</span>
+            </td>
+            <td>
+              <span class="cell-muted">{{
+                data.createdAt | date: "dd-MM-yyyy"
+              }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
-    <!-- Pagination  -->
 
     <app-paginator
       [length]="totalOrders"

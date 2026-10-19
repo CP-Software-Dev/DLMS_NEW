@@ -1,93 +1,210 @@
 <div class="card">
-    <div class="card-head">
-
-        <div class="row">
-
-            <div class="col-md-6 col-sm-6">
-                <h4><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"> </i> Import List</h4>
-            </div>
-            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
-
-                <button class="btn btn-outline-dark btn-sm me-3" (click)="navigateToOrders()"
-                    onclick="makeActive(this)"><i class="ri-add-line"></i> More Import</button>
-                <button class="btn btn-outline-dark btn-sm " [class.active]="isActive === 'buttonText'"
-                    (click)="makeActive('buttonText')" (click)="toggleFiltersForm()"> <i [class]="buttonIcon"></i> {{
-                    buttonText }}</button>
-
-            </div>
-        </div>
-
-        <div class="form" style="margin-top: 30px;" *ngIf="showFiltersForm">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="mb-2">
-                        <label for="filterCriteria" class="form-label">From Date:</label>
-                        <app-datepicker (dateRangeSelected)="onDateRangeSelected($event)"></app-datepicker>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="mb-2">
-                        <label for="sellerName" class="form-label">Seller Name</label>
-                        <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="sellerId">
-                            <option value="" selected disabled>Select Seller</option>
-                            <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <div class="button-grp mb-2 d-flex justify-content-start">
-                        <button class="btn btn-outline-dark btn-sm me-3" type="button"
-                            style="background-color: rgb(5, 114, 209); font-size: small; color: white;"
-                           (click)="applyFilters()" >Apply</button>
-                        <button class="btn btn-danger btn-sm me-3" style="font-size: small; box-shadow: none;"
-                           (click)="clearFilters()" >Clear</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-               
-            </div>
-        </div>
-
-
+  <div class="row row-head">
+    <div class="col-md-6 col-sm-6">
+      <h5 class="page-title">Import list</h5>
+      <p class="page-subtitle">
+        Every RTO file uploaded so far, with processed vs failed record
+        counts.
+      </p>
     </div>
+    <div
+      class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center"
+    >
+      <button
+        class="btn btn-outline-dark btn-sm me-3"
+        (click)="navigateToOrders()"
+      >
+        <i class="ri-arrow-left-line"></i> Back to RTO Process
+      </button>
+    </div>
+  </div>
+
+  <div class="main-container">
     <div class="card-body">
-        <div class="row">
+      <div class="row">
+        <div class="filter-section">
+          <div class="filter-wrapper">
+            <div class="d-flex gap-3 align-items-center filter_container">
+              <div class="search-box">
+                <i class="ri-search-line search-icon"></i>
+                <input
+                  type="text"
+                  class="search-input"
+                  name="searchInput"
+                  id="searchInput"
+                  placeholder="File name, institution or import ID"
+                  [(ngModel)]="searchTerm"
+                />
+              </div>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Import ID</th>
-                        <th scope="col">File Name</th>
-                        <th scope="col">Institution</th>
-                        <th scope="col">Total Record</th>
-                        <th scope="col">Processed Record</th>
-                        <th scope="col">Failed Record</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let file of importList">
-                        <td>{{file.rowNum}}</td>
-                        <td>{{file.filename}}</td>
-                        <td>{{file.institution}}</td>
-                        <td>{{file.totalCount}}</td>
-                        <td>{{file.processedCount}}</td>
-                        <td [ngClass]="{'text-red': (file.totalCount - file.processedCount) > 0}">
-                            {{file.totalCount - file.processedCount }}
-                        </td>
-                        <td>
-                            <button class="btn btn-success btn-sm"
-                               style="box-shadow: none; " (click)="exportFile(file.fileID)">Export</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            
+              <div
+                class="active-filters"
+                *ngIf="getActiveFiltersList().length > 0"
+              >
+                <span
+                  class="filter-chip"
+                  *ngFor="let f of getActiveFiltersList()"
+                >
+                  {{ f.label }}
+                  <i
+                    class="ri-close-line chip-close"
+                    (click)="removeFilter(f.key)"
+                  ></i>
+                </span>
+              </div>
+
+              <button
+                class="btn-filters"
+                [class.active]="showFiltersForm"
+                (click)="toggleFiltersForm()"
+              >
+                <i [class]="buttonIcon"></i> {{ buttonText }}
+                <span
+                  class="filter-count"
+                  *ngIf="getActiveFiltersList().length > 0"
+                >
+                  · {{ getActiveFiltersList().length }}
+                </span>
+              </button>
+
+              <span
+                class="clear-all-link"
+                *ngIf="getActiveFiltersList().length > 0"
+                (click)="clearAllFilters()"
+              >
+                Clear all
+              </span>
+            </div>
+
+            <div class="filter-popover" *ngIf="showFiltersForm">
+              <h6 class="filter-title">Filter Import List</h6>
+
+              <div class="filter-grid">
+                <div class="filter-field">
+                  <label for="sellerName" class="form-label">Seller</label>
+                  <select
+                    class="form-select form-select-sm"
+                    id="sellerName"
+                    [(ngModel)]="sellerId"
+                  >
+                    <option value="" selected>Any</option>
+                    <option
+                      *ngFor="let seller of sellerData"
+                      [value]="seller.id"
+                    >
+                      {{ seller.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="filter-field">
+                  <label for="fileId" class="form-label">Import ID</label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="fileId"
+                    [(ngModel)]="FileId"
+                    placeholder="Enter Import ID"
+                  />
+                </div>
+
+                <div class="filter-field">
+                  <label class="form-label">From Date:</label>
+                  <app-datepicker
+                    (dateRangeSelected)="onDateRangeSelected($event)"
+                  ></app-datepicker>
+                </div>
+              </div>
+
+              <div class="filter-actions">
+                <button class="btn-clear" (click)="clearFilters()">
+                  Clear
+                </button>
+                <button
+                  class="btn-apply"
+                  (click)="applyFilters(); toggleFiltersForm()"
+                >
+                  Apply
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <app-paginator [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="[10,20,50,100,200]"
-            (page)="handlePageEvent($event)">
-        </app-paginator>
+
+        <div class="table-row">
+          <table class="table rto-table">
+            <thead>
+              <tr>
+                <th class="edge-spacer"></th>
+                <th>Import ID</th>
+                <th>File Name</th>
+                <th>Institution</th>
+                <th class="text-center">Total Record</th>
+                <th class="text-center">Processed</th>
+                <th class="text-center">Failed</th>
+                <th class="text-center">Action</th>
+                <th class="edge-spacer"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let file of filteredImportList">
+                <td class="edge-spacer"></td>
+
+                <td>
+                  <div class="cell-main">{{ file.rowNum }}</div>
+                </td>
+
+                <td>
+                  <div class="cell-main">{{ file.filename }}</div>
+                </td>
+
+                <td>
+                  <div class="cell-sub upper">{{ file.institution }}</div>
+                </td>
+
+                <td class="text-center">
+                  <div class="cell-main">{{ file.totalCount }}</div>
+                </td>
+
+                <td class="text-center">
+                  <div class="cell-main">{{ file.processedCount }}</div>
+                </td>
+
+                <td class="text-center">
+                  <span
+                    class="days-pill"
+                    [class.days-pill--danger]="
+                      (file.totalCount - file.processedCount) > 0
+                    "
+                  >
+                    {{ file.totalCount - file.processedCount }}
+                  </span>
+                </td>
+
+                <td class="text-center">
+                  <button
+                    class="btn-view"
+                    (click)="exportFile(file.fileID)"
+                  >
+                    <i class="ri-download-2-line"></i> Export
+                  </button>
+                </td>
+
+                <td class="edge-spacer"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <app-paginator
+        [length]="totalCount"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[10, 20, 50, 100, 200]"
+        [pageIndex]="pageIndex"
+        (page)="handlePageEvent($event)"
+      >
+      </app-paginator>
     </div>
+  </div>
 </div>

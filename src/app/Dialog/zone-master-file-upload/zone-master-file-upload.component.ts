@@ -28,24 +28,24 @@ import { RefreshService } from "../../services/refresh.service";
         "void",
         style({
           opacity: 0,
-          transform: "translateY(-50%)",
+          transform: "translateX(100%)",
         })
       ),
       transition("void => *", [
         animate(
-          "700ms ease",
+          "350ms ease-out",
           style({
             opacity: 1,
-            transform: "translateY(0)",
+            transform: "translateX(0)",
           })
         ),
       ]),
       transition("* => void", [
         animate(
-          "300ms ease",
+          "250ms ease-in",
           style({
             opacity: 0,
-            transform: "translateY(-50%)",
+            transform: "translateX(100%)",
           })
         ),
       ]),
@@ -60,12 +60,14 @@ export class ZoneMasterFileUploadComponent implements OnInit {
     private refreshservice: RefreshService,
     private dialogRef: MatDialogRef<ZoneMasterFileUploadComponent>
   ) {}
+
   selectedFileName: string = "";
   fileInvalid: boolean = false;
   fileSelected: boolean = false;
   file: File | null = null;
   courierData: any[] = [];
   courierId: string = "";
+  isDragOver: boolean = false;
 
   ngOnInit(): void {
     this.loadCourierData();
@@ -77,9 +79,33 @@ export class ZoneMasterFileUploadComponent implements OnInit {
     });
   }
 
-   onFileSelected(event: any) {
-    const file: File = event.target.files[0];
+  // File picked through the browse dialog
+  onFileSelected(event: any) {
+    this.handleFile(event.target.files[0]);
+  }
 
+  // Drag and drop handlers
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = true;
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+    this.handleFile(event.dataTransfer?.files?.[0]);
+  }
+
+  // Shared validation for browse and drop
+  private handleFile(file: File | null | undefined) {
     if (file) {
       if (file.type === "text/csv") {
         this.selectedFileName = file.name;
@@ -96,31 +122,36 @@ export class ZoneMasterFileUploadComponent implements OnInit {
       this.selectedFileName = "";
       this.fileSelected = false;
       this.fileInvalid = false;
-      this.file = null; // Reset fileInvalid flag
+      this.file = null;
     }
+  }
+
+  // Remove the chosen file and reset the hidden input
+  clearFile(input: HTMLInputElement) {
+    input.value = "";
+    this.handleFile(null);
   }
 
   uploadFile() {
     if (this.file && this.courierId) {
       const formData: FormData = new FormData();
-      formData.append('file', this.file, this.file.name);
+      formData.append("file", this.file, this.file.name);
 
       const url = `${this.apiservice.ZoneMasterUpload}?file=${this.file.name}&courier=${this.courierId}`;
 
       const headers = new HttpHeaders({
-        'Accept': 'application/json'
+        Accept: "application/json",
       });
 
       this.http.post(url, formData, { headers }).subscribe((res: any) => {
         if (res.status) {
-          this.toastr.success('File Uploaded Successfully.', 'Success');
+          this.toastr.success("File Uploaded Successfully.", "Success");
           this.dialogRef.close();
           this.refreshservice.triggerRefresh();
+        } else {
+          this.toastr.error(res.errors, "Failure");
         }
-        else {
-          this.toastr.error(res.errors, 'Failure');
-        }
-      })
+      });
     }
   }
 

@@ -1,11 +1,23 @@
 <div class="card">
   <div class="card-body">
-    <div *ngIf="!noData" class="chart-container">
-      <canvas id="barChart"></canvas>
+    <div *ngIf="!noData" class="chart-wrapper">
+      <div class="chart-container">
+        <canvas id="barChart"></canvas>
+      </div>
+
+      <ul class="chart-legend">
+        <li *ngFor="let item of legendData">
+          <span class="legend-dot" [style.background-color]="item.color"></span>
+          <span class="legend-label">{{ item.label }}</span>
+          <span class="legend-count">{{ item.count }}</span>
+          <span class="legend-percent">{{ item.percent }}%</span>
+        </li>
+      </ul>
+
+      
     </div>
     <div *ngIf="noData" class="no-data-message">
       <img src="assets\Images\Graph.gif" alt="No Data Available" class="img-fluid">
     </div>
   </div>
 </div>
-

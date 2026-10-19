@@ -1,53 +1,126 @@
 <div class="card">
-    <div class="card-head">
-        <div class="row">
-            <div class="col-md-6 col-sm-6">
-                <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Courier's List</h5>
-            </div>
-            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
-                <button class="btn btn-outline-dark btn-sm me-3" (click)="navigateToCourierPage()"> <i
-                        class="bi-plus"></i>
-                    New Courier</button>
-            </div>
-        </div>
-
+  <!-- Page header -->
+  <div class="page-head">
+    <div class="page-head_text">
+      <h2 class="page-title">Couriers</h2>
+      <p class="page-sub">Partners and the accounts they run under.</p>
     </div>
-    <div class="card-body">
-        <div class="table-row">
-            <table class="table">
-                <thead class="table-head-hover">
-                    <tr>
-                        <!-- <th scope="col">Courier Image</th> -->
-                        <th scope="col">Courier ID</th>
-                        <th scope="col">Courier Name</th>
-                        <th scope="col">Courier Code</th>
-                        <th scope="col">Remaining AWB</th>
-                        <th scope="col">Institution</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
-                    </tr>
 
-                </thead>
-                <tbody>
-                    <tr *ngFor="let entry of getCourierEntriesForCurrentPage()">
-                        <td>{{entry.courierID}}</td>
-                        <td>{{ entry.courierName }}</td>
-                        <td>{{ entry.courierCode }}</td>
-                        <td>{{ entry.courierCode === 'INPOST' ? entry.remainingCount : '--' }}</td>
-                        <td>{{ entry.institution || '--' }}</td>
-                        <td>Active</td>
-                        <td>
-                            <button *ngIf="entry.courierCode === 'INPOST'" class="btn btn-sm btn-primary"
-                                (click)="awbDialog(entry)">
-                                <i class="ri-pencil-fill"></i> Edit
-                            </button>
-                        </td>
+    <button
+      *ngIf="!isSeller"
+      type="button"
+      class="btn-add"
+      (click)="navigateToCourierPage()"
+    >
+      <i class="ri-add-line"></i> Add courier
+    </button>
+  </div>
 
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <app-paginator [length]="courierEntries.length" [pageSize]="10" [pageSizeOptions]="[10, 20, 50]"
-            (page)="handlePageEvent($event)"></app-paginator>
+  <div class="card-body">
+    <!-- Table -->
+    <div class="table-row">
+      <table class="table table-borderless courier-table">
+        <thead class="table-head-hover">
+          <tr>
+            <th scope="col">Courier Name</th>
+            <th scope="col">Courier ID</th>
+            <th scope="col">Courier Code</th>
+            <th scope="col" class="num" *ngIf="!isSeller">Remaining AWB</th>
+            <th scope="col" *ngIf="!isSeller">Institution</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            *ngFor="
+              let entry of getCourierEntriesForCurrentPage();
+              let i = index
+            "
+          >
+            <td>
+              <div class="name-cell">
+                <span
+                  class="dot"
+                  [ngClass]="'dot--c' + ((currentPage * pageSize + i) % 6)"
+                ></span>
+                <span class="cell-name">{{ getName(entry) }}</span>
+              </div>
+            </td>
+
+            <td>
+              <span class="cell-muted">{{ getId(entry) }}</span>
+            </td>
+
+            <td>
+              <span class="cap-pill">{{ getCode(entry) }}</span>
+            </td>
+
+            <td class="num" *ngIf="!isSeller">
+              <span class="cell-muted">{{
+                entry.courierCode === "INPOST" ? entry.remainingCount : "--"
+              }}</span>
+            </td>
+
+            <td *ngIf="!isSeller">
+              <span
+                [class.inst-pill]="!!entry.institution"
+                [class.cell-muted]="!entry.institution"
+                >{{ entry.institution || "--" }}</span
+              >
+            </td>
+
+            <td>
+              <span class="status-pill">
+                <span class="status-dot"></span>
+                Active
+              </span>
+            </td>
+
+            <td>
+              <!-- Admin action -->
+              <button
+                *ngIf="!isSeller && entry.courierCode === 'INPOST'"
+                type="button"
+                class="view-btn"
+                (click)="awbDialog(entry)"
+              >
+                <i class="ri-pencil-fill"></i> Edit
+              </button>
+
+              <!-- Seller actions -->
+              <div class="action-group" *ngIf="isSeller">
+                <button
+                  type="button"
+                  class="view-btn"
+                  [disabled]="entry.isEditable != 1"
+                  (click)="addSellerCourier(entry)"
+                >
+                  <i class="ri-add-line"></i> Add
+                </button>
+                <button
+                  type="button"
+                  class="view-btn"
+                  [disabled]="entry.isEditable != 1"
+                  (click)="editSellerCourier(entry)"
+                >
+                  <i class="ri-pencil-fill"></i> Edit
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
+    <!-- Pagination -->
+    <app-paginator
+      [length]="courierEntries.length"
+      [pageSize]="pageSize"
+      [pageIndex]="currentPage"
+      [pageSizeOptions]="[10, 20, 50, 100, 200]"
+      (page)="handlePageEvent($event)"
+    ></app-paginator>
+  </div>
 </div>

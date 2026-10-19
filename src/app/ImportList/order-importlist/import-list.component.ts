@@ -15,6 +15,7 @@ export class ImportListComponent implements OnInit {
   buttonIcon: string = 'ri-filter-fill';
   sellerData: any[] = [];
   importList: any[] = [];
+  filteredImportList: any[] = []; 
   exportFileData: any[] = [];
   exportInstaFileData: any[] = [];
   sellerId: string = '';
@@ -30,22 +31,25 @@ export class ImportListComponent implements OnInit {
     endDate: '',
   };
 
+  appliedFilters: { sellerId: string; status: string; fileId: string } = {
+    sellerId: '',
+    status: '',
+    fileId: '',
+  };
+
+  // ----- search -----
+  searchTerm: string = '';
+  private searchDebounce: any;
+
   constructor(
     private apiservice: ApiService,
     private http: HttpClient,
     private router: Router,
     private fb: FormBuilder,
   ) {
-    //  const startDate = '01-01-2024'
-    // const currentDate = new Date();
-    // this.selectedDateRange = {
-    //   startDate: this.formatDate(startDate),
-    //   endDate: this.formatDate(currentDate.toISOString())
-    // };
-
-    const endDate = new Date(); // Today
-    const startDate = new Date(); // Clone today
-    startDate.setDate(startDate.getDate() - 29); // Last 30 days
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 29);
 
     this.selectedDateRange = {
       startDate: this.formatDate(startDate.toISOString()),
@@ -65,7 +69,6 @@ export class ImportListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.fetchImportList(this.pageIndex, this.pageSize);
     this.loadSellerData();
     this.applyFilters();
   }
@@ -94,6 +97,7 @@ export class ImportListComponent implements OnInit {
     if (filters.status) {
       params = params.set('status', filters.status);
     }
+
     let startDate = filters.startDate;
     let endDate = filters.endDate;
 
@@ -115,6 +119,7 @@ export class ImportListComponent implements OnInit {
         if (res.status) {
           this.importList = res.data.importFiles;
           this.totalUsers = res.data.dataCount;
+          this.applySearch(); 
         }
       },
       (error) => {},
@@ -140,7 +145,17 @@ export class ImportListComponent implements OnInit {
       this.currentFilters.endDate = endDate;
     }
 
+    this.appliedFilters = {
+      sellerId: this.sellerId,
+      status: this.status,
+      fileId: this.FileId,
+    };
+
     this.fetchImportList(this.pageIndex, this.pageSize, this.currentFilters);
+
+    this.showFiltersForm = false;
+    this.buttonText = 'Filters';
+    this.buttonIcon = 'ri-filter-fill';
   }
 
   clearFilters() {
@@ -152,22 +167,8 @@ export class ImportListComponent implements OnInit {
     this.status = '';
     this.FileId = '';
 
-    // const start = this.dateRange.get("start")?.value;
-    // const end = this.dateRange.get("end")?.value;
-    // if (start && end) {
-    //   const adjustedStart = new Date(
-    //     start.getTime() - start.getTimezoneOffset() * 60000
-    //   );
-    //   const adjustedEnd = new Date(
-    //     end.getTime() - end.getTimezoneOffset() * 60000
-    //   );
-
-    //   this.currentFilters.startDate = adjustedStart.toISOString().split("T")[0];
-    //   this.currentFilters.endDate = adjustedEnd.toISOString().split("T")[0];
-    // }
-
     const currentDate = new Date();
-    const startDate = new Date(); // Clone today
+    const startDate = new Date();
     startDate.setDate(startDate.getDate() - 29);
     this.selectedDateRange = {
       startDate: this.formatDate(startDate.toISOString()),
@@ -175,6 +176,8 @@ export class ImportListComponent implements OnInit {
     };
     this.currentFilters.startDate = this.selectedDateRange.startDate;
     this.currentFilters.endDate = this.selectedDateRange.endDate;
+
+    this.appliedFilters = { sellerId: '', status: '', fileId: '' };
 
     this.fetchImportList(this.pageIndex, this.pageSize, this.currentFilters);
     this.toggleFiltersForm();
@@ -229,13 +232,13 @@ export class ImportListComponent implements OnInit {
     );
   }
 
-  exportShipment(fileID: string , bank: string , type: string): void {
+  exportShipment(fileID: string, bank: string, type: string): void {
     const params = new HttpParams().set('fileID', fileID);
     this.http.get(this.apiservice.ShipmentByFile, { params }).subscribe(
       (res: any) => {
         if (res.status) {
           this.exportFileData = res.data;
-          this.downloadShipmentCSV(this.exportFileData, fileID , bank , type);
+          this.downloadShipmentCSV(this.exportFileData, fileID, bank, type);
         } else {
           console.error('Failed to fetch data');
         }
@@ -246,14 +249,13 @@ export class ImportListComponent implements OnInit {
     );
   }
 
-  downloadShipmentCSV(data: any[], fileID: string , bank: string , type: string) {
+  downloadShipmentCSV(data: any[], fileID: string, bank: string, type: string) {
     const csvData = this.convertToCSV(data);
     const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
     let fileType = '';
     if (type == '1') {
       fileType = 'Perso';
-    }
-    else if (type == '2') {
+    } else if (type == '2') {
       fileType = 'Insta';
     }
     const fileName = `Shipment_${bank}_${fileType}_${date}.csv`;
@@ -266,7 +268,6 @@ export class ImportListComponent implements OnInit {
     a.click();
     document.body.removeChild(a);
   }
-
 
   downloadCSV(data: any[], fileID: string) {
     const csvData = this.convertToCSV(data);
@@ -291,5 +292,88 @@ export class ImportListComponent implements OnInit {
       csvRows.push(values.join(','));
     }
     return csvRows.join('\n');
+  }
+
+  // ---------  filter data based on bank or status ----------
+
+  getActiveFiltersList(): { key: string; label: string }[] {
+    const filters: { key: string; label: string }[] = [];
+
+    if (this.appliedFilters.sellerId) {
+      const seller = this.sellerData.find(
+        (s) => s.id === this.appliedFilters.sellerId,
+      );
+      filters.push({
+        key: 'seller',
+        label: `Bank: ${seller ? seller.name : this.appliedFilters.sellerId}`,
+      });
+    }
+    if (this.appliedFilters.status) {
+      filters.push({
+        key: 'status',
+        label: `Status: ${this.appliedFilters.status}`,
+      });
+    }
+    if (this.appliedFilters.fileId) {
+      filters.push({
+        key: 'fileId',
+        label: `File ID: ${this.appliedFilters.fileId}`,
+      });
+    }
+
+    return filters;
+  }
+
+  removeFilter(key: string) {
+    if (key === 'seller') {
+      this.sellerId = '';
+    }
+    if (key === 'status') {
+      this.status = '';
+    }
+    if (key === 'fileId') {
+      this.FileId = '';
+    }
+    this.applyFilters();
+  }
+
+  clearAllFilters() {
+    this.sellerId = '';
+    this.status = '';
+    this.FileId = '';
+
+    const currentDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 29);
+    this.selectedDateRange = {
+      startDate: this.formatDate(startDate.toISOString()),
+      endDate: this.formatDate(currentDate.toISOString()),
+    };
+
+    this.applyFilters();
+  }
+
+  // ---------- search data direct using import id and file name ----------
+
+  onSearchChange() {
+    clearTimeout(this.searchDebounce);
+    this.searchDebounce = setTimeout(() => {
+      this.applySearch();
+    }, 100);
+  }
+
+  applySearch() {
+    const term = this.searchTerm ? this.searchTerm.trim().toLowerCase() : '';
+
+    if (!term) {
+      this.filteredImportList = this.importList;
+      return;
+    }
+
+    this.filteredImportList = this.importList.filter((file) => {
+      const name = (file.name || '').toString().toLowerCase();
+      const id = (file.id || '').toString().toLowerCase();
+      return name.includes(term) || id.includes(term);
+    });
   }
 }

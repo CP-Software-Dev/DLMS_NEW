@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,14 +7,16 @@ import { Router } from '@angular/router';
   styleUrl: './admin-reports.component.css'
 })
 export class AdminReportsComponent {
+  activeReport: 'order' | 'shipment' = 'order';
+
   constructor(private router: Router) { }
 
   navigateToOrderReport() {
-    this.router.navigate(['/admin/reports/orders']);
+    this.activeReport = 'order';
   }
 
   navigateToShipmentReport() {
-    this.router.navigate(['admin/reports/shipments']);
+    this.activeReport = 'shipment';
   }
 
   navigateToWarehouseReport() {

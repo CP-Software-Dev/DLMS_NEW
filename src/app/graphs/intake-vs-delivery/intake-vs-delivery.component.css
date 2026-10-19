@@ -1,0 +1,98 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.intake-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 12px;
+}
+
+.intake-header {
+  margin-bottom: 16px;
+}
+
+.intake-title {
+  font-weight: 750;
+  font-size: 15.5px;
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.intake-subtitle {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-family);
+  color: #858da0;
+  margin-left: 10px;
+  letter-spacing: 0.3px;
+  text-transform: lowercase;
+  margin-left: 8px;
+}
+
+.intake-wrapper {
+  width: 100%;
+}
+
+.intake-holder {
+  position: relative;
+  width: 100%;
+  height: 280px;
+}
+
+.intake-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 28px;
+
+  margin-top: 16px;
+  padding-top: 14px;
+
+  border-top: 1px solid #eef0f4;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.orders-dot {
+  background: #7c6fea;
+}
+
+.delivered-dot {
+  background: #2ecc71;
+}
+
+.legend-label {
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6c7080;
+}
+
+.legend-value {
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.no-data-message {
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

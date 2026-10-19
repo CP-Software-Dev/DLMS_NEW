@@ -7,14 +7,16 @@ import { Router } from '@angular/router';
   styleUrl: './user-reports.component.css'
 })
 export class UserReportsComponent {
+  activeReport: 'order' | 'shipment' = 'order';
+
   constructor(private router: Router) { }
 
   navigateToOrderReport() {
-    this.router.navigate(['user/reports/order']);
+    this.activeReport = 'order';
   }
 
   navigateToShipmentReport() {
-    this.router.navigate(['user/reports/shipments']);
+    this.activeReport = 'shipment';
   }
 
   navigateToWarehouseReport() {

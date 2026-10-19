@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="card-body">
+    <div *ngIf="!noData" class="chart-wrapper">
+      <ul class="chart-legend">
+        <li *ngFor="let item of legendData; let i = index">
+          <span class="rank_no">{{ i + 1 < 10 ? "0" + (i + 1) : i + 1 }}</span>
+          <span class="legend-label">{{ item.label }}</span>
+          <span class="track_bar">
+            <span
+              class="track_fill"
+              [style.width.%]="item.percent"
+              [style.background-color]="item.color"
+            ></span>
+          </span>
+          <span
+            class="legend-percent"
+            [style.color]="item.textColor"
+            [style.background-color]="item.bg"
+              [style.border-color]="item.border"
+            >{{ item.percent }}%</span
+          >
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="noData" class="no-data-message">
+      <img
+        src="assets\Images\Graph.gif"
+        alt="No Data Available"
+        class="img-fluid"
+      />
+    </div>
+  </div>
+</div>

@@ -3,157 +3,252 @@
 </div>
 
 <div class="card">
-  <div class="card-head">
-    <div class="form" *ngIf="showFiltersForm" style="margin-top: 30px">
-      <div class="row">
-        <!-- Daterange -->
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="filterCriteriaFromDate" class="form-label"
-              >From Date:</label
-            >
-            <!-- <app-datepicker (dateRangeSelected)="onDateRangeSelected($event)"></app-datepicker> -->
-            <app-date-picker-invoice
-              [selectedRange]="selectedDateRange"
-              (dateRangeSelected)="onDateRangeSelected($event)"
-            ></app-date-picker-invoice>
-          </div>
-        </div>
-        <!-- Order Id -->
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="orderIds" class="form-label">Order ID(s):</label>
-            <input
-              type="text"
-              class="form-control form-control-sm"
-              id="orderIds"
-              [(ngModel)]="orderIds"
-              placeholder="Enter Order Id separated by comma"
-            />
-          </div>
-        </div>
-        <!-- AWB -->
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="awbNos" class="form-label">AWB NO(s):</label>
-            <input
-              type="text"
-              class="form-control form-control-sm"
-              id="awbNos"
-              [(ngModel)]="awbnumber"
-              placeholder="Enter AWB no(s) separated by comma"
-            />
-          </div>
-        </div>
-        <!-- Kit Number -->
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="awbNos" class="form-label">Kit Number:</label>
-            <input
-              type="text"
-              class="form-control form-control-sm"
-              id="awbNos"
-              [(ngModel)]="kitnumber"
-              placeholder="Enter Kit Number"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <!-- Bank  -->
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="sellerName" class="form-label">Bank Name</label>
-            <select
-              class="form-select form-select-sm mb-2"
-              id="sellerName"
-              [(ngModel)]="sellerId"
-            >
-              <option value="" selected>Select Bank</option>
-              <option *ngFor="let seller of sellerData" [value]="seller.id">
-                {{ seller.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <!-- Couriers  -->
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="courier" class="form-label">Courier:</label>
-            <select
-              class="form-select form-select-sm mb-2"
-              id="sellerName"
-              [(ngModel)]="courierId"
-            >
-              <option value="" selected>Select Courier</option>
-              <option *ngFor="let courier of courierData" [value]="courier.id">
-                {{ courier.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <!-- Buttons  -->
-        <div class="col-md-3 d-flex align-items-end">
-          <div class="button-grp mb-2 d-flex justify-content-start">
-            <button
-              class="btn btn-outline-dark btn-sm me-3"
-              type="button"
-              style="
-                background-color: rgb(5, 114, 209);
-                font-size: small;
-                color: white;
-              "
-              (click)="applyFilters()"
-            >
-              Apply
-            </button>
-            <button
-              class="btn btn-danger btn-sm me-3"
-              style="font-size: small; box-shadow: none"
-              (click)="clearFilters()"
-            >
-              Clear
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class="card-body">
     <div class="row">
-      <!-- Status Buttons  -->
-
-      <div class="col-sm-12 col-md-12">
+      <!-- Status Cards -->
+      <div class="col-sm-12 col-md-12 card_main_container">
         <button
-          class="col-md-2 btn btn-sm mb-4 me-4"
+          class="card_menu card_menu--all"
           [class.active]="isActive === 'All'"
           (click)="applyStatusFilter(null)"
         >
-          All
+          <span class="card_value">{{ baseTotal }}</span>
+          <span class="card_label" [style.opacity]="1">All Exceptions</span>
+          <span class="card_bar">
+            <span class="card_bar_fill" [style.width.%]="100"></span>
+          </span>
         </button>
-        <button
-          *ngFor="let button of statusData"
-          class="col-md-2 btn btn-sm mb-4 me-4"
-          [class.active]="isActive === button.id.toString()"
-          (click)="applyStatusFilter(button.id)"
-        >
-          {{ button.name }} ({{ getCountByStatusId(button.id) }})
-        </button>
+
+        <ng-container *ngFor="let button of statusData; let i = index">
+          <button
+            *ngIf="button.id < 15"
+            class="card_menu"
+            [ngClass]="'card_menu--c' + (i % 6)"
+            [class.active]="isActive === button.id.toString()"
+            (click)="applyStatusFilter(button.id)"
+          >
+            <span class="card_value">{{ getCountByStatusId(button.id) }}</span>
+            <span
+              class="card_label"
+              [style.opacity]="getLabelOpacity(getCountByStatusId(button.id))"
+            >
+              {{ button.name }}
+            </span>
+            <span class="card_bar">
+              <span
+                class="card_bar_fill"
+                [style.width.%]="getPercentage(getCountByStatusId(button.id))"
+              ></span>
+            </span>
+          </button>
+        </ng-container>
       </div>
 
-      <!-- Exception Status Dailog  -->
+      <!-- Needs attention -->
+      <div
+        class="needs-attention-wrap d-flex align-items-center gap-3 flex-wrap"
+      >
+        <p class="need-text mb-0">Needs attention</p>
+
+        <div
+          class="awb_label awb_lost"
+          [class.active]="isActive === '15'"
+          (click)="applyStatusFilter(15)"
+        >
+          <span class="pill_dot" style="background-color: #f2637e"></span>
+          <span class="awb_text">Lost</span>
+          <span class="awb_count">{{ lost }}</span>
+        </div>
+
+        <div
+          class="awb_label awb_damaged"
+          [class.active]="isActive === '16'"
+          (click)="applyStatusFilter(16)"
+        >
+          <span class="pill_dot" style="background-color: #c93a55"></span>
+          <span class="awb_text">Damaged</span>
+          <span class="awb_count">{{ damaged }}</span>
+        </div>
+
+        <div
+          class="awb_label awb_rtolost"
+          [class.active]="isActive === '17'"
+          (click)="applyStatusFilter(17)"
+        >
+          <span class="pill_dot" style="background-color: #f0679a"></span>
+          <span class="awb_text">RTO Lost</span>
+          <span class="awb_count">{{ rtoLost }}</span>
+        </div>
+
+        <div
+          class="awb_label awb_rtodamaged"
+          [class.active]="isActive === '18'"
+          (click)="applyStatusFilter(18)"
+        >
+          <span class="pill_dot" style="background-color: #a78bfa"></span>
+          <span class="awb_text">RTO Damaged</span>
+          <span class="awb_count">{{ rtoDamaged }}</span>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="card-head">
+        <div class="filter-wrapper">
+          <div
+            class="d-flex gap-3 align-items-center bg-white filter_container"
+          >
+            <div class="search-box">
+              <i class="ri-search-line search-icon"></i>
+              <input
+                type="text"
+                class="search-input"
+                name="searchInput"
+                id="searchInput"
+                placeholder="AWB, order, kit, lot or branch head"
+                [(ngModel)]="searchTerm"
+              />
+            </div>
+
+            <div
+              class="active-filters"
+              *ngIf="getActiveFiltersList().length > 0"
+            >
+              <span
+                class="filter-chip"
+                *ngFor="let f of getActiveFiltersList()"
+              >
+                {{ f.label }}
+                <i
+                  class="ri-close-line chip-close"
+                  (click)="removeFilter(f.key)"
+                ></i>
+              </span>
+            </div>
+
+            <button
+              class="btn-filters"
+              [class.active]="showFiltersForm"
+              (click)="toggleFiltersForm()"
+            >
+              <i [class]="buttonIcon"></i> {{ buttonText }}
+              <span
+                class="filter-count"
+                *ngIf="getActiveFiltersList().length > 0"
+              >
+                · {{ getActiveFiltersList().length }}
+              </span>
+            </button>
+
+            <span
+              class="clear-all-link"
+              *ngIf="getActiveFiltersList().length > 0"
+              (click)="clearAllFilters()"
+            >
+              Clear all
+            </span>
+          </div>
+
+          <div class="filter-popover" *ngIf="showFiltersForm">
+            <h6 class="filter-title">Filter Insta Exceptions</h6>
+
+            <div class="filter-grid">
+              <div class="filter-field">
+                <label class="form-label">From Date:</label>
+                <app-date-picker-invoice
+                  [selectedRange]="selectedDateRange"
+                  (dateRangeSelected)="onDateRangeSelected($event)"
+                ></app-date-picker-invoice>
+              </div>
+
+              <div class="filter-field">
+                <label for="orderIds" class="form-label">Order ID(s)</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="orderIds"
+                  [(ngModel)]="orderIds"
+                  placeholder="Separated by comma"
+                />
+              </div>
+
+              <div class="filter-field">
+                <label for="awbNos" class="form-label">AWB No(s)</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="awbNos"
+                  [(ngModel)]="awbnumber"
+                  placeholder="Separated by comma"
+                />
+              </div>
+
+              <div class="filter-field">
+                <label for="kitNo" class="form-label">Kit Number</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="kitNo"
+                  [(ngModel)]="kitnumber"
+                  placeholder="Enter Kit Number"
+                />
+              </div>
+
+              <div class="filter-field" *ngIf="!isUser">
+                <label for="sellerName" class="form-label">Bank</label>
+                <select
+                  class="form-select form-select-sm"
+                  id="sellerName"
+                  [(ngModel)]="sellerId"
+                >
+                  <option value="" selected>Any</option>
+                  <option *ngFor="let seller of sellerData" [value]="seller.id">
+                    {{ seller.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="filter-field">
+                <label for="courier" class="form-label">Courier</label>
+                <select
+                  class="form-select form-select-sm"
+                  id="courier"
+                  [(ngModel)]="courierId"
+                >
+                  <option value="" selected>Any</option>
+                  <option
+                    *ngFor="let courier of courierData"
+                    [value]="courier.id"
+                  >
+                    {{ courier.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="filter-actions">
+              <button class="btn-clear" (click)="clearFilters()">Clear</button>
+              <button
+                class="btn-apply"
+                (click)="applyFilters(); toggleFiltersForm()"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <app-loader [loading]="loading"></app-loader>
 
-      <div class="row" style="width: 25%">
+      <!-- Bulk actions -->
+      <div class="row" style="width: 25%" *ngIf="!isUser">
         <div
           class="btn-group col p-1"
-          style="border-top: 1px solid black"
+          style="border-top: 1px solid black; margin-bottom: 20px"
           [@fadeInOut]
           *ngIf="getSelectedCount() > 0"
           role="group"
           aria-label="Basic outlined example"
-          style="margin-bottom: 20px"
         >
           <button
             type="button"
@@ -176,13 +271,12 @@
         </div>
       </div>
 
-      <!-- Exceptions Data -->
-
+      <!-- Table -->
       <div class="table-row" *ngIf="!loading">
-        <table class="table">
+        <table class="table table-borderless shipment-table">
           <thead class="table-head-hover">
             <tr>
-              <th scope="col" *ngIf="isActive !== 'All'">
+              <th scope="col" *ngIf="!isUser && isActive !== 'All'">
                 <input
                   type="checkbox"
                   id="selectAllCheckbox"
@@ -191,28 +285,24 @@
                   (click)="toggleAllCheckboxes($event)"
                 />
               </th>
+              <th scope="col">AWB</th>
               <th scope="col">Order</th>
               <th scope="col">Kit Number</th>
+              <th scope="col" *ngIf="!isUser">Lot ID</th>
+              <th scope="col" *ngIf="isUser">Product</th>
+              <th scope="col" *ngIf="isUser">Method</th>
+              <th scope="col">{{ isUser ? "Customer" : "Branch Head" }}</th>
+              <th scope="col" *ngIf="!isUser">Count</th>
+              <th scope="col" *ngIf="!isUser">Remake Count</th>
               <th scope="col">Date</th>
-              <th scope="col">Bank</th>
-              <th scope="col">Lot ID</th>
-              <th scope="col">Branch Head</th>
-              <th scope="col">Count</th>
-              <th scope="col">Remake Count</th>
-              <th scope="col">
-                Carrier<br /><span style="font-size: 12px; font-weight: 500">
-                  <i class="ri-corner-down-right-line"></i>
-                  AWB
-                </span>
-              </th>
-              <th scope="col">Webhook</th>
               <th scope="col">Status</th>
-              <th scope="col">Action</th>
+              <th scope="col" *ngIf="!isUser">Webhook</th>
+              <th scope="col" *ngIf="!isUser">Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let order of paginatedOrders">
-              <td *ngIf="isActive !== 'All'">
+            <tr *ngFor="let order of filteredOrders">
+              <td *ngIf="!isUser && isActive !== 'All'">
                 <ng-container
                   *ngIf="isActive == '14' && order.isRto == '1'; else checkbox"
                 >
@@ -228,50 +318,113 @@
                   />
                 </ng-template>
               </td>
-              <td> <span style="cursor: pointer; color:#0b72c7
-                                ; font-weight: 700;" (click)="navigateToShipmentDetail(order.orderID)">{{ order.orderID
-                                    }}</span> </td>
-                            <td>{{ order.kitNumber}}</td>
-                            <td>{{ order.date }}</td>
-                            <td>{{ order.company }}</td>
-                            <td>{{ order.lotId}}</td>
-                            <td>
-                                <span [matTooltip]="getAddressTooltip(order)" matTooltipPosition="right"
-                                    matTooltipClass="multiline-tooltip">
-                                    <!-- {{ order.customer.length > 25 ? (order.customer | slice:0:19) + '...' :
-                                    order.customer }} -->
-                                    {{ order.customer.trim().length > 25 ? (order.customer.trim() | slice: 0: 19) +
-                                    '...' : order.customer.trim() }}
-                                </span>
-                            </td>
-                            <td>{{ order.instaCardCount }}</td>
-                            <td>{{ order.remakeCount }}</td>
-                            <td><span style="font-weight: 600;">{{ order.courier }}</span><br><span style="cursor: pointer; color:#0b72c7
-                                 ; font-weight: 700;" (click)="navigateToAwbStatus(order.awb)" *ngIf="order.awb"><i
-                                        class="ri-corner-down-right-line"></i>{{ order.awb
-                                    }}</span>
-                            </td>
-                            <td>
-                                <span style="visibility: hidden;">llll</span>
-                                <i class="ri-eye-line" style="font-size: 20px; color: #0b72c7; cursor: pointer;"
-                                    matTooltip="View Webhook" matTooltipPosition="above"
-                                    matTooltipClass="multiline-tooltip" (click)="openDialog(order.orderID)"></i>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm statusbtn" style="min-width: 80px;">{{
-                                    order.shipmentStatus }}</button>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm" (click)="navigatetoInstaDetails(order.orderID)"
-                                    style="cursor: pointer; color:#0b72c7; min-width: 80px; border: none; font-weight: 700; box-shadow: none; text-decoration: underline;">View</button>
-                            </td>
+
+              <td>
+                <div
+                  class="cell-main cell-link"
+                  *ngIf="order.awb; else noAwb"
+                  (click)="navigateToAwbStatus(order.awb)"
+                >
+                  {{ order.awb }}
+                </div>
+                <ng-template #noAwb><div class="cell-main">-</div></ng-template>
+                <span class="cell-sub">{{ order.courier }}</span>
+              </td>
+
+              <td>
+                <span
+                  class="cell-link"
+                  (click)="navigateToShipmentDetail(order.orderID)"
+                  >{{ order.orderID }}</span
+                >
+              </td>
+
+              <td>
+                <div class="cell-main">{{ order.kitNumber }}</div>
+              </td>
+
+              <td *ngIf="!isUser">
+                <div class="cell-main">{{ order.lotId }}</div>
+              </td>
+
+              <td *ngIf="isUser">
+                <div class="cell-main">{{ order.product }}</div>
+              </td>
+
+              <td *ngIf="isUser">
+                <div class="cell-main">{{ order.method }}</div>
+              </td>
+
+              <td>
+                <div
+                  class="cell-main"
+                  [matTooltip]="getAddressTooltip(order)"
+                  matTooltipPosition="right"
+                  matTooltipClass="multiline-tooltip"
+                >
+                  {{
+                    order.customer.trim().length > 25
+                      ? (order.customer.trim() | slice: 0 : 19) + "..."
+                      : order.customer.trim()
+                  }}
+                </div>
+                <span class="cell-sub" *ngIf="!isUser">{{ order.company }}</span>
+              </td>
+
+              <td *ngIf="!isUser">
+                <div class="cell-main">{{ order.instaCardCount }}</div>
+              </td>
+
+              <td *ngIf="!isUser">
+                <div class="cell-main">{{ order.remakeCount }}</div>
+              </td>
+
+              <td>
+                <div class="cell-main">{{ order.date }}</div>
+                <span class="cell-sub">{{ getDaysAgo(order.date) }}d ago</span>
+              </td>
+
+              <td>
+                <span
+                  class="status-pill"
+                  [style.background-color]="getStatusColor(order.shipmentStatus).bg"
+                  [style.color]="getStatusColor(order.shipmentStatus).color"
+                >
+                  <span
+                    class="status-dot"
+                    [style.background-color]="getStatusColor(order.shipmentStatus).color"
+                  ></span>
+                  {{ order.shipmentStatus }}
+                </span>
+              </td>
+
+              <td *ngIf="!isUser">
+                <button
+                  type="button"
+                  class="view-btn"
+                  matTooltip="View Webhook"
+                  matTooltipPosition="above"
+                  matTooltipClass="multiline-tooltip"
+                  (click)="openDialog(order.orderID)"
+                >
+                  <i class="ri-eye-line"></i>
+                </button>
+              </td>
+
+              <td *ngIf="!isUser">
+                <button
+                  type="button"
+                  class="view-btn"
+                  (click)="navigatetoInstaDetails(order.orderID)"
+                >
+                  View
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-
-    <!-- Pagination -->
 
     <app-paginator
       [length]="totalOrders"

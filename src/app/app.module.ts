@@ -39,7 +39,7 @@ import { AllocationComponent } from './allocation/allocation.component';
 import { UserlistComponent } from './userlist/userlist.component';
 import { UserDialogComponent } from './user-dialog/user-dialog.component';
 import { NdrnewComponent } from './Shipment/ndrnew/ndrnew.component';
-import { UserSidenavComponent } from './UserPanel/sidenav/user-sidenav.component';
+// import { UserSidenavComponent } from './UserPanel/sidenav/user-sidenav.component';
 import { UserDashboardComponent } from './UserPanel/dashboard/user-dashboard.component';
 import { UserOrdersComponent } from './UserPanel/orders/user-orders.component';
 import { UserShipmentComponent } from './UserPanel/shipment/user-shipment.component';
@@ -154,7 +154,9 @@ import { RejectionListComponent } from './ManageOrders/rejection-list/rejection-
 import { WebhookLogComponent } from './ManageOrders/webhook-log/webhook-log.component';
 import { InstaExceptionsComponent } from './Shipment/insta-exceptions/insta-exceptions.component';
 import { NdrContainerComponent } from './Shipment/ndr-container/ndr-container.component';
-
+import { IntakeVsDeliveryComponent } from './graphs/intake-vs-delivery/intake-vs-delivery.component';
+import { CourierTracking } from './graphs/courier-tracking/courier-tracking.component';
+import { DateRangeFilterComponent } from './Shared/Dates/date-range-filter/date-range-filter.component';
 @NgModule({
   declarations: [
     OrderConatinerComponent,
@@ -175,7 +177,7 @@ import { NdrContainerComponent } from './Shipment/ndr-container/ndr-container.co
     UserlistComponent,
     UserDialogComponent,
     NdrnewComponent,
-    UserSidenavComponent,
+    // UserSidenavComponent,
     UserDashboardComponent,
     UserOrdersComponent,
     UserShipmentComponent,
@@ -280,7 +282,10 @@ import { NdrContainerComponent } from './Shipment/ndr-container/ndr-container.co
     RejectionListComponent,
     WebhookLogComponent,
     InstaExceptionsComponent,
-    NdrContainerComponent
+    NdrContainerComponent,
+    IntakeVsDeliveryComponent,
+    CourierTracking,
+    DateRangeFilterComponent
   ],
   imports: [
     HttpClientModule,

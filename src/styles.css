@@ -1,24 +1,45 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800;900&display=swap');
 
+body {
+  --font-family: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
 
-  
-  /* Scrollbar styles */
 ::-webkit-scrollbar {
-    width: 4px; /* Width of the scrollbar */
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Background color of the track */
-    border-radius: 10px; /* Rounded corners of the track */
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: #d8d7d7; /* Color of the scrollbar thumb */
-    border-radius: 10px; /* Rounded corners of the thumb */
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: #c0bfbf; /* Color of the thumb on hover */
-  }
-  
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d8d7d7;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c0bfbf;
+}
+
+/* ---------- Webhook drawer: backdrop blur ---------- */
+.remake-blur-backdrop {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.26);
+  pointer-events: none;
+}
+
+/* ---------- Webhook drawer: panel container ---------- */
+.right-slide-panel .mat-mdc-dialog-container {
+  pointer-events: auto;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.right-slide-panel .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 20px;
+}

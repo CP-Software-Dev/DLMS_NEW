@@ -1,179 +1,370 @@
+:host {
+  display: block;
+}
 
 .card {
-    display: flex;
+  container: list / inline-size;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-page);
+  border: none;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+/* ------------ page header ------------ */
+.page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 1.25rem 2.5rem 0.5rem;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.1px;
+  line-height: 1.2;
+  color: var(--navy);
+  font-family: var(--font-family);
+}
+
+.page-sub {
+  margin: 8px 0 0;
+  max-width: 560px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #8a8f98;
+  font-family: var(--font-family);
+}
+
+.btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 20px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: var(--font-family);
+  background: linear-gradient(135deg, #7c6df7, #9b87f5);
+  box-shadow: 0 8px 18px -6px rgba(124, 109, 247, 0.6);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.btn-add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px -6px rgba(124, 109, 247, 0.7);
+}
+.btn-add i {
+  font-size: 16px;
+}
+
+/* ------------ card ------------ */
+.card-body {
+  margin: 1rem 2.5rem;
+  padding: 0;
+  background-color: var(--white);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+/* ------------ table (touches card border left and right) ------------ */
+.card-body .table-row {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.webhook-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 0 !important;
+  table-layout: auto;
+  border-left: none;
+  border-right: none;
+}
+
+.webhook-table th,
+.webhook-table td {
+  border-left: none;
+  border-right: none;
+}
+
+.webhook-table thead th {
+  background-color: #fafafd;
+  padding: 15px 8px;
+  border-bottom: 1px solid #eceef2;
+  white-space: normal;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #a9b0c0;
+  font-family: var(--font-family);
+}
+
+.webhook-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.webhook-table tbody tr:hover {
+  background-color: #fafbfc;
+}
+
+.webhook-table tbody td {
+  padding: 16px 8px;
+  border-bottom: 1px solid #eceef2;
+  vertical-align: middle;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: break-word;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: #4b5563;
+  font-family: var(--font-family);
+}
+
+.webhook-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.webhook-table thead th:first-child,
+.webhook-table tbody td:first-child {
+  padding-left: 16px;
+}
+
+.webhook-table thead th:last-child,
+.webhook-table tbody td:last-child {
+  padding-right: 16px;
+}
+
+/* URL column: long URLs wrap instead of stretching the table */
+.webhook-table .url-col {
+  width: 30%;
+  min-width: 220px;
+  white-space: normal;
+  word-break: break-all;
+}
+
+/* ------------ cell content ------------ */
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot--c0 { background-color: #f59e0b; }
+.dot--c1 { background-color: #7c3aed; }
+.dot--c2 { background-color: #2f6fed; }
+.dot--c3 { background-color: #16a34a; }
+.dot--c4 { background-color: #ef476f; }
+.dot--c5 { background-color: #14b8a6; }
+
+.cell-name {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: rgb(39, 38, 38);
+  font-family: var(--font-family);
+}
+
+.cell-muted {
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: #4b5563;
+  font-family: var(--font-family);
+}
+
+.cap-pill {
+  display: inline-block;
+  background-color: #e0eefc;
+  color: #1f7ae0;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 6px 12px;
+  border-radius: 14px;
+  white-space: nowrap;
+  font-family: var(--font-family);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  font-family: var(--font-family);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+.status-pill--on {
+  background-color: #e3f7ec;
+  color: #16a34a;
+}
+
+.status-pill--off {
+  background-color: #fdeaed;
+  color: #ef4444;
+}
+
+.view-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid rgb(223, 221, 221);
+  background-color: var(--white);
+  padding: 7px 14px;
+  font-size: 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: rgb(92, 92, 92);
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+.view-btn i {
+  font-size: 13px;
+  line-height: 1;
+}
+.view-btn:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  border-color: #d0d5dd;
+}
+.view-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =====================  RESPONSIVE (container based)  ===================== */
+
+@container list (min-width: 1200px) {
+  .webhook-table thead th {
+    padding: 15px 13px;
+  }
+
+  .webhook-table tbody td {
+    padding: 16px 13px;
+  }
+
+  .webhook-table thead th:first-child,
+  .webhook-table tbody td:first-child {
+    padding-left: 20px;
+  }
+}
+
+@container list (max-width: 1199px) {
+  .card .card-body {
+    margin: 1rem 1.5rem;
+  }
+
+  .page-head {
+    padding: 1.25rem 1.5rem 0.5rem;
+  }
+}
+
+@container list (max-width: 991px) {
+  .card .card-body {
+    margin: 0.75rem 1rem;
+    border-radius: 14px;
+  }
+
+  .page-head {
+    padding: 1rem 1rem 0.5rem;
+  }
+}
+
+@container list (max-width: 899px) {
+  .webhook-table thead th,
+  .webhook-table tbody td {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .webhook-table thead th:first-child,
+  .webhook-table tbody td:first-child {
+    padding-left: 12px;
+  }
+
+  .webhook-table thead th:last-child,
+  .webhook-table tbody td:last-child {
+    padding-right: 12px;
+  }
+}
+
+/* Scroll mode: only when the card is really narrow */
+@container list (max-width: 759px) {
+  .webhook-table {
+    min-width: 820px;
+  }
+
+  .webhook-table thead th,
+  .webhook-table tbody td:not(.url-col) {
+    white-space: nowrap;
+  }
+
+  .webhook-table thead th,
+  .webhook-table tbody td {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+@container list (max-width: 575px) {
+  .card .card-body {
+    margin: 0.5rem;
+    border-radius: 12px;
+  }
+
+  .page-head {
     flex-direction: column;
-    border-radius: .5rem;
-    background-color: #fff;
-    margin: 0.8rem 0 0.8rem 0;
-    box-shadow: 0 .25rem .5rem #e6edef;
+    align-items: stretch;
+  }
 
-    .card-head {
-        padding: 1rem 1.5rem;
-        font-size: 1rem;
+  .page-title {
+    font-size: 24px;
+  }
 
-        .btn-outline-dark{
-            box-shadow: none;
-            outline: none;
-            font-size: small; 
-            padding: 0.25rem 0.35rem; 
-        }
-
-        .form{
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px -5px 5px -3px rgba(0, 0, 0, 0.2);
-            margin-bottom: 10px;
-        }
-
-        .form-label{
-            font-size: small;
-        }
-
-        .form-control-sm {
-            font-size: 0.875rem; 
-            padding: 0.25rem 0.5rem; 
-            box-shadow: none;
-        }
-
-        .form-select-sm {
-            font-size: 0.875rem; 
-            padding: 0.25rem 0.5rem; 
-        }
-        
-
-        .form-select:focus {
-            border-color: #747575;
-            box-shadow: none;
-            outline: none;
-         }
-        
-    }
-
-
-    .example-form-field {
-        width: 105%;
-        border-radius: 6px;
-        font-size: smaller;
-        margin-left: -10px;
-        margin-bottom: -35px;
-      }
-
-      .example-form-field:focus {
-        border-color: #747575;
-     }
-
-    ::ng-deep  .mdc-notched-outline{
-        padding: 11px;
-      }
-      
-      ::ng-deep .mat-mdc-icon-button{
-          pointer-events: none;
-      }
-
-    .card-body {
-        padding: 1rem 1.5rem;
-
-        .btn-primary{
-            box-shadow: none;
-            outline: none;
-            font-size: small; 
-            padding: 0.1rem 0.25rem; 
-        }
- 
-        .table th {
-            font-size: small;
-            font-weight: 700;
-            padding-bottom: 15px;
-        }
-
-
-        .table td {
-            font-size: smaller;
-            font-weight: 400;
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd; 
-        }
-        
-    }
-}
-
-.column {
-    width: 30%;
-    word-wrap: break-word;
-    word-break: break-all;
-    white-space: normal;
-}
-
-@media (max-width: 872px) {
-    .table-row{
-        overflow-x: scroll;
-    }
-    .card-body .col-md-2.btn {
-        width: 100%;
-        margin: 0 10px 5px;
-    }
-    .card-body th,
-    .card-body td {
-        white-space: nowrap;
-    }
-}
-
-
-
-.btn-action {
-    display: block;
-    width: 330px;
-    text-align: center;
-}
-
-.btn-sm.dropdown {
-    background-color: #fff;
-    color: #12263f;
-    font-weight: 500;
-    border: 1px solid #12263f;
-    font-size: 0.9rem;
-    border-radius: 0.25rem;
-    text-align: left;
-}
-
-.dropdown-menu {
-    width: 100px;
-    padding-top: 20px;
-}
-
-.dropdown-item {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-}
-
-.dropdown-item.active,
-.dropdown-item:active {
-    background-color: #f4f6f8;
-    color: black;
-}
-
-.dropdown-item:hover {
-    background-color: #c0c8f7ee;
-    color: #fff;
-}
-
-.btn-sm.dropdown.active {
-    background-color: #c0c8f7ee;
-    border-color: #c0c8f7ee;
-}
-
-.btn-sm.dropdown:focus,
-.btn-sm.dropdown:active {
-    outline: none;
-    box-shadow: none;
-}
-
-.dropdown-icon {
-    position: absolute;
-    right: 3%;
-    /* Adjust as needed */
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
+  .btn-add {
+    align-self: flex-start;
+  }
 }

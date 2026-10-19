@@ -1,206 +1,420 @@
+:host {
+  display: block;
+}
+
 .card {
-    display: flex;
+  container: list / inline-size;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-page);
+  border: none;
+  margin: 0 -10px;
+}
+
+/* ------------ page header ------------ */
+.page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 1.25rem 2.5rem 0.5rem;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.1px;
+  line-height: 1.2;
+  color: var(--navy);
+  font-family: var(--font-family);
+}
+
+.page-sub {
+  margin: 8px 0 0;
+  max-width: 560px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #8a8f98;
+  font-family: var(--font-family);
+}
+
+.btn-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #dcdde2;
+  border-radius: 10px;
+  padding: 10px 18px;
+  background-color: var(--white);
+  color: #575656;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-upload:hover {
+  background-color: #f4f5f9;
+  color: #000;
+  border-color: #c9cad0;
+}
+
+.btn-upload i {
+  font-size: 15px;
+}
+
+/* ------------ card ------------ */
+.card-body {
+  margin: 1rem 2.5rem;
+  padding: 0 0 0.75rem;
+  background-color: var(--white);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+app-paginator {
+  display: block;
+  padding: 0.75rem 1rem 0;
+}
+
+/* ------------ filter bar ------------ */
+.filter-bar {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eceef2;
+}
+
+.filter-field {
+  min-width: 240px;
+}
+
+.filter-field .form-label {
+  display: block;
+  margin-bottom: 7px;
+  color: #a9b0c0;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: var(--font-family);
+}
+
+.filter-field .form-select {
+  width: 100%;
+  height: 40px;
+  padding: 0.12rem 0.9rem;
+  border-radius: 15px;
+  border: 1px solid #e8e9ec;
+  background-color: #fafafd;
+  box-sizing: border-box;
+  box-shadow: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1f2430;
+  font-family: var(--font-family);
+}
+
+.filter-field .form-select:focus {
+  border-color: #747575;
+  box-shadow: none;
+  outline: none;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-apply {
+  background: linear-gradient(120deg, var(--indigo), var(--sky));
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  height: 40px;
+  padding: 0 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-family);
+}
+
+.btn-apply:hover {
+  background-color: var(--accent-violet-dark);
+}
+
+.btn-clear {
+  background-color: var(--white);
+  color: #4b5563;
+  border: 1px solid #e0e2e8;
+  border-radius: 8px;
+  height: 40px;
+  padding: 0 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-family);
+}
+
+.btn-clear:hover {
+  background-color: var(--bg-input);
+}
+
+/* ------------ table (touches card border left and right) ------------ */
+.card-body .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.card-body .table-row {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.branch-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 0 !important;
+  table-layout: auto;
+  border-left: none;
+  border-right: none;
+}
+
+.branch-table th,
+.branch-table td {
+  border-left: none;
+  border-right: none;
+}
+
+.branch-table thead th {
+  background-color: #fafafd;
+  padding: 15px 8px;
+  border-bottom: 1px solid #eceef2;
+  white-space: normal;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #a9b0c0;
+  font-family: var(--font-family);
+}
+
+.branch-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.branch-table tbody tr:hover {
+  background-color: #fafbfc;
+}
+
+.branch-table tbody td {
+  padding: 16px 8px;
+  border-bottom: 1px solid #eceef2;
+  vertical-align: middle;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: break-word;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: #4b5563;
+  font-family: var(--font-family);
+}
+
+.branch-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.branch-table thead th:first-child,
+.branch-table tbody td:first-child {
+  padding-left: 20px;
+}
+
+.branch-table thead th:last-child,
+.branch-table tbody td:last-child {
+  padding-right: 20px;
+}
+
+.branch-table th.num,
+.branch-table td.num {
+  text-align: right;
+}
+
+/* ------------ cell content ------------ */
+.cell-code {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #6b7280;
+  font-family: var(--font-family);
+}
+
+.copy-icon {
+  margin-left: 4px;
+  font-size: 12px;
+  color: #b4bac8;
+  cursor: pointer;
+}
+
+.copy-icon:hover {
+  color: var(--navy);
+}
+
+.cell-main {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: rgb(39, 38, 38);
+  font-family: var(--font-family);
+}
+
+.cell-sub {
+  margin-top: 2px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #9aa0ab;
+  font-family: var(--font-family);
+}
+
+.cell-sub.upper {
+  text-transform: uppercase;
+}
+
+.cell-muted {
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: #9aa0ab;
+  font-family: var(--font-family);
+}
+
+.cell-count {
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: #313842;
+  font-family: var(--font-family);
+}
+
+/* =====================  RESPONSIVE (container based)  ===================== */
+
+@container list (min-width: 1200px) {
+  .branch-table thead th {
+    padding: 15px 13px;
+  }
+
+  .branch-table tbody td {
+    padding: 16px 13px;
+  }
+
+  .branch-table thead th:first-child,
+  .branch-table tbody td:first-child {
+    padding-left: 20px;
+  }
+
+  .branch-table thead th:last-child,
+  .branch-table tbody td:last-child {
+    padding-right: 20px;
+  }
+}
+
+@container list (max-width: 1199px) {
+  .card .card-body {
+    margin: 1rem 1.5rem;
+  }
+
+  .page-head {
+    padding: 1.25rem 1.5rem 0.5rem;
+  }
+}
+
+@container list (max-width: 991px) {
+  .card .card-body {
+    margin: 0.75rem 1rem;
+    border-radius: 14px;
+  }
+
+  .page-head {
+    padding: 1rem 1rem 0.5rem;
+  }
+}
+
+@container list (max-width: 899px) {
+  .branch-table thead th,
+  .branch-table tbody td {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .branch-table thead th:first-child,
+  .branch-table tbody td:first-child {
+    padding-left: 12px;
+  }
+
+  .branch-table thead th:last-child,
+  .branch-table tbody td:last-child {
+    padding-right: 12px;
+  }
+}
+
+/* Scroll mode: only when the card is really narrow */
+@container list (max-width: 759px) {
+  .branch-table {
+    min-width: 780px;
+  }
+
+  .branch-table thead th,
+  .branch-table tbody td {
+    white-space: nowrap;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+@container list (max-width: 575px) {
+  .card .card-body {
+    margin: 0.5rem;
+    border-radius: 12px;
+  }
+
+  .page-head {
     flex-direction: column;
-    border-radius: .5rem;
-    background-color: #fff;
-    margin: 0.8rem 0 0.8rem 0;
-    z-index: 0;
-    box-shadow: 0 .25rem .5rem #e6edef;
+    align-items: stretch;
+  }
 
-    .card-head {
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #edf1f7;
-        font-size: 1rem;
+  .page-title {
+    font-size: 24px;
+  }
 
+  .btn-upload {
+    align-self: flex-start;
+  }
 
-        .btn-outline-dark {
-            box-shadow: none;
-            outline: none;
-            font-size: small;
-            padding: 0.1rem 0.35rem;
-        }
+  .filter-bar {
+    padding: 0.75rem 1rem;
+  }
 
-        .form {
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: -5px -5px 5px rgba(109, 109, 109, 0.2),
-                0 5px 5px rgba(109, 109, 109, 0.2),
-                -5px 5px 5px rgba(109, 109, 109, 0.2);
-            margin-bottom: 10px;
-        }
-
-        .form-label {
-            font-size: small;
-        }
-
-        .form-control-sm {
-            font-size: 0.875rem;
-            padding: 0.25rem 0.5rem;
-            box-shadow: none;
-        }
-
-        .form-select-sm {
-            font-size: 0.875rem;
-            padding: 0.25rem 0.5rem;
-        }
-
-
-        .form-select:focus,
-        .form-control:focus {
-            border-color: #747575;
-            box-shadow: none;
-            outline: none;
-        }
-
-
-    }
-
-
-    .example-form-field {
-        width: 105%;
-        border-radius: 6px;
-        font-size: smaller;
-        margin-left: -10px;
-        margin-bottom: -35px;
-    }
-
-    .example-form-field:focus {
-        border-color: #747575;
-    }
-
-    ::ng-deep .mdc-notched-outline {
-        padding: 11px;
-    }
-
-    ::ng-deep .mat-mdc-icon-button {
-        pointer-events: none;
-    }
-
-    .card-body {
-        padding: 1rem 1.5rem;
-
-        .btn {
-            padding: 0.2rem 0.25rem;
-            box-shadow: 0 0 10px rgba(117, 117, 117, 0.5);
-        }
-
-        .btn.active {
-            background-color: #12263f;
-            border: #12263f;
-            color: #fff;
-        }
-
-        .table th {
-            font-size: small;
-            font-weight: 700;
-            background-color: #f9fbfd;
-            vertical-align: text-top; 
-            text-align: left;
-        }
-
-        .table td {
-            font-size: smaller;
-            font-weight: 400;
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            vertical-align: middle;
-        }
-        .multiline-tooltip {
-            white-space: pre-line; /* Preserves line breaks in the tooltip */
-        }
-  
-    }
-}
-
-
-.btn-group {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    opacity: 1;
-    transition: opacity 0.5s ease;
-    box-shadow: none;
-}
-
-.button-group.show {
-    opacity: 1;
-}
-
-.btn-outline {
-    border: 0.5px solid #12263f;
-    background-color: #fff;
-    color: #12263f;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    box-shadow: none;
-    outline: none;
-    font-size: 15px;
-    padding: 0.4rem 0.35rem;
-}
-
-.btn-outline:hover {
-    background-color: #12263f;
-    color: #fff;
-}
-
-.circle {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 8px;
-}
-
-.awb-text {
-    font-weight: 500;
-}
-
-.blue-color {
-    color: #E67E22;
-}
-
-.red-color {
-    color: red;
-}
-
-.green-color {
-    color: green;
-}
-
-
-.btn-outline:focus {
-    box-shadow: none;
-}
-
-.statusbtn {
-    border: 1px solid #0d6efd;
-    color: #0d6efd;
-}
-
-.statusbtn:hover {
-    color: #0d6efd;
-    cursor: default;
-}
-
-.custom-modalbox {
-    mat-dialog-container {
-        background-color: blueviolet;
-    }
-}
-
-@media (max-width: 872px) {
-    .table-row {
-        overflow-x: scroll;
-    }
-
-    .card-body .col-md-2.btn {
-        width: 100%;
-        margin: 0 10px 5px;
-    }
-
-    .card-body th,
-    .card-body td {
-        white-space: nowrap;
-    }
-
+  .filter-field {
+    min-width: 0;
+    width: 100%;
+  }
 }

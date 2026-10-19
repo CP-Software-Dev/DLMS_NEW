@@ -1,91 +1,331 @@
+::ng-deep .blur-backdrop.cdk-overlay-backdrop {
+  background-color: rgba(18, 38, 63, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+::ng-deep .credentials-drawer.cdk-overlay-pane {
+  position: fixed !important;
+  top: 16px !important;
+  right: 16px !important;
+  bottom: 16px !important;
+  left: auto !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+}
+
+::ng-deep .credentials-drawer.cdk-overlay-pane,
+::ng-deep .credentials-drawer .mat-mdc-dialog-container,
+::ng-deep .credentials-drawer .mdc-dialog__container,
+::ng-deep .credentials-drawer .mat-mdc-dialog-surface,
+::ng-deep .credentials-drawer .mdc-dialog__surface {
+  border-radius: var(--radius-md) !important;
+}
+
+::ng-deep .credentials-drawer .mat-mdc-dialog-container {
+  --mdc-dialog-container-shape: var(--radius-md);
+  --mat-dialog-container-shape: var(--radius-md);
+  overflow: hidden;
+}
+
+::ng-deep .credentials-drawer .mat-mdc-dialog-container,
+::ng-deep .credentials-drawer .mdc-dialog__container,
+::ng-deep .credentials-drawer .mdc-dialog__surface {
+  height: 100%;
+  max-height: 100%;
+}
+
+::ng-deep .credentials-drawer .mdc-dialog__surface {
+  overflow: hidden;
+}
+
+:host {
+  display: block;
+  height: 100%;
+}
+
 .card {
-    width: 500px; 
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background-color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  overflow: hidden;
+}
+
+/* ------------ header ------------ */
+.drawer-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid #eceef2;
+  background: linear-gradient(135deg, #f1ecff 0%, #fdeef2 100%);
+}
+
+.drawer-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.1px;
+  line-height: 1.25;
+  color: var(--navy, #12263f);
+  font-family: var(--font-family);
+}
+
+.close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  color: #8a8f98;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+.close-btn:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+  color: #4b5563;
+}
+
+/* ------------ body ------------ */
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 22px 24px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a9b0c0;
+  font-family: var(--font-family);
+}
+
+.section-title--gap {
+  margin-top: 26px;
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background-color: #eceef2;
+}
+
+/* ------------ drag and drop zone ------------ */
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 44px 20px;
+  border: 1.5px dashed #d9dce6;
+  border-radius: 16px;
+  background-color: #fafafd;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.dropzone:hover,
+.dropzone:focus-visible,
+.dropzone.drag-over {
+  border-color: #7c6df7;
+  background-color: #f4f2fb;
+}
+
+.dropzone.has-file {
+  border-style: solid;
+  border-color: #cfe9da;
+  background-color: #f3fbf6;
+}
+
+.dropzone.invalid {
+  border-color: #ef476f;
+  background-color: #fff6f8;
+}
+
+/* Children ignore the pointer so dragleave does not flicker */
+.dropzone > * {
+  pointer-events: none;
+}
+
+.dropzone .remove-btn {
+  pointer-events: auto;
+}
+
+.drop-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5b7cfa, #8b6cf7);
+  box-shadow: 0 8px 18px -6px rgba(124, 109, 247, 0.6);
+  color: #fff;
+  font-size: 20px;
+}
+
+.dropzone.has-file .drop-icon {
+  background: linear-gradient(135deg, #16a34a, #34c26a);
+  box-shadow: 0 8px 18px -6px rgba(22, 163, 74, 0.5);
+}
+
+.drop-title {
+  max-width: 100%;
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a1a1a;
+  overflow-wrap: anywhere;
+  font-family: var(--font-family);
+}
+
+.drop-sub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8a8f98;
+  font-family: var(--font-family);
+}
+
+.remove-btn {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ef476f;
+  cursor: pointer;
+  font-family: var(--font-family);
+}
+.remove-btn:hover {
+  text-decoration: underline;
+}
+
+.error-text {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ef476f;
+  font-family: var(--font-family);
+}
+
+/* ------------ sample download button ------------ */
+.btn-sample {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 1px solid #dcdde2;
+  border-radius: 10px;
+  background-color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #575656;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  font-family: var(--font-family);
+  transition: all 0.15s ease-in-out;
+}
+.btn-sample:hover {
+  background-color: #f4f5f9;
+  color: #000;
+  border-color: #c9cad0;
+}
+
+/* ------------ footer ------------ */
+.drawer-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 24px;
+  border-top: 1px solid #eceef2;
+  background-color: #fff;
+}
+
+.btn-cancel {
+  padding: 9px 22px;
+  border: 1px solid #e0e2e8;
+  border-radius: 10px;
+  background-color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4b5563;
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: background-color 0.15s ease;
+}
+.btn-cancel:hover {
+  background-color: #f6f7fa;
+}
+
+.btn-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 22px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7c6df7, #9b87f5);
+  box-shadow: 0 8px 18px -6px rgba(124, 109, 247, 0.6);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.btn-save:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px -6px rgba(124, 109, 247, 0.7);
+}
+.btn-save:disabled {
+  opacity: 0.5;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.btn-save i {
+  font-size: 16px;
+}
+
+@media (max-width: 560px) {
+  .dropzone {
+    padding: 32px 14px;
   }
-
-  
-  
-  .card-head {
-    padding: 5px;
-    font-size: 20px;
-    font-weight: bold;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 10px;
-  }
-  
-  .card-body {
-    padding: 20px;
-  }
-  
-  .close-form{
-    text-align: end;
-    cursor: pointer;
-  }
-
-  .close-icon{
-    font-size: 30px;
-    font-weight: 200;
-    background-color: rgb(231, 231, 230);
-    border-radius: 50%;
-  }
-
-  
-.input-group {
-    display: flex;
-    align-items: center;
-}
-
-.input-group input[type="file"] {
-    display: none;
-}
-
-.input-group input[type="text"] {
-    flex: 1;
-    border: 1px solid #ced4da; 
-    height: 38px;
-    box-shadow: none;
-}
-
-.companyid{
-    flex: 1;
-    border: 1px solid #ced4da; 
-    height: 38px;
-    box-shadow: none;
-    width: 99%;
-}
-
-.input-group button {
-    margin-left: 5px;
-    box-shadow: none;
-    height: 38px;
-}
-
-.card-body .btn-browse{
-    box-shadow: none;
-    margin-right: 5px;
-    background-color: #4c66fb;
-    color: #fff;
-}
-
-.card-body .btn{
-    box-shadow: none;
-    margin-right: 5px;
-}
-.card-body .download-csv a{
-    cursor: pointer;
-    text-decoration: none;
-    outline: none;
-}
-
-.download-icon{
-    color: black;
-}
-
-@media (max-width: 768px) {
-    .card {
-        width: 90%;
-    }
 }

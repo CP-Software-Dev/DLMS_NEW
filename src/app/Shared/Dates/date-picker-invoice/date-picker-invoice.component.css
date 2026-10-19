@@ -1,44 +1,68 @@
+/* Same look as the other filter inputs (Kit Number, Order ID) */
 .daterange-container {
   display: flex;
-  justify-content: space-between;
-  width: 320px;  
-  border: 1px solid #dadcdf;
-  border-radius: 4px;
-  padding: 3px; /* Add padding to make room for the border */
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  box-sizing: border-box;
+  padding: 0.12rem 0.9rem;
+  border: 1px solid #e8e9ec;
+  border-radius: 15px;
+  background-color: #fafafd;
+  cursor: pointer;
+}
+
+.daterange-container:focus-within {
+  border-color: #747575;
 }
 
 .daterange-input-wrapper {
   position: relative;
   width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .daterange-input {
   width: 100%;
-  padding-right: 30px; /* Add padding to the right to make room for the icon */
-  border: none; 
-  font-size: 0.8rem;
+  height: 100%;
+  padding: 0 28px 0 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-family);
+  font-size: 0.9rem;
   font-weight: 600;
-  transition: border-color 0.3s;  
+  color: #1f2430;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.daterange-input::placeholder {
+  color: #a8a9ac;
+  font-weight: 600;
 }
 
 .daterange-input:focus {
-  border-color: #007bff;  
-  outline: none; 
+  outline: none;
 }
 
 .calendar-icon {
   position: absolute;
-  right: 10px;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
-  pointer-events: none; /* Ensure the icon doesn't interfere with input interaction */
+  pointer-events: none; /* Icon should not block clicks on the input */
   font-size: 16px;
-  color: #12263f; /* Adjust the color as needed */
+  line-height: 1;
+  color: #4b5563;
+  cursor: pointer;
 }
 
 .daterangepicker {
   position: absolute;
-  min-width: 700px !important; 
+  min-width: 500px !important;
 }
 
 .daterangepicker .calendar-table {
@@ -50,7 +74,7 @@
 }
 
 ::ng-deep .md-drppicker {
-  font-size: 12px; 
+  font-size: 12px;
 }
 
 ::ng-deep .md-drppicker .calendar,
@@ -58,9 +82,9 @@
 ::ng-deep .md-drppicker .calendar-table table,
 ::ng-deep .md-drppicker .calendar-table th,
 ::ng-deep .md-drppicker .calendar-table td {
-  font-size: inherit; 
+  font-size: inherit;
 }
 
 ::ng-deep .md-drppicker .btn {
-  font-size: 12px; 
-} 
+  font-size: 12px;
+}

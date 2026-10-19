@@ -1,5 +1,5 @@
 .body {
-    width: calc(100% - 5rem);
+    /* width: calc(100% - 5rem);
     height: calc(100vh - 10rem);
     margin-top: 2.15rem;
     margin-left: 5rem;
@@ -9,8 +9,21 @@
     background: none;
     padding-top: 1.8rem;
     padding-right: 0.8rem;
-    padding-left: 0.8rem;
+    padding-left: 0.8rem; */
 
+
+
+    width: calc(100% - 5rem);
+    height: calc(100vh - 10rem);
+    margin-top: 2.15rem;
+    margin-left: 4.7rem;
+    z-index: 0;
+    position: relative;
+    transition: all .5s ease;
+    background: none;
+    padding-top: 1.8rem;
+    padding-right: 0.2rem;
+    padding-left: 0.8rem;
 }
 
 .login-page{
@@ -21,8 +34,10 @@
 }
 
 .body-trimmed {
+    /* width: calc(100% - 16.5625rem);
+    margin-left: 16.5625rem; */
     width: calc(100% - 16.5625rem);
-    margin-left: 16.5625rem;
+    margin-left: 16.2625rem;
 }
 
 .body-md-screen {

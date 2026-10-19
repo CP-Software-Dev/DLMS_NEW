@@ -1,0 +1,103 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.card {
+  min-height: 370px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  border: none;
+  width: 100%;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  border: none;
+  padding: 12px 0 0;
+}
+
+.chart-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Ranked list ---------- */
+
+.chart-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.chart-legend li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 4px;
+  font-size: 13px;
+  color: #2c2f3a;
+  border-bottom: 1px solid #eef0f4;
+}
+
+.chart-legend li:last-child {
+  border-bottom: none;
+}
+
+.rank_no {
+  font-size: 11px;
+  font-weight: 600;
+  color: #b7bdca;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.legend-label {
+  font-weight: 700;
+  color: #1a1a2e;
+  width: 150px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-family);
+}
+
+.track_bar {
+  flex: 1;
+  height: 7.5px;
+  border-radius: 20px;
+  background-color: #eef0f4;
+  overflow: hidden;
+}
+
+.track_fill {
+  display: block;
+  height: 100%;
+  border-radius: 20px;
+}
+
+.legend-percent {
+  box-sizing: border-box;
+  display: inline-block;
+  flex-shrink: 0;
+  min-width: 50px;
+  padding: 9px 9px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  border: 1px solid;
+  font-family: var(--font-family);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}

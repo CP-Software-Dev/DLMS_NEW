@@ -1,11 +1,23 @@
 <div class="daterange-container">
-    <div class="daterange-input-wrapper">
-        <input type="text" class="daterange-input" ngxDaterangepickerMd [(ngModel)]="selected"
-            [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true"
-            [isInvalidDate]="isInvalidDate" [showClearButton]="false" (datesUpdated)="onDatesUpdated($event)"
-            placeholder="Select please..." />
-        <span class="calendar-icon" style="font-size: 16px; cursor: pointer;">
-            <i class="ri-calendar-line" aria-hidden="true"></i>
-        </span>
-    </div>
+  <div class="daterange-input-wrapper">
+    <input
+      type="text"
+      class="daterange-input"
+      ngxDaterangepickerMd
+      [(ngModel)]="selected"
+      [showCustomRangeLabel]="true"
+      [alwaysShowCalendars]="true"
+      [ranges]="ranges"
+      [linkedCalendars]="true"
+      [isInvalidDate]="isInvalidDate"
+      [showClearButton]="false"
+      (datesUpdated)="onDatesUpdated($event)"
+      [opens]="'right'"
+      [drops]="'down'"
+      placeholder="Select please..."
+    />
+    <span class="calendar-icon">
+      <i class="ri-calendar-line" aria-hidden="true"></i>
+    </span>
+  </div>
 </div>

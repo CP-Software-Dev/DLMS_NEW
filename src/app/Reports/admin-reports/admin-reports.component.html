@@ -1,42 +1,39 @@
 <div class="reports-container">
-    <!-- <div class="created-reports-list">
-      <span class="title">Created Reports List</span>
-      <div class="report-category">
-        <span class="subtitle">Order Reports:</span>
-        <ul>
-          <li><i class="ri-file-text-fill report-icon"></i><a href="#">Ayush Demo</a></li>
-          <li><i class="ri-file-text-fill report-icon"></i><a href="#">Demo</a></li>
-          <li><i class="ri-file-text-fill report-icon"></i><a href="#">rupesh</a></li>
-        </ul>
-      </div>
-      <div class="report-category">
-        <span class="subtitle">Shipment Reports:</span>
-        <ul>
-          <li><i class="ri-file-text-fill report-icon"></i><a href="#">Pr report</a></li>
-          <li><i class="ri-file-text-fill report-icon"></i><a href="#">rupesh4</a></li>
-          <li><i class="ri-file-text-fill report-icon"></i><a href="#">Test Report 2</a></li>
-        </ul>
-      </div>
-      <div class="report-category">
-        <span class="subtitle">Warehouse Reports:</span>
-        <ul>
-          <li><i class="ri-file-text-fill report-icon"></i><a href="#">Test Table Report</a></li>
-          <li><i class="ri-file-text-fill report-icon"></i><a href="#">Test Graph Report</a></li>
-        </ul>
-      </div>
-    </div> -->
-    <div class="create-report">
-      <span class="title">Create Report</span>
-      <p>Track the progress of your logistics projects over any timeframe you choose. See where things stand right now with real-time updates. Share clear reports with your team. Keep everyone in the loop effortlessly.</p>
-      <i class="ri-file-text-fill" style="font-size: 50px; margin-bottom: 10px;"></i>
-      <div class="report-options">
-        <span class="subtitle">Reports:</span>
-        <ul>
-          <li><a class="reports-link" (click)="navigateToOrderReport()">Order Reports</a></li>
-          <li><a class="reports-link" (click)="navigateToShipmentReport()">Shipment Reports</a></li>
-          <!-- <li><a class="reports-link" (click)="navigateToWarehouseReport()">Warehouse Report</a></li> -->
-        </ul>
+  <div class="create-report">
+    <header class="rp-header">
+      <h1>Reports</h1>
+      <p>
+        Build an {{ activeReport === 'order' ? 'order' : 'shipment' }} extract
+        once, then run it whenever you need it.
+      </p>
+    </header>
+
+    <div class="report-options">
+      <div class="rp-segment" role="tablist" aria-label="Report type">
+        <button
+          type="button"
+          role="tab"
+          [attr.aria-selected]="activeReport === 'order'"
+          [class.active]="activeReport === 'order'"
+          (click)="navigateToOrderReport()"
+        >
+          Order Reports
+        </button>
+        <button
+          type="button"
+          role="tab"
+          [attr.aria-selected]="activeReport === 'shipment'"
+          [class.active]="activeReport === 'shipment'"
+          (click)="navigateToShipmentReport()"
+        >
+          Shipment Reports
+        </button>
       </div>
     </div>
+
+    <app-order-report *ngIf="activeReport === 'order'"></app-order-report>
+    <app-shipment-report
+      *ngIf="activeReport === 'shipment'"
+    ></app-shipment-report>
   </div>
-  
+</div>

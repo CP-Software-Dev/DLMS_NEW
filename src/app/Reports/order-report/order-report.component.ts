@@ -1,9 +1,8 @@
-import { Component, HostListener, ElementRef, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { FormGroup, FormControl } from "@angular/forms";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { ApiService } from "../../services/api.service";
-import { error } from "node:console";
+import { SellerService } from "../../services/seller.service";
 import { ToastrService } from "ngx-toastr";
 
 interface StatusData {
@@ -16,108 +15,142 @@ interface StatusData {
   isActive: number;
 }
 
+interface ColumnOption {
+  id: string;
+  label: string;
+  checked: boolean;
+}
+
+interface SavedReport {
+  name: string;
+  type: string;
+  bank: string;
+  createdAt: string;
+}
+
 @Component({
   selector: "app-order-report",
   templateUrl: "./order-report.component.html",
   styleUrl: "./order-report.component.css",
 })
 export class OrderReportComponent implements OnInit {
-  reportName: string = "";
-  selectedReportType: string = "";
-  dateRange = new FormGroup({
-    start: new FormControl(),
-    end: new FormControl(),
-  });
+  // Role is detected from the route: /admin/... or /user/...
+  isAdmin: boolean = false;
 
-  orderCategoryType: number | null = null;
+  // Form state
+  reportName: string = "";
+  sellerId: any = "";
+  fromDate: string = "";
+  toDate: string = "";
+  orderCategoryType: number | null = 2; // 2 = Perso, 3 = Insta
+  selectedReportType: string = "Table";
+  isCreating: boolean = false;
   serviceType: number = 0;
 
-  ngOnInit(): void {
-    this.filterStatuses();
-    this.loadSellerData();
-    this.serviceType = Number(localStorage.getItem("serviceType"));
-    if (this.serviceType === 1) {
-      this.orderCategoryType = 2; // default Insta
-    }
-  }
-
-  orderCheckboxes = [
-    { id: "OrderID", label: "Order ID", checked: false },
-    { id: 'CardID', label: 'Card ID', checked: false },
-    { id: "KitNumber", label: "Kit Number", checked: false },
-    { id: "Customer", label: "Customer Name", checked: false },
-    { id: "Contact", label: "Phone No.", checked: false },
-    { id: "Date", label: "Order Date", checked: false },
-    { id: "Courier", label: "Courier", checked: false },
-    { id: "Awb", label: "AWB Number", checked: false },
-    { id: "OrderStatus", label: "Order Status", checked: false },
-    { id: "StatusUpdateAt", label: "Status Updated At", checked: false },
-    { id: "DeliveredDate", label: "Delivery Date", checked: false },
-    { id: "State", label: "State", checked: false },
-    { id: "Pincode", label: "Pincode", checked: false },
-  ];
-  selectedStatuses: any[] = [];
-  filteredStatuses: any[] = [];
-  sellerData: any[] = [];
-  reportData: any[] = [];
-  searchText: string = "";
-  selectedStatusIds: any[] = []; // Store status IDs
-  selectedStatusNames: any[] = []; // Store status names
-  dropdownOpen: boolean = false;
-  allSelected: boolean = false;
-  sellerId: string = "";
+  orderCheckboxes: ColumnOption[] = [];
   selectAllOrderChecked: boolean = false;
-  pageIndex: number = 0;
-  pageSize: number = 1000000;
-  isCreating: boolean = false;
+  allSelected: boolean = false;
+
+  // Data
+  sellerData: any[] = [];
+  filteredStatuses: any[] = [];
+  selectedStatusIds: any[] = [];
+  selectedStatusNames: any[] = [];
+
+  // Saved reports (UI only, not connected to an API yet)
+  savedReports: SavedReport[] = [
+    { name: "Shri Ram Jun–July", type: "Shipments", bank: "Shri Ram", createdAt: "2026-10-04" },
+    { name: "JIO Insta weekly", type: "Shipments", bank: "JIO", createdAt: "2026-10-02" },
+    { name: "RTO ageing — all banks", type: "RTO", bank: "all banks", createdAt: "2026-09-26" },
+  ];
+  savedPage: number = 1;
+  savedPageSize: number = 25;
 
   constructor(
     private router: Router,
     private toastr: ToastrService,
     private http: HttpClient,
-    private apiservice: ApiService
-  ) { }
+    private apiservice: ApiService,
+    private sellerService: SellerService
+  ) {}
 
-  selectedDateRange: { startDate: string; endDate: string } = {
-    startDate: "",
-    endDate: "",
-  };
+  ngOnInit(): void {
+    this.isAdmin = this.router.url.startsWith("/admin");
+    this.serviceType = Number(localStorage.getItem("serviceType"));
 
-  formatDate(date: string): string {
-    const parsedDate = new Date(date);
-    const adjustedDate = new Date(
-      parsedDate.getTime() - parsedDate.getTimezoneOffset() * 60000
-    );
-    return adjustedDate.toISOString().split("T")[0];
-  }
+    this.orderCheckboxes = this.buildColumns();
+    this.checkboxChanged();
+    this.orderCategoryType = this.getDefaultCategory();
+    this.setDefaultDates();
+    this.filterStatuses();
 
-  onDateRangeSelected(dateRange: { startDate: string; endDate: string }): void {
-    this.selectedDateRange = {
-      startDate: this.formatDate(dateRange.startDate),
-      endDate: this.formatDate(dateRange.endDate),
-    };
-  }
-
-  onReportTypeChange(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    this.selectedReportType = inputElement.value;
-  }
-  toggleDropdown() {
-    this.dropdownOpen = !this.dropdownOpen;
-    if (!this.dropdownOpen) {
-      this.selectedStatusIds = [];
-      this.selectedStatusNames = [];
-      this.allSelected = false;
+    if (this.isAdmin) {
+      this.loadSellerData();
+    } else {
+      this.sellerId = this.sellerService.getItem("seller");
     }
   }
 
+  // Order category radio is always shown for admin, and only for serviceType 1 for user
+  get showOrderCategory(): boolean {
+    return this.isAdmin || this.serviceType === 1;
+  }
+
+  private getDefaultCategory(): number {
+    if (!this.isAdmin && this.serviceType === 3) {
+      return 3;
+    }
+    return 2;
+  }
+
+  // Admin has one status column, user has both Order Status and Shipment Status
+  private buildColumns(): ColumnOption[] {
+    const statusColumns: ColumnOption[] = this.isAdmin
+      ? [{ id: "OrderStatus", label: "Shipment Status", checked: false }]
+      : [
+          { id: "OrderStatus", label: "Order Status", checked: false },
+          { id: "ShipmentStatus", label: "Shipment Status", checked: false },
+        ];
+
+    return [
+      { id: "OrderID", label: "Order ID", checked: false },
+      { id: "CardID", label: "Card ID", checked: false },
+      { id: "KitNumber", label: "Kit Number", checked: false },
+      { id: "Customer", label: "Customer Name", checked: false },
+      { id: "Contact", label: "Phone No.", checked: false },
+      { id: "Date", label: "Order Date", checked: false },
+      { id: "Courier", label: "Courier", checked: false },
+      { id: "Awb", label: "AWB Number", checked: false },
+      ...statusColumns,
+      { id: "StatusUpdateAt", label: "Status Updated At", checked: false },
+      { id: "DeliveredDate", label: "Delivery Date", checked: false },
+      { id: "State", label: "State", checked: false },
+      { id: "Pincode", label: "Pincode", checked: false },
+    ];
+  }
+
+  // Dates
+  private setDefaultDates(): void {
+    const today = new Date();
+    const past = new Date();
+    past.setDate(today.getDate() - 30);
+    this.toDate = this.toYMD(today);
+    this.fromDate = this.toYMD(past);
+  }
+
+  private toYMD(d: Date): string {
+    const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+    return local.toISOString().split("T")[0];
+  }
+
+  // API loads
   loadSellerData(): void {
     this.http.get<any>(this.apiservice.SellerData).subscribe((response) => {
       this.sellerData = response.data;
     });
   }
 
-  filterStatuses() {
+  filterStatuses(): void {
     this.http.get<any>(this.apiservice.StatusData).subscribe((response) => {
       this.filteredStatuses = response.data.filter(
         (item: StatusData) => item.role === 1
@@ -125,7 +158,38 @@ export class OrderReportComponent implements OnInit {
     });
   }
 
-  toggleSelection(status: { id: string; name: string }) {
+  // Columns: Select All
+  selectAllOrderCheckboxChanged(): void {
+    this.orderCheckboxes.forEach((checkbox) => {
+      checkbox.checked = this.selectAllOrderChecked;
+    });
+  }
+
+  checkboxChanged(): void {
+    this.selectAllOrderChecked = this.orderCheckboxes.every(
+      (checkbox) => checkbox.checked
+    );
+  }
+
+  // Statuses: Select All
+  private selectAllStatuses(): void {
+    this.selectedStatusIds = this.filteredStatuses.map((s) => s.id);
+    this.selectedStatusNames = this.filteredStatuses.map((s) => s.name);
+    this.allSelected = true;
+  }
+
+  toggleSelectAll(event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    if (isChecked) {
+      this.selectAllStatuses();
+    } else {
+      this.selectedStatusIds = [];
+      this.selectedStatusNames = [];
+      this.allSelected = false;
+    }
+  }
+
+  toggleSelection(status: { id: any; name: string }): void {
     const index = this.selectedStatusIds.indexOf(status.id);
     if (index === -1) {
       this.selectedStatusIds.push(status.id);
@@ -138,168 +202,92 @@ export class OrderReportComponent implements OnInit {
       this.selectedStatusIds.length === this.filteredStatuses.length;
   }
 
-  toggleSelectAll(event: Event) {
-    const isChecked = (event.target as HTMLInputElement).checked;
-    if (isChecked) {
-      this.selectedStatusIds = this.filteredStatuses.map((status) => status.id);
-      this.selectedStatusNames = this.filteredStatuses.map(
-        (status) => status.name
-      );
-    } else {
-      this.selectedStatusIds = [];
-      this.selectedStatusNames = [];
-    }
-    this.allSelected = isChecked;
-  }
-
-  @HostListener("document:click", ["$event"])
-  onClick(event: MouseEvent) {
-    if (!this.isClickInsideDropdown(event)) {
-      this.dropdownOpen = false;
-    }
-  }
-
-  private isClickInsideDropdown(event: MouseEvent): boolean {
-    const dropdownElement = document.getElementById("statusFilterDropdown");
-    if (dropdownElement && dropdownElement.contains(event.target as Node)) {
-      return true;
-    }
-    return false;
-  }
-
-  selectAllOrderCheckboxChanged() {
-    this.orderCheckboxes.forEach((checkbox) => {
-      checkbox.checked = this.selectAllOrderChecked;
-    });
-  }
-
-  checkboxChanged() {
-    this.selectAllOrderChecked = this.orderCheckboxes.every(
-      (checkbox) => checkbox.checked
-    );
-  }
-
+  // Create report
   createReport(): void {
-    this.isCreating = true;
-
-    const startDate = this.selectedDateRange?.startDate || "";
-    const endDate = this.selectedDateRange?.endDate || "";
+    if (this.selectedReportType !== "Table") {
+      this.toastr.error("Bar and Pie report is not functional.", "Failure");
+      return;
+    }
 
     const selectedColumns = this.orderCheckboxes
-      .filter((checkbox) => checkbox.checked)
-      .map((checkbox) => checkbox.id);
-    const selectedStatuses = this.selectedStatusNames;
+      .filter((c) => c.checked)
+      .map((c) => c.id);
 
-    if (this.selectedReportType === "" || this.selectedReportType === null) {
-      this.toastr.error(
-        "Insufficient details for Report generation.",
-        "Failure"
-      );
-      this.isCreating = false;
-    } else {
-      if (this.selectedReportType === "Table") {
-        if (
-          this.reportName &&
-          selectedColumns.length > 0 &&
-          selectedStatuses.length > 0
-        ) {
-          let params = new HttpParams()
-            .set("sellerId", this.sellerId)
-            .set("fileType", Number(this.orderCategoryType))
-            .set("startDate", startDate)
-            .set("endDate", endDate);
-
-             selectedColumns.forEach((column) => {
-            params = params.append('columns', column);
-          });
-
-          this.http
-            .get(this.apiservice.OrdersFileExport, {
-              params,
-              responseType: 'blob',
-            })
-            .subscribe({
-              next: (blob: Blob) => {
-                const fileName = `${this.reportName}_${new Date().getTime()}.xlsx`;
-
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = fileName;
-                a.click();
-
-                window.URL.revokeObjectURL(url);
-
-                this.toastr.success(
-                  'Report generated successfully.',
-                  'Success',
-                );
-                this.isCreating = false;
-              },
-              error: () => {
-                this.toastr.error('Failed to generate report.', 'Failure');
-                this.isCreating = false;
-              },
-            });
-        } else {
-          this.toastr.error(
-            "Please provide complete details for report.",
-            "Failure"
-          );
-          this.isCreating = false;
-        }
-      } else {
-        this.toastr.error("Bar and Pie report is not functional.", "Failure");
-        this.isCreating = false;
-      }
+    if (
+      !this.reportName ||
+      !this.sellerId ||
+      !this.fromDate ||
+      !this.toDate ||
+      selectedColumns.length === 0 ||
+      this.selectedStatusNames.length === 0
+    ) {
+      this.toastr.error("Please provide complete details for report.", "Failure");
+      return;
     }
+
+    this.isCreating = true;
+
+    let params = new HttpParams()
+      .set("sellerId", this.sellerId)
+      .set("fileType", Number(this.orderCategoryType))
+      .set("startDate", this.fromDate)
+      .set("endDate", this.toDate);
+
+    selectedColumns.forEach((column) => {
+      params = params.append("columns", column);
+    });
+
+    this.http
+      .get(this.apiservice.OrdersFileExport, { params, responseType: "blob" })
+      .subscribe({
+        next: (blob: Blob) => {
+          const fileName = `${this.reportName}_${new Date().getTime()}.xlsx`;
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = fileName;
+          a.click();
+          window.URL.revokeObjectURL(url);
+
+          this.toastr.success("Report generated successfully.", "Success");
+          this.isCreating = false;
+        },
+        error: () => {
+          this.toastr.error("Failed to generate report.", "Failure");
+          this.isCreating = false;
+        },
+      });
   }
 
-  downloadCSV(data: any[], columns: string[], statuses: string[]): void {
-    const filteredData = data.filter((item) =>
-      statuses.includes(item.orderStatus)
-    );
-    const columnLabels = columns.map((col) => {
-      const checkbox = this.orderCheckboxes.find(
-        (checkbox) => checkbox.id === col
-      );
-      return checkbox ? checkbox.label.replace(/\s+/g, "_") : col;
-    });
-
-    columnLabels.unshift("Bank");
-    columns.unshift("seller");
-
-    const csvData = filteredData.map((item) => {
-      const row: { [key: string]: any } = { seller: item.company };
-      columns.slice(1).forEach((col) => (row[col] = item[col]));
-      return row;
-    });
-
-    const csvRows = [];
-    const headers = columnLabels.join(",");
-    csvRows.push(headers);
-
-    csvData.forEach((row) => {
-      const values = columns.map((col) => row[col]);
-      csvRows.push(values.join(","));
-    });
-
-    const csvString = csvRows.join("\n");
-
-    const blob = new Blob([csvString], { type: "text/csv" });
-
-    const name = this.reportName;
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${this.reportName}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+  // Saved reports: run and pagination (static for now)
+  runSavedReport(report: SavedReport): void {
+    this.toastr.info(`Running "${report.name}"…`, "Report");
   }
 
-  navigatetoReports() {
-    this.router.navigate(["/admin/reports"]);
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.savedReports.length / this.savedPageSize));
+  }
+
+  get pageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  get pagedReports(): SavedReport[] {
+    const start = (this.savedPage - 1) * this.savedPageSize;
+    return this.savedReports.slice(start, start + this.savedPageSize);
+  }
+
+  get rangeStart(): number {
+    return this.savedReports.length === 0
+      ? 0
+      : (this.savedPage - 1) * this.savedPageSize + 1;
+  }
+
+  get rangeEnd(): number {
+    return Math.min(this.savedPage * this.savedPageSize, this.savedReports.length);
+  }
+
+  navigatetoReports(): void {
+    this.router.navigate([this.isAdmin ? "/admin/reports" : "/user/reports"]);
   }
 }

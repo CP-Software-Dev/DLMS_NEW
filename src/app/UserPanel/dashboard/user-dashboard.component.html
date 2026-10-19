@@ -1,343 +1,319 @@
-<div class="card" style="border: none;">
+<div class="dashboard-page-bg">
+  <div class="card main-card" style="border: none">
     <div class="card-head">
-        <div class="row">
+      <div class="row bg-container">
 
-            <!-- Daterange Filter -->
+        <!-- ================= HEADER ================= -->
+        <div class="col-md-12 col-sm-3" style="vertical-align: middle">
+          <div class="dashboard-header-row">
+            <div class="dashboard-title-block" style="margin-top: -30px">
+              <h5 class="mb-0 dashboard-text">Dashboard</h5>
 
-            <!-- <div class="row">
-                <div class="col-md-2 col-sm-2">
-                    <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Dashboard</h5>
-                </div>
-                
-                <div class="col-md-6 col-sm-6" style="text-align: end;">
-                    <app-daterange (dateRangeSelected)="onDateRangeSelected($event)"></app-daterange>
-                </div>
-            </div> -->
-
-            <div class="col-md-9 col-sm-3" style="vertical-align: middle;">
-                <div class="row">
-                    <div class="col-2 d-flex align-items-center" style="margin-top: -6px;">
-                        <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Dashboard</h5>
-                    </div>
-                    @if(this.serviceType === 1){<div class="col-2">
-                        <button class="btn btn-sm dropdown" style="width: 100%;" type="button" id="typeDropdown"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-
-                            {{ selectedTypeLabel }}
-                            <i class="ri-arrow-down-s-fill dropdown-icon"></i>
-                        </button>
-
-                        <ul class="dropdown-menu dropdown-menu-end" style="width: 100%;" aria-labelledby="typeDropdown">
-                            <li>
-                                <button class="dropdown-item" [class.active]="selectedType === 2"
-                                    (click)="selectType(2, 'Perso')">
-                                    Perso
-                                </button>
-                            </li>
-
-                            <li>
-                                <button class="dropdown-item" [class.active]="selectedType === 3"
-                                    (click)="selectType(3, 'Insta')">
-                                    Insta
-                                </button>
-                            </li>
-                        </ul>
-                    </div>}
-
-                    <div class="col">
-                        <app-daterange (dateRangeSelected)="onDateRangeSelected($event)"></app-daterange>
-                    </div>
-                </div>
+              <small class="dashboard-subtitle">
+                {{ selectedQuickRangeLabel }} &middot;
+                {{ serviceType == 1 ? "Perso and Insta" : selectedTypeLabel }}
+              </small>
             </div>
 
-            <!-- Cards with Counts & Links -->
+            <div class="dashboard-header-controls">
+              <!-- Quick range -->
+              <div class="quick-range-group">
+                <button type="button" class="range-btn" [class.active]="selectedQuickRange === 7" (click)="selectQuickRange(7)">7 days</button>
+                <button type="button" class="range-btn" [class.active]="selectedQuickRange === 30" (click)="selectQuickRange(30)">30 days</button>
+                <button type="button" class="range-btn" [class.active]="selectedQuickRange === 90" (click)="selectQuickRange(90)">90 days</button>
+                <button type="button" class="range-btn" [class.active]="selectedQuickRange === 0" (click)="selectQuickRange(0)">All time</button>
+              </div>
 
-            <div class="row sub-card g-2 mt-1">
-                <div class="col-3">
-                    <div class="card" style="border-left: 5px solid #247B8B; ">
-                        <div class="card-body row">
-                            <div class="col-3 icon-box">
-                                <i class="bi bi-box icon" style="color: #247B8B; "></i>
-                            </div>
-                            <div class="col-9">
-                                <div class="custom-text-wrapper">
-                                    <span class="custom-text">Total Orders</span>
-                                    <ng-container *ngIf="hasOrder; else showCount">
-                                        <span class="custom-link-wrapper">
-                                            <a class="custom-link" (click)="totalOrders()">{{ getCardCount('Orders')
-                                                }}</a>
-                                        </span>
-                                    </ng-container>
-                                    <ng-template #showCount>
-                                        <span class="custom-link">{{ getCardCount('Orders') }}</span>
-                                    </ng-template>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card" style="border-left: 5px solid #0c9; ">
-                        <div class="card-body row">
-                            <div class="col-3 icon-box">
-                                <i class="bi bi-truck icon" style="color: #0c9;"></i>
-                            </div>
-                            <div class="col-9">
-                                <div class="custom-text-wrapper">
-                                    <span class="custom-text">Total Shipped</span>
-                                    <ng-container *ngIf="hasOrder; else showCount">
-                                        <span class="custom-link-wrapper">
-                                            <a class="custom-link" (click)="shippedOrders()">{{ getCardCount('Shipped')
-                                                }}</a>
-                                        </span>
-                                    </ng-container>
-                                    <ng-template #showCount>
-                                        <span class="custom-link">{{ getCardCount('Shipped') }}</span>
-                                    </ng-template>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card" style="border-left: 5px solid #19b5fe;">
-                        <div class="card-body row">
-                            <div class="col-3 icon-box">
-                                <i class="ri-government-line icon" style="color: #19b5fe;"></i>
-                            </div>
-                            <div class="col-9">
-                                <div class="custom-text-wrapper">
-                                    <span class="custom-text">Total Delivered</span>
-                                    <ng-container *ngIf="hasShipments; else showCount">
-                                        <span class="custom-link-wrapper">
-                                            <a class="custom-link" (click)="deliveredOrders()">{{
-                                                getCardCount('Delivered')
-                                                }}</a>
-                                        </span>
-                                    </ng-container>
-                                    <ng-template #showCount>
-                                        <span class="custom-link">{{ getCardCount('Delivered') }}</span>
-                                    </ng-template>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card" style="border-left: 5px solid #19b5fe;">
-                        <div class="card-body row">
-                            <div class="col-3 icon-box">
-                                <i class="ri-file-warning-fill icon" style="color: #19b5fe;"></i>
-                            </div>
-                            <div class="col-9">
-                                <div class="custom-text-wrapper">
-                                    <span class="custom-text">Total Exception</span>
-                                    <ng-container *ngIf="hasShipments; else showCount">
-                                        <span class="custom-link-wrapper">
-                                            <a class="custom-link" (click)="exceptionOrders()">{{
-                                                getCardCount('Exception')
-                                                }}</a>
-                                        </span>
-                                    </ng-container>
-                                    <ng-template #showCount>
-                                        <span class="custom-link">{{ getCardCount('Exception') }}</span>
-                                    </ng-template>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card" style="border-left: 5px solid #4c66fb;">
-                        <div class="card-body row">
-                            <div class="col-3 icon-box">
-                                <i class="bi bi-bootstrap-reboot icon" style="color: #4c66fb;"></i>
-                            </div>
-                            <div class="col-9">
-                                <div class="custom-text-wrapper">
-                                    <span class="custom-text">Total RTO</span>
-                                    <ng-container *ngIf="hasShipments; else showCount">
-                                        <span class="custom-link-wrapper">
-                                            <a class="custom-link" (click)="rtoOrders()">{{ getCardCount('RTO') }}</a>
-                                        </span>
-                                    </ng-container>
-                                    <ng-template #showCount>
-                                        <span class="custom-link">{{ getCardCount('RTO') }}</span>
-                                    </ng-template>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card" style="border-left: 5px solid #f7bc06;">
-                        <div class="card-body row">
-                            <div class="col-3 icon-box">
-                                <i class="ri-takeaway-line icon" style="color:#f7bc06;"></i>
-                            </div>
-                            <div class="col-9">
-                                <div class="custom-text-wrapper">
-                                    <span class="custom-text">Couriers</span>
-                                    <!-- <span class="custom-link">{{ getCardCount('Couriers') }}</span> -->
+              <!-- Perso / Insta dropdown (sirf serviceType 1 ke liye) -->
+              @if (serviceType == 1) {
+                <div class="dashboard-header-item" style="width: 80px">
+                  <button
+                    class="btn btn-sm dropdown"
+                    style="width: 100%"
+                    type="button"
+                    id="typeDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {{ selectedTypeLabel }}
+                    <i class="ri-arrow-down-s-fill dropdown-icon"></i>
+                  </button>
 
-                                    <ng-container *ngIf="rolenum === 3; else showUser">
-                                        <span class="custom-link-wrapper">
-                                            <a class="custom-link" (click)="toCouriers()">{{ getCardCount('Couriers')
-                                                }}</a>
-                                        </span>
+                  <ul class="dropdown-menu dropdown-menu-end" style="width: 100%" aria-labelledby="typeDropdown">
+                    <li>
+                      <button class="dropdown-item" [class.active]="selectedType === 2" (click)="selectType(2, 'Perso')">Perso</button>
+                    </li>
+                    <li>
+                      <button class="dropdown-item" [class.active]="selectedType === 3" (click)="selectType(3, 'Insta')">Insta</button>
+                    </li>
+                  </ul>
+                </div>
+              }
 
-                                    </ng-container>
-                                    <ng-template #showUser>
-                                        <span class="custom-link">{{ getCardCount('Couriers') }}</span>
-                                    </ng-template>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card" style="border-left: 5px solid #CD5C5C;">
-                        <div class="card-body row">
-                            <div class="col-3 icon-box">
-                                <i class="bi bi-people-fill icon" style="color: #CD5C5C;"></i>
-                            </div>
-                            <div class="col-9">
-                                <div class="custom-text-wrapper">
-                                    <span class="custom-text">Employees</span>
-                                    <ng-container *ngIf="rolenum === 3; else showUser">
-                                        <span class="custom-link-wrapper">
-                                            <a class="custom-link" (click)="toUser()">{{ EmployeeCount }}</a>
-                                        </span>
+              <!-- Date picker -->
+              <div style="width: auto">
+                <app-date-picker-invoice
+                  style="border-radius: 8px; font-size: 14px"
+                  [selectedRange]="selectedDateRange"
+                  (dateRangeSelected)="onDateRangeSelected($event)"
+                ></app-date-picker-invoice>
+              </div>
 
-                                    </ng-container>
-                                    <ng-template #showUser>
-                                        <span class="custom-link">{{ EmployeeCount }}</span>
-                                    </ng-template>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card" style="border-left: 5px solid #AEB6BF;">
-                        <div class="card-body row">
-                            <div class="col-3 icon-box">
-                                <i class="ri-links-fill icon" style="color: #AEB6BF;"></i>
-                            </div>
-                            <div class="col-9">
-                                <div class="custom-text-wrapper">
-                                    <span class="custom-text">Webhooks</span>
-                                    <span class="custom-link">{{ getCardCount('Webhooks') }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              <button type="button" class="refresh-btn" (click)="refreshDashboard()">
+                <i class="ri-refresh-line"></i> Refresh
+              </button>
             </div>
+          </div>
         </div>
+
+        <!-- ================= KPI CARDS ================= -->
+        <div class="d-flex justify-content-between">
+          <div>
+            <p class="section-heading">Key performance indicators</p>
+          </div>
+        </div>
+
+        <div class="row sub-card g-3">
+          <!-- Total Orders -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="summary-card total-order" style="background-color: #edeafb">
+              <div class="summary-icon" style="background-color: #8b7ff0"><i class="bi bi-box"></i></div>
+              <div class="summary-body">
+                @if (hasOrder) {
+                  <a class="summary-number" (click)="totalOrders()">{{ getCardCount("Orders") }}</a>
+                } @else {
+                  <span class="summary-number">{{ getCardCount("Orders") }}</span>
+                }
+                <span class="summary-label">Total Orders</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Shipped -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="summary-card sumary-card" style="background-color: #e1f0fc">
+              <div class="summary-icon" style="background-color: #3b9eef"><i class="bi bi-truck"></i></div>
+              <div class="summary-body">
+                @if (hasOrder) {
+                  <a class="summary-number" (click)="shippedOrders()">{{ getCardCount("Shipped") }}</a>
+                } @else {
+                  <span class="summary-number">{{ getCardCount("Shipped") }}</span>
+                }
+                <span class="summary-label">Total Shipped</span>
+                <span class="summary-label" style="color: #3b9af8">
+                  {{ percent(getCardCount("Shipped"), getCardCount("Orders")) }}% of orders
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Delivered -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="summary-card total-deliver" style="background-color: #dff7ec">
+              <div class="summary-icon" style="background-color: #2ecc71"><i class="ri-government-line"></i></div>
+              <div class="summary-body">
+                @if (hasShipments) {
+                  <a class="summary-number" (click)="deliveredOrders()">{{ getCardCount("Delivered") }}</a>
+                } @else {
+                  <span class="summary-number">{{ getCardCount("Delivered") }}</span>
+                }
+                <span class="summary-label">Total Delivered</span>
+                <span class="summary-label text-success">
+                  {{ percent(getCardCount("Delivered"), getCardCount("Shipped")) }}% delivery rate
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Exceptions -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="summary-card total-exception" style="background-color: #fce7ea">
+              <div class="summary-icon" style="background-color: #f2617a"><i class="ri-file-warning-fill"></i></div>
+              <div class="summary-body">
+                @if (hasShipments) {
+                  <a class="summary-number" (click)="exceptionOrders()">{{ getCardCount("Exception") }}</a>
+                } @else {
+                  <span class="summary-number">{{ getCardCount("Exception") }}</span>
+                }
+                <span class="summary-label">Total Exceptions</span>
+                <span class="summary-label text-danger">nobody home, bad address or refuse</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total RTO -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="summary-card total-rto" style="background-color: #edeafb">
+              <div class="summary-icon" style="background-color: #8b7ff0"><i class="bi bi-bootstrap-reboot"></i></div>
+              <div class="summary-body">
+                @if (hasShipments) {
+                  <a class="summary-number" (click)="rtoOrders()">{{ getCardCount("RTO") }}</a>
+                } @else {
+                  <span class="summary-number">{{ getCardCount("RTO") }}</span>
+                }
+                <span class="summary-label">Total RTO</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Couriers (link sirf role 3 ko) -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="summary-card total-courier" style="background-color: #fbf1de">
+              <div class="summary-icon" style="background-color: #f5a623"><i class="ri-takeaway-line"></i></div>
+              <div class="summary-body">
+                @if (isAdmin) {
+                  <a class="summary-number" (click)="totalCouriers()">{{ getCardCount("Couriers") }}</a>
+                } @else {
+                  <span class="summary-number">{{ getCardCount("Couriers") }}</span>
+                }
+                <span class="summary-label">Couriers</span>
+                <span class="summary-label text-warning">Accounts in use</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Employees (link sirf role 3 ko) -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="summary-card total-user" style="background-color: #fceae4">
+              <div class="summary-icon" style="background-color: #f0876b"><i class="bi bi-people-fill"></i></div>
+              <div class="summary-body">
+                @if (isAdmin) {
+                  <a class="summary-number" (click)="totalUsers()">{{ usersCount }}</a>
+                } @else {
+                  <span class="summary-number">{{ usersCount }}</span>
+                }
+                <span class="summary-label">Employees</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Webhooks (user side par sirf count, link nahi) -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="summary-card total-webhooks" style="background-color: #dff6f1">
+              <div class="summary-icon" style="background-color: #26b99a"><i class="ri-links-fill"></i></div>
+              <div class="summary-body">
+                <span class="summary-number">{{ getCardCount("Webhooks") }}</span>
+                <span class="summary-label">Webhooks</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- Graphs -->
+  <!-- ================= STATUS TRACKERS ================= -->
+  <div class="row graph-card g-3 mt-1">
+    <p class="section-heading">Status trackers</p>
 
-<div class="row graph-card">
-    <div class="col">
+    <div class="col-lg-4 col-md-6 col-12">
+      <div class="card graph-card-box">
+        <div class="card-body">
+          <div class="text-wrapper">
+            <span class="custom-text">Order status tracker</span>
+            <div class="graph-content">
+              <app-sellerorder-graph></app-sellerorder-graph>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-12">
+      <div class="card graph-card-box">
+        <div class="card-body">
+          <div class="text-wrapper">
+            <span class="custom-text">Shipment status tracker</span>
+            <div class="graph-content">
+              <app-sellershipments-graph></app-sellershipments-graph>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-12">
+      <div class="card graph-card-box">
+        <div class="card-body">
+          <div class="text-wrapper">
+            <span class="custom-text">Courier wise status</span>
+            <div class="graph-content">
+              <app-sellercourier-graph></app-sellercourier-graph>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TABLES ================= -->
+  <div class="row table-card">
+    @if (hasOrder) {
+      <div class="col">
         <div class="card">
-            <div class="card-body" style="text-align: center;">
-                <div class="text-wrapper">
-                    <span class="custom-text">Order Status Tracker</span>
-                    <app-sellerorder-graph></app-sellerorder-graph>
-                </div>
-            </div>
+          <div class="card-head">Orders</div>
+          <div class="card-body">
+            <table class="table">
+              <thead class="table-head-hover">
+                <tr>
+                  <th scope="col">Bank</th>
+                  <th scope="col">Total Orders</th>
+                  <th scope="col">Requested</th>
+                  <th scope="col">Printed</th>
+                  <th scope="col">Personalized</th>
+                  <th scope="col">Ready to Dispatch</th>
+                  <th scope="col">Shipped</th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let data of sellerwiseData">
+                <tr>
+                  <td>{{ data.name }}</td>
+                  <td>{{ data.orders }}</td>
+                  <td>{{ data.requested }}</td>
+                  <td>{{ data.printed }}</td>
+                  <td>{{ data.personalized }}</td>
+                  <td>{{ data.readyToDispatch }}</td>
+                  <td>{{ data.shipped }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-    </div>
+      </div>
+    }
 
-    <div class="col">
+    @if (hasShipments) {
+      <div class="col">
         <div class="card">
-            <div class="card-body" style="text-align: center;">
-                <div class="text-wrapper">
-                    <span class="custom-text">Shipment Status Tracker</span>
-                    <app-sellershipments-graph></app-sellershipments-graph>
-                </div>
-            </div>
+          <div class="card-head">Shipments</div>
+          <div class="card-body">
+            <table class="table">
+              <thead class="table-head-hover">
+                <tr>
+                  <th scope="col">Bank</th>
+                  <th scope="col">Total Orders</th>
+                  <th scope="col">Pending Pickup</th>
+                  <th scope="col">In Transit</th>
+                  <th scope="col">Out for Delivery</th>
+                  <th scope="col">Delivered</th>
+                  <th scope="col">RTO</th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let data of shipmentwiseData">
+                <tr>
+                  <td>{{ data.name }}</td>
+                  <td>{{ data.orders }}</td>
+                  <td>{{ data.pendingPickup }}</td>
+                  <td>{{ data.inTransit }}</td>
+                  <td>{{ data.ofd }}</td>
+                  <td>{{ data.delivered }}</td>
+                  <td>{{ data.rto }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-    </div>
-
-    <div class="col">
-        <div class="card">
-            <div class="card-body" style="text-align: center;">
-                <div class="text-wrapper">
-                    <span class="custom-text">Courier Wise Status</span>
-                    <app-sellercourier-graph></app-sellercourier-graph>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Tables -->
-
-<div class="row table-card">
-    <div class="col">
-        <div class="card">
-            <div class="card-head">Orders</div>
-            <div class="card-body">
-                <table class="table">
-                    <thead class="table-head-hover">
-                        <tr>
-                            <th scope="col">Bank</th>
-                            <th scope="col">Total Orders</th>
-                            <th scope="col">Requested</th>
-                            <th scope="col">Printed</th>
-                            <th scope="col">Personalized</th>
-                            <th scope="col">Ready to Dispatch</th>
-                            <th scope="col">Shipped</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngFor="let data of sellerwiseData">
-                        <tr>
-                            <td scope="col">{{data.name}}</td>
-                            <td scope="col">{{data.orders}}</td>
-                            <td scope="col">{{data.requested}}</td>
-                            <td scope="col">{{data.printed}}</td>
-                            <td scope="col">{{data.personalized}}</td>
-                            <td scope="col">{{data.readyToDispatch}}</td>
-                            <td scope="col">{{data.shipped}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card">
-            <div class="card-head">Shipments</div>
-            <div class="card-body">
-                <table class="table">
-                    <thead class="table-head-hover">
-                        <tr>
-                            <th scope="col">Bank</th>
-                            <th scope="col">Total Orders</th>
-                            <th scope="col">Pending Pickup</th>
-                            <th scope="col">In Transit</th>
-                            <th scope="col">Out for Delivery</th>
-                            <th scope="col">Delivered</th>
-                            <th scope="col">RTO</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngFor="let data of shipmentwiseData">
-                        <tr>
-                            <td scope="col">{{data.name}}</td>
-                            <td scope="col">{{data.orders}}</td>
-                            <td scope="col">{{data.pendingPickup}}</td>
-                            <td scope="col">{{data.inTransit}}</td>
-                            <td scope="col">{{data.ofd}}</td>
-                            <td scope="col">{{data.delivered}}</td>
-                            <td scope="col">{{data.rto}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+      </div>
+    }
+  </div>
 </div>

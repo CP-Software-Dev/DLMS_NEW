@@ -12,6 +12,8 @@ import { OrderStateService } from '../../services/States/Orders/order-state.serv
 import { ShipmentStateService } from '../../services/States/Shipments/shipment-state.service';
 import { ExceptionStateService } from '../../services/States/Exceptions/exception-state.service';
 import { RtoStateService } from '../../services/States/RTO/rto-state.service';
+import { NavigationEnd, ActivatedRoute } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -19,7 +21,7 @@ import { RtoStateService } from '../../services/States/RTO/rto-state.service';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit {
-
+  pageTitle: string = 'Dashboard';
   data: any;
   username: any;
   fName: any;
@@ -32,6 +34,7 @@ export class HeaderComponent implements OnInit {
   isDropdownOpen: boolean = false;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
+    private route: ActivatedRoute,
     private toastr: ToastrService,
     private refreshservice: RefreshService,
     private http: HttpClient,
@@ -42,7 +45,14 @@ export class HeaderComponent implements OnInit {
     private rtoService : RtoStateService,
     private apiservice: ApiService,
     private dialog: MatDialog,
-    private sellerservice: SellerService) { }
+    private sellerservice: SellerService) {
+
+    // ------- get route data for header title -----------------------
+    this.setPageTitleFromRoute();
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd))
+      .subscribe(() => this.setPageTitleFromRoute());
+  }
 
   ngOnInit(): void {
     this.username = this.sellerservice.getItem('username');
@@ -173,5 +183,25 @@ export class HeaderComponent implements OnInit {
   checkOrderExists(orderID: string) {
     let params = new HttpParams().set('uid', orderID);
     return this.http.get(this.apiservice.OrderDetails, { params });
+  }
+
+
+  // ------- get route data for header title -----------------------
+  private setPageTitleFromRoute(): void {
+    let child = this.route.root.firstChild;
+    while (child?.firstChild) {
+      child = child.firstChild;
+    }
+
+    const titleFromData = child?.snapshot.data?.['title'];
+    if (titleFromData) {
+      this.pageTitle = titleFromData;
+      return;
+    }
+
+    // Fallback: no data.title set on the route yet — derive from the URL
+    const segments = this.router.url.split('?')[0].split('/').filter(Boolean);
+    const last = segments[segments.length - 1] || 'dashboard';
+    this.pageTitle = last.charAt(0).toUpperCase() + last.slice(1);
   }
 }

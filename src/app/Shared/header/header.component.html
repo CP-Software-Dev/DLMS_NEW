@@ -1,61 +1,99 @@
 <div class="head" [ngClass]="getHeadClass()">
-    <nav class="bg-white rounded">
-        <div class="container-fluid" style="max-width: 100%;">
-            <div class="row align-items-center justify-content-between">
+    <nav class="app-header">
 
-                <div class="col-md-7 col-sm-7">
-                    <img class="company-logo" src="assets\Images\CP1.png" alt="Dashboard Image" style="max-width: 100%; height: 40px; width: auto; margin-right: 10px;">
-                </div>
+        <!-- Left: page title -->
+        <div class="app-header-left">
+            <h5 class="app-header-title">{{ pageTitle }}</h5>
+        </div>
 
-                <div class="col-md-3" style="align-items: end;">
-                        <div class="dropdown" style="width: 45%; border-right:none;">
-                            <button class="btn select_btn btn-sm dropdown" type="button" id="moreDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ selectedOption }}
-                                <i class="ri-arrow-down-s-fill dropdown-icon"></i>
+        <!-- Right: search + profile -->
+        <div class="app-header-right">
+
+            <!-- Search bar -->
+            <div class="app-search">
+
+                <div class="app-search-type dropdown">
+                    <button
+                        class="app-search-type-btn"
+                        type="button"
+                        id="moreDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        <i class="ri-search-line"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="moreDropdown">
+                        <li *ngFor="let option of options">
+                            <button
+                                class="dropdown-item"
+                                [class.active]="selectedOption === option"
+                                (click)="selectOption(option)"
+                            >
+                                {{ option }}
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="moreDropdown">
-                                <li *ngFor="let option of options">
-                                    <button class="dropdown-item" [class.active]="selectedOption === option" (click)="selectOption(option)">
-                                        {{ option }}
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                        <input #orderInput type="text" class="form-control form-control-sm" placeholder="Search here" style="height: 33px; padding-bottom: 5px; padding-left: 4px;" autocomplete="off" maxlength="20">
-                        <button class="search-btn btn btn-outline-dark btn-lg" (click)="searchOrder(orderInput.value)"><i class="ri-search-line"></i></button>
+                        </li>
+                    </ul>
                 </div>
 
-                <div class="col-md-2" *ngIf="username && role">
-                    <div class="row" style="width: 100%;">
-                       
-                        <div class="col" style="display: flex; flex-direction: row;">
-                            <div class="col d-flex align-items-center justify-content-end">
-                                <div class="d-flex align-items-center justify-content-end cursor-pointer">
-                                    <app-hellpbtn *ngIf="isNotRoleOne()"></app-hellpbtn>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-end cursor-pointer">
-                                <div style="margin-right: 8px;">
-                                    <div class="username" style="font-size: 16px; font-weight: 700; text-align: end;">{{ fName }}</div>
-                                    <div class="role" style="font-size: 14px; text-align: end;">
-                                        {{ role == 1 ? 'Super Admin' : role == 2 ? 'Admin' : role == 3 ? 'Client' : role == 4 ? 'Client' : 'Unknown Role' }}
-                                    </div>
-                                    
-                                </div>     
-                                <i class="bi bi-person-circle navbar-profile-icon" style="color: #ec1c2c;" (click)="toggleDropdown($event)"></i>           
-                            </div>
-                            
-                            <ul class="dropdown-menu" [ngClass]="{'show': isDropdownOpen}" style="border: 1px solid #95aac9; right: 0; left: auto; cursor: pointer;">
-                                <li><a class="dropdown-item" (click)="chnagePassword()">Change Password</a></li>
-                                <li><a class="dropdown-item" (click)="logout()">Log Out</a></li>
-                            </ul>
+                <input
+                    #orderInput
+                    type="text"
+                    class="app-search-input"
+                    placeholder="Search AWB, order, kit or page"
+                    autocomplete="off"
+                    maxlength="20"
+                    (keyup.enter)="searchOrder(orderInput.value)"
+                />
+
+                <button
+                    type="button"
+                    class="app-search-kbd"
+                    (click)="searchOrder(orderInput.value)"
+                >
+                    &#8984;K
+                </button>
+            </div>
+
+            <!-- Profile -->
+            <div class="app-profile" *ngIf="username && role">
+
+                <div
+                    class="app-help-wrap d-flex align-items-center justify-content-end cursor-pointer"
+                >
+                    <app-hellpbtn *ngIf="isNotRoleOne()"></app-hellpbtn>
+                </div>
+
+                <div
+                    class="app-profile-info cursor-pointer"
+                    (click)="toggleDropdown($event)"
+                >
+                    <div class="app-profile-text">
+                        <div class="app-profile-name">{{ fName }} {{ lName }}</div>
+                        <div class="app-profile-role">
+                            {{ role == 1 ? 'Super Admin' : role == 2 ? 'Admin' : role == 3 ? 'Client' : role == 4 ? 'Client' : 'Unknown Role' }}
                         </div>
                     </div>
-                    
-                    
+                    <div class="app-profile-avatar">
+                        {{ (fName ? fName.charAt(0) : '') + (lName ? lName.charAt(0) : '') }}
+                    </div>
                 </div>
-                
+
+                <ul
+                    class="dropdown-menu"
+                    [ngClass]="{ show: isDropdownOpen }"
+                    style="border: 1px solid #95aac9; right: 0; left: auto; cursor: pointer;"
+                >
+                    <li><a class="dropdown-item" (click)="chnagePassword()">Change Password</a></li>
+                    <li><a class="dropdown-item" (click)="logout()">Log Out</a></li>
+                </ul>
             </div>
+
         </div>
+
     </nav>
 </div>
+
+
+  <!-- <div class="col-md-7 col-sm-7">
+                    <img class="company-logo" src="assets\Images\CP1.png" alt="Dashboard Image" style="max-width: 100%; height: 40px; width: auto; margin-right: 10px;">
+                </div> -->

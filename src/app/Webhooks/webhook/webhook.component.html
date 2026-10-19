@@ -1,76 +1,75 @@
 <div class="card">
-    <div class="card-head">
-        <div class="row">
-            <div class="col-md-6 col-sm-6">
-                <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Webhooks</h5>
-            </div>
-            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
-                <button class="btn btn-outline-dark btn-sm me-3" (click)="navigateToAddWebhook()"> <i
-                        class="bi-plus"></i>
-                    New Webhook</button>
-            </div>
-        </div>
-        <div class="row mt-3">
-            <b>
-                <h6>Webhooks are event notifications sent to URLs of your choice. Use these to receive real time
-                    shipment updates in your system.</h6>
-            </b>
-        </div>
-
+  <div class="page-head">
+    <div class="page-head_text">
+      <h2 class="page-title">Webhooks</h2>
+      <p class="page-sub">
+        Webhooks are event notifications sent to URLs of your choice. Use
+        these to receive real time shipment updates in your system.
+      </p>
     </div>
-    <div class="card-body">
-        <div class="table-row">
-            <table class="table">
-                <thead class="table-head-hover">
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">User</th>
-                        <th scope="col" class="column">URL</th>
-                        <th scope="col">Type</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
-                    </tr>
 
-                </thead>
-                <tbody>
-                    <tr *ngFor="let webhook of webhookdata">
-                        <td scope="col">{{ webhook.webhookName }}</td>
-                        <td scope="col">{{ webhook.sellerName }}</td>
-                        <td class="column" scope="col">{{ webhook.webhookURL }}</td>
-                        <td scope="col">Booking</td>
-                        <td scope="col">
-                            <span class="badge"
-                                [ngClass]="webhook.status === 'Active' ? 'badge-success' : 'badge-danger'">
-                                {{ webhook.status }}
-                            </span>
-                        </td>
-                        <td scope="col-md-2">
-                            <!-- <button class="btn btn-action btn-sm dropdown" style="width: 50%;" type="button" id="moreDropdown"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Action
-                                <i class="ri-arrow-down-s-fill dropdown-icon"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" style="width: 50px;"
-                                aria-labelledby="moreDropdown">
-                                <li>
-                                    <button class="dropdown-item" (click)="editWebhook(webhook.sellerID)">
-                                        Edit
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="dropdown-item" (click)="deleteWebhook(webhook.id)">
-                                        Delete
-                                    </button>
-                                </li>
-                            </ul> -->
+    <button type="button" class="btn-add" (click)="navigateToAddWebhook()">
+      <i class="ri-add-line"></i> New Webhook
+    </button>
+  </div>
 
-                            <button class="btn btn-sm btn-outline-primary" (click)="editWebhook(webhook.sellerID)">
-                               <i class="ri-pencil-fill"></i> Edit
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+  <div class="card-body">
+    <div class="table-row">
+      <table class="table table-borderless webhook-table">
+        <thead class="table-head-hover">
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">User</th>
+            <th scope="col" class="url-col">URL</th>
+            <th scope="col">Type</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let webhook of webhookdata; let i = index">
+            <td>
+              <div class="name-cell">
+                <span class="dot" [ngClass]="'dot--c' + (i % 6)"></span>
+                <span class="cell-name">{{ webhook.webhookName }}</span>
+              </div>
+            </td>
+
+            <td>
+              <span class="cell-muted">{{ webhook.sellerName }}</span>
+            </td>
+
+            <td class="url-col">
+              <span class="cell-muted">{{ webhook.webhookURL }}</span>
+            </td>
+
+            <td>
+              <span class="cap-pill">Booking</span>
+            </td>
+
+            <td>
+              <span
+                class="status-pill"
+                [ngClass]="webhook.status === 'Active' ? 'status-pill--on' : 'status-pill--off'"
+              >
+                <span class="status-dot"></span>
+                {{ webhook.status }}
+              </span>
+            </td>
+
+            <td>
+              <button
+                type="button"
+                class="view-btn"
+                (click)="editWebhook(webhook.sellerID)"
+              >
+                <i class="ri-pencil-fill"></i> Edit
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>

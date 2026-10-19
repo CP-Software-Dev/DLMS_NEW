@@ -1,106 +1,84 @@
 <div class="card">
   <div class="card-head">
     <!-- Card-header elements -->
-
-    <div class="row">
-      <div class="col-md-6 col-sm-6">
-        <h5>
-          <i class="ri-checkbox-blank-fill" style="border: 2px solid black"></i>
-          Pincode Master
-        </h5>
+    <div class="head-row">
+      <div>
+        <h5>Pincode Master</h5>
+        <p class="page-sub">Destination master with courier coverage and volume.</p>
       </div>
-      <div
-        class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center"
-      >
-        <button class="btn btn-outline-dark btn-sm me-3" (click)="openDialog()">
-          <i class="ri-upload-2-line"></i> CSV Upload
-        </button>
-        <button
-          class="btn btn-outline-dark btn-sm me-3"
-          (click)="toggleFiltersForm()"
-        >
-          <i [class]="buttonIcon"></i> {{ buttonText }}
-        </button>
-      </div>
-    </div>
-
-    <div class="form" *ngIf="showFiltersForm" style="margin-top: 30px">
-      <div class="row">
-        <!-- Phone -->
-        <div class="col-md-3">
-          <div class="mb-2">
-            <label for="pincode" class="form-label">Pincode</label>
-            <input
-              type="text"
-              class="form-control form-control-sm"
-              id="pincode"
-              [(ngModel)]="pincode"
-              placeholder="Enter Pincode Here"
-            />
-          </div>
-        </div>
-
-        <div class="col-md-3 d-flex align-items-end">
-          <div class="button-grp mb-2 d-flex justify-content-start">
-            <button
-              class="btn btn-outline-dark btn-sm me-3"
-              type="button"
-              style="
-                background-color: rgb(5, 114, 209);
-                font-size: small;
-                color: white;
-              "
-              (click)="applyFilters()"
-            >
-              Apply
-            </button>
-            <button
-              class="btn btn-danger btn-sm me-3"
-              style="font-size: small; box-shadow: none"
-              (click)="clearFilters()"
-            >
-              Clear
-            </button>
-          </div>
-        </div>
-      </div>
+      <button class="head-btn" (click)="openDialog()">
+        <i class="ri-upload-2-line"></i> CSV Upload
+      </button>
     </div>
   </div>
-</div>
 
-<div class="card-body">
-  <div class="row">
+  <div class="card-body">
+    <div class="filter-bar">
+      <div class="field">
+        <label for="pincode" class="form-label">Pincode</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="pincode"
+          [(ngModel)]="pincode"
+          placeholder="Enter Pincode Here"
+        />
+      </div>
+
+      <div class="filter-actions">
+        <button class="apply-btn" type="button" (click)="applyFilters()">
+          Apply
+        </button>
+        <button class="clear-btn" type="button" (click)="clearFilters()">
+          Clear
+        </button>
+      </div>
+    </div>
+
     <div class="table-row">
       <table class="table">
         <thead class="table-head-hover">
-          <th scope="col">ID</th>
-          <th scope="col">Pincode</th>
-          <th scope="col">City</th>
-          <th scope="col">Updated By</th>
-          <th scope="col">Updated At</th>
+          <tr>
+            <th scope="col">Pincode</th>
+            <th scope="col">Place</th>
+            <th scope="col">Metro</th>
+            <th scope="col">Couriers serving</th>
+            <th scope="col">ODA</th>
+            <th scope="col" class="num">Orders shipped</th>
+            <th scope="col">Updated</th>
+          </tr>
         </thead>
 
         <tbody>
           <tr *ngFor="let data of pincodeData">
-            <td>{{ data.id }}</td>
-            <td>{{ data.pincode }}</td>
-            <td>{{ data.city }}</td>
-            <td>{{ data.updatedBy }}</td>
-            <td>{{ data.updatedAt | date: "dd-MM-yyyy" }}</td>
+            <td>
+              <span class="pin">{{ data.pincode }}</span>
+              <i
+                class="ri-file-copy-line copy-icon"
+                (click)="copyPincode(data.pincode)"
+              ></i>
+            </td>
+            <td><span class="place-name">{{ data.city }}</span></td>
+            <td><span class="cell-muted">not yet</span></td>
+            <td><span class="cell-muted">not yet</span></td>
+            <td><span class="cell-muted">not yet</span></td>
+            <td class="num"><span class="cell-muted">not yet</span></td>
+            <td>{{ data.updatedAt | date: "dd MMM yyyy" }}</td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <!-- Pagination  -->
+    <div class="paginator-wrap">
+      <app-paginator
+        [length]="totalOrders"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+        [pageIndex]="pageIndex"
+        (page)="handlePageEvent($event)"
+      >
+      </app-paginator>
+    </div>
   </div>
-
-  <!-- Pagination  -->
-
-  <app-paginator
-    [length]="totalOrders"
-    [pageSize]="pageSize"
-    [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
-    [pageIndex]="pageIndex"
-    (page)="handlePageEvent($event)"
-  >
-  </app-paginator>
 </div>

@@ -3,13 +3,15 @@
     <div class="row">
       <div class="col-md-6 col-sm-6">
         <h5>
-          <i class="ri-checkbox-blank-fill icon-box"></i>
           AWB Finder
         </h5>
       </div>
       <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
       </div>
     </div>
+    <p class="page-sub">
+      Drag and drop an Excel file of old AWBs to get each one mapped to its new AWB.
+    </p>
   </div>
 
   <div class="card-body">
@@ -19,7 +21,7 @@
       <div class="row">
         <div class="col-md-12 d-flex">
 
-          <div class="card inner-card w-100">
+          <div class="inner-card w-100">
             <h3 class="title">Upload Excel File</h3>
             <p class="subtitle">
               Upload a .xlsx or .xls file with old AWB numbers in the first column
@@ -49,7 +51,7 @@
       <!-- ROW 2 → How it works -->
       <div class="row mt-3">
         <div class="col-md-12 d-flex">
-          <div class="card info-card w-100">
+          <div class="info-card w-100">
             <h4>How it works</h4>
             <ol>
               <li>Prepare an Excel file with old AWB numbers in the first column</li>
@@ -65,7 +67,6 @@
   </div>
 </div>
 
-<!-- ✅ LOADER OVERLAY -->
 <div *ngIf="isUploading" class="upload-overlay">
   <div class="loader-box">
     <div class="spinner"></div>

@@ -1,70 +1,134 @@
 .reports-container {
-    display: flex;
-    padding: 20px;
-    gap: 20px; /* Add some space between the columns */
-  }
-  
-  .created-reports-list {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
-    flex: 2.5; /* Use 2.5 parts of the flex container */
-  }
-  
-  .create-report {
-    border-radius: 5px;
-    padding: 20px;
-    flex: 7.5; /* Use 7.5 parts of the flex container */
-  }
-  
-  .title {
-    font-size: 1.5em;
-    font-weight: 600;
-    display: block;
-    margin-bottom: 10px;
-  }
-  
-  .subtitle {
-    font-size: 1em;
-    font-weight: 500;
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .report-category {
-    margin-bottom: 20px;
-  }
+  display: flex;
+  padding: 15px 12px 32px;
+  gap: 20px;
+  background-color: var(--bg-page);
+  margin-left: -10px;
+  margin-right: -10px;
+}
 
+.created-reports-list {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  flex: 2.5;
+}
 
-  .reports-link{
-    color: #007bff;
-    cursor: pointer;
-  }
-  
-  ul {
-    list-style-type: disc;
-    padding-left: 0;
-  }
-  
-  .report-icon{
-    margin-right: 5px;
-  }
-  li {
-    margin-bottom: 5px;
-    margin-left: 30px;
-    font-size: 0.9em;
-  }
-  
-  a {
-    text-decoration: none;
-    color: #007bff;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-  
-  .create-report p {
-    margin-bottom: 20px;
-  }
-  
+.rp-header h1 {
+  margin: 0 0 6px;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-align: left;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+}
+
+.rp-header p {
+  margin: 10px 0 18px;
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.3px;
+  text-align: left;
+  color: var(--text-muted);
+  font-family: var(--font-family);
+}
+
+.create-report {
+  border-radius: 5px;
+  padding: 20px;
+  flex: 7.5; /* Use 7.5 parts of the flex container */
+}
+
+.title {
+  font-size: 1.5em;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 1em;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.report-category {
+  margin-bottom: 20px;
+}
+
+.reports-link {
+  color: #007bff;
+  cursor: pointer;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 0;
+}
+
+.report-icon {
+  margin-right: 5px;
+}
+
+li {
+  margin-bottom: 5px;
+  margin-left: 30px;
+  font-size: 0.9em;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.create-report p {
+  margin-bottom: 20px;
+}
+
+/* ---------- Report type switch (Order / Shipment) ---------- */
+.report-options {
+  margin-bottom: 20px;
+}
+
+.rp-segment {
+  display: inline-flex;
+  padding: 4px;
+  gap: 2px;
+  background: var(--bg-segment, #eff0f7);
+  border-radius: var(--radius-pill, 999px);
+}
+
+.rp-segment button {
+  border: 0;
+  background: transparent;
+  padding: 8px 20px;
+  font-family: var(--font-family);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-muted);
+  border-radius: var(--radius-pill, 999px);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.rp-segment button:hover:not(.active) {
+  color: var(--text-secondary);
+}
+
+.rp-segment button.active {
+  background: var(--white);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(26, 26, 46, 0.12);
+}
+
+.rp-segment button:focus-visible {
+  outline: 2px solid var(--accent-violet);
+  outline-offset: 2px;
+}

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit,ViewEncapsulation } from "@angular/core";
 import {
   trigger,
   state,
@@ -17,35 +17,35 @@ import { MatDialogRef } from "@angular/material/dialog";
 import { ApiService } from "../../services/api.service";
 import { RefreshService } from "../../services/refresh.service";
 
-import { Subscription } from "rxjs";
 @Component({
   selector: "app-order-upload",
   templateUrl: "./order-upload.component.html",
   styleUrl: "./order-upload.component.css",
+  encapsulation: ViewEncapsulation.None,
   animations: [
     trigger("fadeSlideInOut", [
       state(
         "void",
         style({
           opacity: 0,
-          transform: "translateY(-50%)",
+          transform: "translateX(100%)",
         })
       ),
       transition("void => *", [
         animate(
-          "700ms ease",
+          "200ms ease",
           style({
             opacity: 1,
-            transform: "translateY(0)",
+            transform: "translateX(0)",
           })
         ),
       ]),
       transition("* => void", [
         animate(
-          "300ms ease",
+          "200ms ease",
           style({
             opacity: 0,
-            transform: "translateY(-50%)",
+            transform: "translateX(100%)",
           })
         ),
       ]),
@@ -69,7 +69,8 @@ export class OrderUploadComponent implements OnInit, OnDestroy {
 
   lotId: string = "";
   showLotId: boolean = false;
-
+ // ------------- darg and drop file --------------
+  isDragOver: boolean = false;
   ngOnInit(): void {
     this.loadSellerData();
   }
@@ -145,54 +146,92 @@ export class OrderUploadComponent implements OnInit, OnDestroy {
   //   }
   // }
 
+ 
+
   uploadFile() {
+    if (this.file && this.sellerId) {
+      let lotIdValue = 0; // integer default
 
-    if (!this.file) {
-      this.toastr.error("Please select a file.", "Validation");
-      return;
-    }
+      if (this.showLotId) {
+        if (!this.lotId || this.lotId.trim() === '') {
+          this.toastr.error('Please enter Lot ID', 'Validation');
+          return;
+        }
 
-    // Seller validation
-    if (!this.sellerId) {
-      this.toastr.error("Please select a seller.", "Validation");
-      return;
-    }
+        if (!/^\d+$/.test(this.lotId.trim())) {
+          this.toastr.error('Lot ID must be an integer number', 'Validation');
+          return;
+        }
 
-    let lotIdValue = 0; // integer default
-
-    if (this.showLotId) {
-      if (!this.lotId || this.lotId.trim() === "") {
-        this.toastr.error("Please enter Lot ID", "Validation");
-        return;
+        lotIdValue = parseInt(this.lotId.trim(), 10);
       }
 
-      if (!/^\d+$/.test(this.lotId.trim())) {
-        this.toastr.error("Lot ID must be an integer number", "Validation");
-        return;
-      }
+      const formData: FormData = new FormData();
+      formData.append('file', this.file, this.file.name);
 
-      lotIdValue = parseInt(this.lotId.trim(), 10);
+      const url = `${this.apiservice.UploadOrders}?file=${this.file.name}`;
+
+      const headers = new HttpHeaders({
+        Accept: 'application/json',
+      });
+
+      this.http.post(url, formData, { headers }).subscribe((res: any) => {
+        if (res.status) {
+          this.toastr.success('File Uploaded Successfully.', 'Success');
+          this.dialogRef.close();
+          this.refreshservice.triggerRefresh();
+        } else {
+          this.toastr.error(res.errors, 'Failure');
+        }
+      });
     }
-
-    const formData: FormData = new FormData();
-    formData.append("file", this.file, this.file.name);
-
-    const url = `${this.apiservice.UploadOrders}?file=${this.file.name}&institutionId=${this.sellerId}&lotId=${lotIdValue}`;
-
-    const headers = new HttpHeaders({
-      Accept: "application/json",
-    });
-
-    this.http.post(url, formData, { headers }).subscribe((res: any) => {
-      if (res.status) {
-        this.toastr.success("File Uploaded Successfully.", "Success");
-        this.dialogRef.close();
-        this.refreshservice.triggerRefresh();
-      } else {
-        this.toastr.error(res.errors, "Failure");
-      }
-    });
   }
+
+
+  // ------------ dragondrop code is here--------------
+  private validateAndSetFile(file: File) {
+    if (file) {
+      if (file.type === 'text/csv') {
+        this.selectedFileName = file.name;
+        this.fileSelected = true;
+        this.fileInvalid = false;
+        this.file = file;
+      } else {
+        this.selectedFileName = '';
+        this.fileSelected = false;
+        this.fileInvalid = true;
+        this.file = null;
+      }
+    } else {
+      this.selectedFileName=""
+      this.fileSelected=false;
+      this.fileInvalid= true;
+      this.file=file
+    }
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = true;
+  }
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+  }
+    // ------- get input drag and drop file------------
+    onFileDrop(event:DragEvent){
+      event.preventDefault()
+      event.stopPropagation();
+      this.isDragOver=false
+      const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.validateAndSetFile(files[0]);
+    }
+    }
+  
+
 
   closeDialog() {
     this.dialogRef.close();

@@ -1,43 +1,185 @@
 <div class="card" [@fadeSlideInOut]>
-    <div class="card-head">
-        <div class="row">
-            <div class="col">
-                Bulk Orders Upload
-            </div>
-            <div class="col close-form">
-                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
-            </div>
-        </div>
+  <!-- Header -->
+  <div class="card-head">
+    <div class="row align-items-start">
+      <div class="col">
+        <h2 class="modal-title">RTO upload</h2>
+        <p class="modal-subtitle">Upload an RTO CSV file for processing.</p>
+      </div>
+      <div class="col-auto close-form">
+        <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <!-- Top options -->
+    <div class="row remake_first">
+      <!-- Institute (only for admin roles) -->
+      <div class="col-6 mb-3" *ngIf="userRole < 3">
+        <label for="sellerName" class="form-label"
+          >Institute <span class="required">*</span></label
+        >
+        <select class="form-select" id="sellerName" [(ngModel)]="sellerId">
+          <option value="" selected>Select Seller</option>
+          <option *ngFor="let seller of sellerData" [value]="seller.id">
+            {{ seller.name }}
+          </option>
+        </select>
+        <i class="ri-arrow-down-s-line custom-select-arrow"></i>
+      </div>
+
+      <div class="col-6 mb-3">
+        <label for="importKind" class="form-label"
+          >Import kind <span class="required">*</span></label
+        >
+        <select class="form-select" id="importKind" [(ngModel)]="importKind">
+          <option value="logistics">Logistics</option>
+        </select>
+        <i class="ri-arrow-down-s-line custom-select-arrow"></i>
+      </div>
+
+      <div class="col-6 mb-3">
+        <label for="orderCategory" class="form-label"
+          >Order category <span class="required">*</span></label
+        >
+        <select
+          class="form-select"
+          id="orderCategory"
+          [(ngModel)]="orderCategory"
+        >
+          <option value="perso">Perso - personalised, to customers</option>
+          <option value="insta">Insta - bulk parcel to the bank</option>
+        </select>
+        <i class="ri-arrow-down-s-line custom-select-arrow"></i>
+      </div>
+
+      <div class="col-6 mb-3">
+        <label for="lotId" class="form-label">Lot ID</label>
+        <input
+          type="text"
+          id="lotId"
+          class="form-control"
+          [(ngModel)]="lotId"
+          placeholder="optional"
+          style="background: #f6f6f7"
+        />
+      </div>
     </div>
 
-    <div class="card-body">
-        <div class="row mb-3">
-            <div class="col">
-                <div class="input-group">
-                    <input class="form-control" type="text" [value]="selectedFileName" readonly>
-                    <input #fileInput type="file" style="display:none;" (change)="onFileSelected($event)">
-                    <button class="btn btn-browse" type="button" (click)="fileInput.click()">Select File</button>
-                </div>
-                <div *ngIf="fileInvalid" class="text-danger mt-2">Invalid file format. Please select a .csv file.</div>
-            </div>
+    <hr class="section-divider" />
+
+    <!-- File Drop Zone -->
+    <div class="row mb-3">
+      <div class="col">
+        <div class="selection-line-container">
+          <label class="form-label section-label">FILE</label>
+          <span class="driver-line"></span>
         </div>
-        <div class="row mb-3" *ngIf="userRole < 3">
-            <div class="col ">
-                    <label for="sellerName" class="form-label" style="font-weight: 600;">Company Name</label>
-                    <select class="form-select form-select-sm mb-2" id="sellerName"  [(ngModel)]="sellerId">
-                        <option value = "" selected>Select Seller</option>
-                        <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
-                    </select>
-            </div>
+        <div
+          class="drop-zone"
+          [class.drag-over]="isDragOver"
+          [class.file-invalid]="fileInvalid"
+          (click)="fileInput.click()"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onFileDrop($event)"
+        >
+          <input
+            #fileInput
+            type="file"
+            accept=".csv"
+            style="display: none"
+            (change)="onFileSelected($event)"
+          />
+          <div class="drop-icon">
+            <i class="ri-upload-2-fill"></i>
+          </div>
+          <div class="drop-text" *ngIf="!selectedFileName">
+            Drop the RTO CSV here
+          </div>
+          <div class="drop-text" *ngIf="selectedFileName">
+            {{ selectedFileName }}
+          </div>
+          <div class="drop-subtext">or click to browse · .csv up to 20 MB</div>
         </div>
-        
-        <div class="row justify-content-end">
-            <button class="col-2 btn btn-outline-success btn-sm" (click)="uploadFile()" [disabled]="!fileSelected"><b>Upload</b></button>
-            <button class="col-2 btn btn-outline-danger btn-sm" (click)="closeDialog()"><b>Close</b></button>
+        <div *ngIf="fileInvalid" class="text-danger mt-2">
+          {{ errorMessage }}
         </div>
-        <div class="row download-csv">
-            
-            <a href="/assets/File_format/RTO_Sample_File.csv" download="Sample_RTO.csv"><i  class="ri-download-2-fill"></i> Download CSV Format</a>
-        </div>
+      </div>
     </div>
+
+    <hr class="section-divider" />
+
+    <!-- Expected Format and download button -->
+    <div class="row mb-2">
+      <div class="col d-flex align-items-center gap-2">
+        <span class="section-label">EXPECTED FORMAT</span>
+        <a
+          class="download-sample"
+          href="/assets/File_format/RTO_Sample_File.csv"
+          download="Sample_RTO.csv"
+        >
+          <i class="ri-download-2-fill"></i> Download sample
+        </a>
+        <div class="download-line">
+          <span class="line"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-container mt-3">
+      <table class="format-table table">
+        <thead class="table-head">
+          <tr>
+            <th>Column</th>
+            <th>Required</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let col of expectedColumns">
+            <td class="collumn_name">
+              {{ col.name }}
+              <p class="col-subtext" *ngIf="col.note">{{ col.note }}</p>
+            </td>
+            <td>
+              <span
+                [class.required-text]="col.required"
+                [class.optional-text]="!col.required"
+              >
+                {{ col.required ? "Required" : "Optional" }}
+              </span>
+            </td>
+            <td class="example-text">{{ col.example }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Warning message -->
+    <div class="warning-info">
+      <i class="ri-alert-fill warning-icon"></i>
+      <p>
+        The same file is never processed twice — it is fingerprinted on upload.
+        Rows that fail validation are rejected individually and listed on the
+        Import list, so one bad row never blocks the rest.
+      </p>
+    </div>
+  </div>
+
+  <div class="row justify-content-end footer-buttons">
+    <div class="col-auto">
+      <button class="btn btn-cancel" (click)="closeDialog()">Cancel</button>
+    </div>
+    <div class="col-auto">
+      <button
+        class="btn btn-upload"
+        (click)="uploadFile()"
+        [disabled]="!fileSelected"
+      >
+        <i class="ri-upload-2-fill"></i> Upload and process
+      </button>
+    </div>
+  </div>
 </div>

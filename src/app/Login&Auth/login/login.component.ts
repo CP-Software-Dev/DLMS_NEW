@@ -31,6 +31,8 @@ export class LoginComponent {
   }
 
   login() {
+
+    debugger;
     if (isPlatformBrowser(this.platformId)) {
       const emailInput = (document.getElementById('email') as HTMLInputElement);
       const passwordInput = (document.getElementById('password') as HTMLInputElement);

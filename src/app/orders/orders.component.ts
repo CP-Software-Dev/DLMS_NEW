@@ -1,11 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   trigger,
   state,
@@ -20,13 +13,21 @@ import { OrderUploadComponent } from '../Dialog/order-upload/order-upload.compon
 import { ChangestatusDialogComponent } from '../Dialog/changestatus-dialog/changestatus-dialog.component';
 import { Router } from '@angular/router';
 import { BulkshipComponent } from '../Dialog/bulkship/bulkship.component';
+import { WebhookViewComponent } from '../Dialog/webhook-view/webhook-view.component';
 import { ApiService } from '../services/api.service';
+import { SellerService } from '../services/seller.service';
 import { Subscription } from 'rxjs';
 import { RefreshService } from '../services/refresh.service';
 import { OrderStateService } from '../services/States/Orders/order-state.service';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
+
 interface StatusData {
+  id: number;
+  name: string;
+  shortName?: string;
+  description?: string | null;
+  createdAt?: string;
   role: number;
 }
 
@@ -46,12 +47,21 @@ interface StatusData {
     ]),
   ],
 })
-export class OrdersComponent implements OnInit {
-  //@Input() showFiltersForm: boolean = false;
+export class OrdersComponent implements OnInit, OnDestroy {
+  // ---------- role / view ----------
+  rolenum = 0;
+  isAdminView = false; // role 1, 2 => admin side
+  basePath: 'admin' | 'user' = 'user';
+  private userSellerId: any = 0; // user view only (localStorage "seller")
+
   showFiltersForm: boolean = false;
   buttonText: string = 'Filters';
   buttonIcon: string = 'ri-filter-fill';
   orders: any[] = [];
+
+  // Full unfiltered status master list (all 19 statuses from API)
+  allStatusData: any[] = [];
+  // Top card menu statuses (role === 1)
   statusData: any[] = [];
   paginatedOrders: any[] = [];
   currentFilters: any = {};
@@ -79,7 +89,42 @@ export class OrdersComponent implements OnInit {
     startDate: '',
     endDate: '',
   };
+
+  // -------------- baseTotalOrders for color label percentage --------------------
+  baseTotalOrders: number = 0;
   private refreshSubscription?: Subscription;
+
+  // ============================================================
+  // SHIPPED SUB-STATUS GROUP
+  // ============================================================
+  shippedSubStatusIds: number[] = [5, 6, 7, 8, 9, 10, 11, 12, 14, 15];
+
+  // Derived list (id + name) used to render the pills in the template.
+  shippedSubStatuses: any[] = [];
+
+  private shippedPillColors: { [id: number]: { tone: string; light: string } } = {
+    5: { tone: '#7c6df7', light: '#f2eefc' }, // All Shipped        - violet
+    6: { tone: '#9aa0ac', light: '#f1f2f4' }, // Booked             - grey
+    7: { tone: '#f5a623', light: '#fff4e2' }, // Waiting for Pickup - orange
+    8: { tone: '#2f6fed', light: '#eaf1ff' }, // In Transit         - blue
+    9: { tone: '#14b8a6', light: '#e6faf7' }, // Out for Delivery   - teal
+    10: { tone: '#16a34a', light: '#e9f9f1' }, // Delivered         - green
+    11: { tone: '#fa2048', light: '#fde8ec' }, // Exception         - red
+    12: { tone: '#8b5cf6', light: '#f2eefc' }, // RTO In Transit    - purple
+    14: { tone: '#b8a6f5', light: '#f5f2fd' }, // RTO Delivered     - light purple
+    15: { tone: '#e11d48', light: '#fde6ea' }, // Lost              - deep red
+  };
+
+  getShippedPillTone(statusId: number): string {
+    return (this.shippedPillColors[statusId] || this.shippedPillColors[5]).tone;
+  }
+
+  // Returns the pale background color shown before the pill is clicked.
+  getShippedPillLight(statusId: number): string {
+    return (this.shippedPillColors[statusId] || this.shippedPillColors[5]).light;
+  }
+
+  statusCounts: { [id: number]: number } = {};
 
   constructor(
     private apiservice: ApiService,
@@ -90,14 +135,8 @@ export class OrdersComponent implements OnInit {
     private toastr: ToastrService,
     private ordersStateService: OrderStateService,
     private route: ActivatedRoute,
+    private sellerService: SellerService,
   ) {
-    // const startDate = "01-01-2024";
-    // const currentDate = new Date();
-    // this.selectedDateRange = {
-    //   startDate: this.formatDate(startDate),
-    //   endDate: this.formatDate(currentDate.toISOString()),
-    // };
-
     const endDate = new Date(); // Today
     const startDate = new Date(); // Clone today
     startDate.setDate(startDate.getDate() - 29); // Last 30 days
@@ -108,7 +147,41 @@ export class OrdersComponent implements OnInit {
     };
   }
 
+  // ================= role helpers =================
+  private initRole(): void {
+    this.rolenum = Number(this.sellerService.getItem('role'));
+    this.isAdminView = this.rolenum === 1 || this.rolenum === 2;
+    this.basePath = this.isAdminView ? 'admin' : 'user';
+    if (!this.isAdminView) {
+      this.userSellerId = this.sellerService.getItem('seller');
+    }
+  }
+
+  // checkbox column + bulk actions sirf admin side par
+  get showSelect(): boolean {
+    return (
+      this.isAdminView &&
+      this.isActive !== 'All' &&
+      this.isActive !== '5' &&
+      this.isActive !== '4' &&
+      this.isActive != 'AWB_Success'
+    );
+  }
+
+  // admin: optional institute filter | user: hamesha apni seller id
+  private applySellerParam(params: HttpParams, sellerId: any): HttpParams {
+    if (!this.isAdminView) {
+      return params.set('sellerID', this.userSellerId);
+    }
+    if (sellerId && sellerId !== '0') {
+      return params.set('sellerId', sellerId);
+    }
+    return params;
+  }
+
   ngOnInit(): void {
+    this.initRole();
+
     this.isSelectAllChecked = false;
     this.route.queryParams.subscribe((params) => {
       this.initializeFiltersFromParams(params);
@@ -126,7 +199,9 @@ export class OrdersComponent implements OnInit {
 
     this.applyFilters();
     this.fetchOrders(this.pageIndex, this.pageSize);
-    this.loadSellerData();
+    if (this.isAdminView) {
+      this.loadSellerData(); // institute dropdown sirf admin ko
+    }
     this.loadCourierData();
     this.loadStatus();
 
@@ -142,7 +217,8 @@ export class OrdersComponent implements OnInit {
       return;
     }
 
-    if (params['sellerId']) {
+    // user ke liye seller fixed hai, query param se change nahi hoga
+    if (this.isAdminView && params['sellerId']) {
       this.sellerId = params['sellerId'];
     }
 
@@ -186,8 +262,17 @@ export class OrdersComponent implements OnInit {
 
   loadStatus(): void {
     this.http.get<any>(this.apiservice.StatusData).subscribe((response) => {
-      this.statusData = response.data.filter(
+      // Full master list (all statuses, e.g. 19 items)
+      this.allStatusData = response.data || [];
+
+      // Top card menu (role === 1)
+      this.statusData = this.allStatusData.filter(
         (item: StatusData) => item.role === 1,
+      );
+
+      // Shipped sub-status pills, labels backend se
+      this.shippedSubStatuses = this.allStatusData.filter((item: any) =>
+        this.shippedSubStatusIds.includes(item.id),
       );
     });
   }
@@ -200,13 +285,32 @@ export class OrdersComponent implements OnInit {
     });
   }
 
-  //--------Bank Data
+  //--------Bank Data (admin only)
 
   loadSellerData(): void {
     this.http.get<any>(this.apiservice.SellerData).subscribe((response) => {
       this.sellerData = response.data;
     });
   }
+
+  // ============================================================
+  // ORDER STATUS BADGE COLORS (the "statusbtn" pill in the table)
+  // ============================================================
+  private statusColorMap: { [status: string]: { bg: string; color: string } } = {
+    Requested: { bg: '#E0EFFE', color: '#0D6EFD' },
+    Delivered: { bg: '#DCF6EF', color: '#16A34A' },
+    'Waiting for Pickup': { bg: '#FDEDD3', color: '#F59E0B' },
+    Printed: { bg: '#F2F3F9', color: '#6B7280' },
+    Personalized: { bg: '#56DCCB', color: '#FFFFFF' },
+    'Ready To Dispatch': { bg: '#F2F3F9', color: '#6B7280' },
+    'RTO Received': { bg: '#EDE8FE', color: '#7C3AED' },
+    Held: { bg: '#FDE6EA', color: '#FA2048' },
+  };
+
+  getStatusColor(status: string): { bg: string; color: string } {
+    return this.statusColorMap[status] || { bg: '#E0EFFE', color: '#0D6EFD' };
+  }
+
   isActive: string = 'All';
 
   getCountByStatusId(statusId: number): number {
@@ -224,11 +328,19 @@ export class OrdersComponent implements OnInit {
       case 20:
         return this.rto;
       default:
-        return 0;
+        // Sub-statuses under the Shipped group (6,7,8,9,10,11,12,14,15)
+        return this.statusCounts[statusId] || 0;
     }
   }
 
-  //--------Daata for table
+  // True when the active filter is the Shipped umbrella or any sub-status.
+  isShippedGroupActive(): boolean {
+    return this.shippedSubStatusIds
+      .map((id) => id.toString())
+      .includes(this.isActive);
+  }
+
+  //--------Data for table
   loading: boolean = false;
 
   fetchOrders(
@@ -252,9 +364,7 @@ export class OrdersComponent implements OnInit {
     if (filters.kitnumber) {
       params = params.set('kitnumber', filters.kitnumber);
     }
-    if (filters.sellerId && filters.sellerId !== '0') {
-      params = params.set('sellerId', filters.sellerId);
-    }
+    params = this.applySellerParam(params, filters.sellerId);
     if (filters.awbnumber) {
       params = params.set('awb', filters.awbnumber);
     }
@@ -303,6 +413,20 @@ export class OrdersComponent implements OnInit {
           this.shipped = res.data.shipped || 0;
           this.rto = res.data.rto || 0;
           this.paginatedOrders = this.orders;
+
+          // Per-status counts for Shipped sub-status pills (6,7,8,9,10,11,12,14,15).
+          // Shape A: res.data.statusCounts = [{ id: 6, count: 12 }, ...]
+          if (res.data.statusCounts && Array.isArray(res.data.statusCounts)) {
+            this.statusCounts = {};
+            res.data.statusCounts.forEach((item: any) => {
+              this.statusCounts[item.id ?? item.statusId] =
+                item.count ?? item.total ?? 0;
+            });
+          }
+        }
+        // ---------- it is only for color level----------
+        if (!filters.statusId) {
+          this.baseTotalOrders = res.data.total;
         }
         this.loading = false;
       },
@@ -332,9 +456,7 @@ export class OrdersComponent implements OnInit {
         params = params.set('cardId', this.currentFilters.cardId);
       }
 
-      if (this.currentFilters.sellerId) {
-        params = params.set('sellerId', this.currentFilters.sellerId);
-      }
+      params = this.applySellerParam(params, this.currentFilters.sellerId);
 
       if (this.currentFilters.courierId) {
         params = params.set('courierId', this.currentFilters.courierId);
@@ -375,7 +497,7 @@ export class OrdersComponent implements OnInit {
         params = params.set('phone', this.currentFilters.phone);
       }
 
-      // 🚀 SINGLE API CALL
+      // ---------------- API calling ---------------------
       this.http.get(this.apiservice.OrdersExport, { params }).subscribe(
         (res: any) => {
           if (res.status) {
@@ -411,7 +533,8 @@ export class OrdersComponent implements OnInit {
         .map((id) => id.trim());
     }
 
-    if (this.sellerId) {
+    // institute filter sirf admin ke liye
+    if (this.isAdminView && this.sellerId) {
       this.currentFilters.sellerId = this.sellerId;
     }
 
@@ -453,14 +576,7 @@ export class OrdersComponent implements OnInit {
     this.currentFilters = {};
     this.courierId = '';
     this.kitnumber = '';
-    // const startDate = "01-01-2024";
-    // const currentDate = new Date();
-    // this.selectedDateRange = {
-    //   startDate: this.formatDate(startDate),
-    //   endDate: this.formatDate(currentDate.toISOString()),
-    // };
-    // this.currentFilters.startDate = this.selectedDateRange.startDate;
-    // this.currentFilters.endDate = this.selectedDateRange.endDate;
+
     const currentDate = new Date();
     const startDate = new Date(); // Clone today
     startDate.setDate(startDate.getDate() - 29);
@@ -490,7 +606,7 @@ export class OrdersComponent implements OnInit {
     return `${customer}\n${filteredParts.join(', ')}`;
   }
 
-  //--------Dailog boxes
+  //--------Dialog boxes (admin only)
 
   openDialog(): void {
     this.dialog.open(OrderUploadComponent, {
@@ -498,7 +614,28 @@ export class OrdersComponent implements OnInit {
     });
   }
 
+  // Order ID / View click par right-side dialog (shipment list jaisa)
+  openWebhookDialog(order: any): void {
+    this.dialog.open(WebhookViewComponent, {
+      data: {
+        order: order.orderID,
+        awb: order.awb,
+        shipmentStatus: order.shipmentStatus || order.orderStatus,
+        company: `${order.company} - Perso`,
+      },
+      position: { right: '1%', top: '10px' },
+      height: 'calc(100vh - 40px)',
+      maxHeight: 'calc(100vh - 40px)',
+      width: '700px',
+      maxWidth: '700px',
+      panelClass: 'right-slide-panel',
+      backdropClass: 'remake-blur-backdrop',
+      hasBackdrop: true,
+    });
+  }
+
   openStatusdialog(): void {
+    if (!this.isAdminView) return;
     const selectedOrderIds = this.getSelectedOrderIds();
     const statusID = Number(this.isActive);
     this.dialog.open(ChangestatusDialogComponent, {
@@ -512,8 +649,9 @@ export class OrdersComponent implements OnInit {
   }
 
   rejectOrders(): void {
+    if (!this.isAdminView) return;
     const selectedOrderIds = this.getSelectedOrderIds();
-    
+
     if (!selectedOrderIds || selectedOrderIds.length === 0) {
       Swal.fire({
         icon: 'warning',
@@ -537,7 +675,7 @@ export class OrdersComponent implements OnInit {
           institutionId: 0,
           warehouseID: 0,
           courierID: 0,
-          orderIDs: selectedOrderIds.map(id => id.toString()),
+          orderIDs: selectedOrderIds.map((id) => id.toString()),
           createdBy: '',
         };
 
@@ -564,6 +702,7 @@ export class OrdersComponent implements OnInit {
   }
 
   openBulkShipdialog(): void {
+    if (!this.isAdminView) return;
     const selectedOrderDetails = this.getSelectedOrderDetails();
     this.dialog.open(BulkshipComponent, {
       panelClass: 'rounded-dialog',
@@ -628,16 +767,6 @@ export class OrdersComponent implements OnInit {
 
   //--------Export Order Data
 
-  // exportToCSV() {
-  //   this.fetchAllOrders()
-  //     .then((allOrders) => {
-  //       this.downloadCSV(allOrders);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching orders:", error);
-  //     });
-  // }
-
   exportToCSV(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.fetchAllOrders()
@@ -677,7 +806,7 @@ export class OrdersComponent implements OnInit {
     return csvRows.join('\n');
   }
 
-  //-------Status FIlter
+  //-------Status Filter
 
   applyStatusFilter(statusId: number | null) {
     if (statusId === null) {
@@ -703,7 +832,7 @@ export class OrdersComponent implements OnInit {
     this.fetchOrders(this.pageIndex, this.pageSize, this.currentFilters);
   }
 
-  //--AWB FIlter
+  //--AWB Filter
 
   awbFilter(isAttempted: number, hasAwb: number, status: string = '') {
     this.currentFilters.isAttempted = isAttempted;
@@ -711,21 +840,37 @@ export class OrdersComponent implements OnInit {
     this.currentFilters.statusId = null;
     this.pageIndex = 0;
     this.fetchOrders(this.pageIndex, this.pageSize, this.currentFilters);
-    // this.isActive = '';
     this.isActive = status;
   }
 
-  //------Routes
+  //------Routes (basePath se: admin/... ya user/...)
 
   navigateToImportList() {
-    this.router.navigate(['admin/orders/list']);
+    this.router.navigate(['admin/orders/list']); // admin only
   }
 
   navigateToOrderDetail(orderID: string): void {
-    this.router.navigate(['/admin/orders/details', orderID]);
+    this.router.navigate([`/${this.basePath}/orders/details`, orderID]);
   }
 
   navigateToAwbStatus(awb: string): void {
-    this.router.navigate(['admin/status', awb]);
+    this.router.navigate([`${this.basePath}/status`, awb]);
+  }
+
+  // --------------- get percentage for card label color ------------
+  getPercentage(count: number): number {
+    if (!this.baseTotalOrders) {
+      return 0;
+    }
+    const pct = (count / this.baseTotalOrders) * 100;
+    return pct > 100 ? 100 : pct;
+  }
+
+  getLabelOpacity(count: number): number {
+    if (count === 0) {
+      return 0.65;
+    }
+    const opacity = this.getPercentage(count) / 100;
+    return Math.max(opacity, 0.4);
   }
 }

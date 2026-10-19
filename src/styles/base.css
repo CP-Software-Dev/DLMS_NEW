@@ -1,0 +1,166 @@
+:root {
+ 
+  --bg-page: #f5f6fb;
+  --white: #ffffff;
+
+  --text-primary: #1a1a2e;
+  --text-secondary: #5a5f73;
+  --text-muted: #8a8fa3;
+
+  --border: #edeef5;
+  --border-light: #eff0f5;
+
+  --primary: #8b7ff0;
+  --success: #1f9d55;
+  --danger: #f2617a;
+  --warning: #f5a623;
+  --info: #3b9eef;
+
+  /* ---- extra semantic tokens (icon color + light bg + hover shadow) ---- */
+  --purple: #8b7ff0;
+  --purple-bg: #edeafb;
+  --purple-shadow: #9e8cf0;
+
+  --blue: #3b9eef;
+  --blue-bg: #e1f0fc;
+  --blue-shadow: #8cc1f7;
+
+  --green: #2ecc71;
+  --green-bg: #dff7ec;
+  --green-shadow: #8cf5d9;
+
+  --red: #f2617a;
+  --red-bg: #fce7ea;
+  --red-shadow: #f78da0;
+
+  --violet: #8b7ff0;
+  --violet-bg: #edeafb;
+  --violet-shadow: #a68df1;
+
+  --amber: #f5a623;
+  --amber-bg: #fbf1de;
+  --amber-shadow: #f7c576;
+
+  --orange: #f0876b;
+  --orange-bg: #fceae4;
+  --orange-shadow: #f3a181;
+
+  --teal: #26b99a;
+  --teal-bg: #dff6f1;
+  --teal-shadow: #8cf0e2;
+
+  --pink: #f0679a;
+
+  --navy: #12263f;
+  --accent-violet: #7c5cf0;
+  --accent-violet-dark: #6941e8;
+  --text-faint: #9aa1b1;
+  --bg-input: #f4f5f8;
+  --indigo:#7C6BF5;
+  --sky:#3B9AF8;
+
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 18px;
+
+  /* ---- Pink / Cyan / Lime / Slate (icon + bg + shadow) ---- */
+  --pink-bg: #fdeaf2;
+  --pink-shadow: #f5a3c4;
+
+  --cyan: #22b8cf;
+  --cyan-bg: #e0f6fa;
+  --cyan-shadow: #86dcea;
+
+  --lime: #82c91e;
+  --lime-bg: #eef8dc;
+  --lime-shadow: #bde277;
+
+  --slate: #64748b;
+  --slate-bg: #eceff4;
+  --slate-shadow: #aab4c3;
+
+  /* ---- Status backgrounds (for badges / alerts / toasts) ---- */
+  --success-bg: #dff3e7;
+  --danger-bg: #fde9ed;
+  --warning-bg: #fdf1dc;
+  --info-bg: #e3f1fd;
+
+  /* ---- Darker text shades for use on the light bg above ---- */
+  --success-text: #167a42;
+  --danger-text: #c93a55;
+  --warning-text: #b87908;
+  --info-text: #1f78c4;
+  --purple-text: #5b49d6;
+
+  /* ---- Neutral gray scale ---- */
+  --gray-50: #fafafd;
+  --gray-100: #f4f5f8;
+  --gray-200: #eff0f7;
+  --gray-300: #e6e8f0;
+  --gray-400: #c9cde0;
+  --gray-500: #9aa1b1;
+  --gray-600: #8a8fa3;
+  --gray-700: #5a5f73;
+  --gray-800: #2b2e45;
+  --gray-900: #1a1a2e;
+
+  /* ---- Shipment status colors (badge text + bg) ---- */
+  --st-booked: #3b9eef;
+  --st-booked-bg: #e1f0fc;
+  --st-pickup: #f5a623;
+  --st-pickup-bg: #fbf1de;
+  --st-transit: #7c5cf0;
+  --st-transit-bg: #edeafb;
+  --st-out-delivery: #26b99a;
+  --st-out-delivery-bg: #dff6f1;
+  --st-delivered: #1f9d55;
+  --st-delivered-bg: #dff3e7;
+  --st-exception: #f0876b;
+  --st-exception-bg: #fceae4;
+  --st-rto: #f0679a;
+  --st-rto-bg: #fdeaf2;
+  --st-rto-delivered: #64748b;
+  --st-rto-delivered-bg: #eceff4;
+  --st-lost: #f2617a;
+  --st-lost-bg: #fce7ea;
+  --st-damaged: #c93a55;
+  --st-damaged-bg: #fde9ed;
+
+  /* ---- Surfaces ---- */
+  --bg-head: #fafafd;
+  --bg-hover: #f7f7fc;
+  --bg-segment: #eff0f7;
+  --bg-overlay: rgba(18, 38, 63, 0.45);
+  --border-check: #c9cde0;
+  --border-strong: #d6d9e8;
+
+  /* ---- Gradients ---- */
+  --grad-primary: linear-gradient(135deg, var(--indigo) 0%, var(--sky) 100%);
+  --grad-success: linear-gradient(135deg, #2ecc71 0%, #26b99a 100%);
+  --grad-danger: linear-gradient(135deg, #f2617a 0%, #f0876b 100%);
+  --grad-warning: linear-gradient(135deg, #f5a623 0%, #f0876b 100%);
+  --grad-violet: linear-gradient(135deg, #a68df1 0%, #7c5cf0 100%);
+
+  /* ---- Shadows & focus ---- */
+  --shadow-card: 0 1px 2px rgba(26, 26, 46, 0.04);
+  --shadow-pop: 0 10px 30px -10px rgba(26, 26, 46, 0.2);
+  --shadow-primary: 0 8px 18px -6px rgba(124, 107, 245, 0.55);
+  --shadow-success: 0 8px 18px -6px rgba(46, 204, 113, 0.5);
+  --shadow-danger: 0 8px 18px -6px rgba(242, 97, 122, 0.5);
+  --focus-ring: 0 0 0 3px rgba(139, 127, 240, 0.18);
+
+  /* ---- Extra radii ---- */
+  --radius-xl: 22px;
+  --radius-pill: 999px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-page);
+  font-family: "Nunito Sans", sans-serif;
+  color: var(--text-primary);
+}

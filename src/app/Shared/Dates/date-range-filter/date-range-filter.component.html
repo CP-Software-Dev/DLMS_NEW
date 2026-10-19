@@ -1,0 +1,45 @@
+<div class="drf-wrapper">
+  <!-- Closed trigger -->
+  <div class="drf-trigger" (click)="toggleOpen()">
+    <i class="ri-time-line drf-trigger-icon" aria-hidden="true"></i>
+    <span class="drf-trigger-label">{{ selectedLabel }}</span>
+    <i class="ri-arrow-down-s-line drf-chevron" [class.rotated]="isOpen" aria-hidden="true"></i>
+  </div>
+
+  <!-- Dropdown panel -->
+  <div class="drf-panel" *ngIf="isOpen">
+    <div class="drf-panel-title">Date range</div>
+
+    <div class="drf-preset-grid">
+      <button
+        type="button"
+        class="drf-preset-btn"
+        *ngFor="let preset of presets"
+        [class.active]="pendingLabel === preset.label"
+        (click)="selectPreset(preset.label)"
+      >
+        {{ preset.label }}
+      </button>
+
+      <button
+        type="button"
+        class="drf-preset-btn"
+        [class.active]="pendingLabel === 'Custom range'"
+        (click)="selectPreset('Custom range')"
+      >
+        Custom range
+      </button>
+    </div>
+
+    <div class="drf-custom-row" *ngIf="isCustomSelected">
+      <input type="date" class="drf-custom-input" [(ngModel)]="customStart" />
+      <span class="drf-custom-sep">to</span>
+      <input type="date" class="drf-custom-input" [(ngModel)]="customEnd" />
+    </div>
+
+    <div class="drf-footer">
+      <button type="button" class="drf-btn-cancel" (click)="cancel()">Cancel</button>
+      <button type="button" class="drf-btn-apply" (click)="apply()">Apply</button>
+    </div>
+  </div>
+</div>

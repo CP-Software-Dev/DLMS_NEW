@@ -1,219 +1,409 @@
 <div class="card">
-    <div class="card-head">
-        <div class="row">
-            <div class="col-md-6 col-sm-6">
-                <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> RTO Orders</h5>
-            </div>
-            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
-                <button class="btn btn-outline-dark btn-sm me-3" (click)="uploadRto()">
-                    <i class="ri-upload-2-line"></i> CSV Upload
-                </button>
-                <button class="btn btn-outline-dark btn-sm me-3" (click)="navigateToRtoImportList()">
-                    <i class="ri-list-check"></i> Import List
-                </button>
-                <button class="btn btn-outline-dark btn-sm me-3" [class.active]="isActive === 'Export'"
-                    (click)="exportToCSV()" [disabled]="isExporting">
-                    <span *ngIf="!isExporting">
-                        <i class="ri-export-fill"></i> Export
-                    </span>
-
-                    <span *ngIf="isExporting">
-                        <i class="ri-loader-4-line spin"></i> Exporting...
-                    </span>
-
-                </button>
-                <button class="btn btn-outline-dark btn-sm me-3" [class.active]="isActive === 'buttonText'"
-                    (click)="toggleFiltersForm()"><i [class]="buttonIcon"></i> {{ buttonText
-                    }}</button>
-            </div>
-        </div>
-        <div class="form" style="margin-top: 30px;" *ngIf="showFiltersForm">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="mb-2">
-                        <label for="filterCriteria" class="form-label">From Date:</label>
-                        <!-- <app-datepicker (dateRangeSelected)="onDateRangeSelected($event)"></app-datepicker> -->
-                        <app-date-picker-invoice [selectedRange]="selectedDateRange"
-                            (dateRangeSelected)="onDateRangeSelected($event)"></app-date-picker-invoice>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="mb-2">
-                        <label for="awbNos" class="form-label">AWB NO:</label>
-                        <input type="text" class="form-control form-control-sm" id="awbNos" [(ngModel)]="awbnumber"
-                             placeholder="Enter AWB Nos (comma-separated)">
-                    </div>
-                </div>
-
-
-
-                <div class="col-md-3">
-                    <div class="mb-2">
-                        <label for="shippingPhone" class="form-label">Kit Number</label>
-                        <input type="text" class="form-control form-control-sm" id="phone" [(ngModel)]="kitnumber"
-                            placeholder="Enter Kit Number">
-                    </div>
-                </div>
-
-
-                <div class="col-md-3">
-                    <div class="mb-2">
-                        <label for="sellerName" class="form-label">Bank Name</label>
-                        <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="sellerId">
-                            <option value="" selected>Select Bank</option>
-                            <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
-                        </select>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-
-
-                <div class="col-md-3">
-                    <div class="mb-2">
-                        <label for="courier" class="form-label">Courier:</label>
-                        <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="courierId">
-                            <option value="" selected>Select Courier</option>
-                            <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-3 d-flex align-items-end">
-                    <div class="button-grp mb-2 d-flex justify-content-start">
-                        <button class="btn btn-outline-dark btn-sm me-3" type="button"
-                            style="background-color: rgb(5, 114, 209); font-size: small; color: white;"
-                            (click)="applyFilters()">Apply</button>
-                        <button class="btn btn-danger btn-sm me-3" style="font-size: small; box-shadow: none;"
-                            (click)="clearFilters()">Clear</button>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
+  <div class="row row-head">
+    <div class="col-md-6 col-sm-6">
+      <h5 class="page-title">RTO process</h5>
+      <p class="page-subtitle">
+        Kits that came back. Vault days drive the re-dispatch or destroy
+        decision.
+      </p>
     </div>
+    <div
+      class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center"
+    >
+      <button class="btn btn-outline-dark btn-sm me-3" (click)="uploadRto()">
+        <i class="ri-upload-2-line"></i> CSV Upload
+      </button>
+      <button
+        class="btn btn-outline-dark btn-sm me-3"
+        (click)="navigateToRtoImportList()"
+      >
+        <i class="ri-list-check"></i> Import List
+      </button>
+      <button
+        class="btn btn-outline-dark btn-sm me-3"
+        [class.active]="isActive === 'Export'"
+        (click)="exportToCSV()"
+        [disabled]="isExporting"
+      >
+        <span *ngIf="!isExporting">
+          <i class="ri-export-fill"></i> Export
+        </span>
+
+        <span *ngIf="isExporting">
+          <i class="ri-loader-4-line spin"></i> Exporting...
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <div class="main-container">
     <div class="card-body">
-        <div class="row">
+      <div class="row">
+        <!-- ================= Status cards ================= -->
+        <div class="card_main_container">
+          <button
+            class="card_menu card_menu--all"
+            [class.active]="isActive === 'All'"
+            (click)="applyStatusFilter(null)"
+          >
+            <span class="card_value">{{ allCount }}</span>
+            <span class="card_label">All Returns</span>
+            <span class="card_bar"
+              ><span class="card_bar_fill" style="width: 100%"></span
+            ></span>
+          </button>
 
+          <button
+            *ngFor="let button of statusData; let i = index"
+            class="card_menu"
+            [ngClass]="'card_menu--c' + (i % 6)"
+            [class.active]="isActive === button.id.toString()"
+            (click)="applyStatusFilter(button.id)"
+          >
+            <span class="card_value">{{ getCountByStatusId(button.id) }}</span>
+            <span class="card_label">{{ button.name }}</span>
+            <span class="card_bar">
+              <span
+                class="card_bar_fill"
+                [style.width.%]="getPercentage(getCountByStatusId(button.id))"
+              ></span>
+            </span>
+          </button>
+        </div>
 
+        <!-- ================= Needs attention ================= -->
+        <div class="need-container">
+          <span class="need-title">Needs attention</span>
+          <button
+            type="button"
+            class="need-pill"
+            [class.active]="isActive === '1'"
+            title="kit vault"
+          >
+            <span class="need-dot"></span>
+            <span class="need-text">Vaulted over 14 days</span>
+            <span class="need-count">0</span>
+          </button>
+        </div>
 
-            <div class="row">
+        <!-- ================= Filter section ================= -->
+        <div class="filter-section">
+          <div class="filter-wrapper">
+            <div class="d-flex gap-3 align-items-center filter_container">
+              <div class="search-box">
+                <i class="ri-search-line search-icon"></i>
+                <input
+                  type="text"
+                  class="search-input"
+                  name="searchInput"
+                  id="searchInput"
+                  placeholder="AWB, kit or customer"
+                  [(ngModel)]="searchTerm"
+                />
+              </div>
 
-                <button class="col-md-2 btn btn-sm mb-4 me-4" [class.active]="isActive === 'All'"
-                    (click)="applyStatusFilter(null)">All</button>
-                <button *ngFor="let button of statusData" class="col-md-2 btn btn-sm mb-4 me-4"
-                    [class.active]="isActive === button.id.toString()" (click)="applyStatusFilter(button.id)">
-                    {{ button.name }} ({{ getCountByStatusId(button.id) }})
-                </button>
+              <!-- Active filter chips -->
+              <div
+                class="active-filters"
+                *ngIf="getActiveFiltersList().length > 0"
+              >
+                <span
+                  class="filter-chip"
+                  *ngFor="let f of getActiveFiltersList()"
+                >
+                  {{ f.label }}
+                  <i
+                    class="ri-close-line chip-close"
+                    (click)="removeFilter(f.key)"
+                  ></i>
+                </span>
+              </div>
 
+              <button
+                class="btn-filters"
+                [class.active]="showFiltersForm"
+                (click)="toggleFiltersForm()"
+              >
+                <i [class]="buttonIcon"></i> {{ buttonText }}
+                <span
+                  class="filter-count"
+                  *ngIf="getActiveFiltersList().length > 0"
+                >
+                  · {{ getActiveFiltersList().length }}
+                </span>
+              </button>
+
+              <span
+                class="clear-all-link"
+                *ngIf="getActiveFiltersList().length > 0"
+                (click)="clearAllFilters()"
+              >
+                Clear all
+              </span>
             </div>
 
-            <app-loader [loading]="loading"></app-loader>
+            <div class="filter-popover" *ngIf="showFiltersForm">
+              <h6 class="filter-title">Filter RTO Process</h6>
 
-            <div class="row" style="width: 25%;">
-
-                <div class="btn-group col p-1" [@fadeInOut] *ngIf="getSelectedCount() > 0" role="group"
-                    aria-label="Basic outlined example" style="margin-bottom: 20px;">
-                    <button type="button" style="pointer-events: none;" class="btn btn-outline-dark"><b>{{
-                            getSelectedCount() }}</b>
-                        selected</button>
-                    <button type="button" class="btn btn-outline-dark" *ngIf="isActive == '1'"
-                        (click)="openStatusdialog()"> <i class="bi bi-chat-left-fill"></i> Change
-                        Status</button>
-                    <button type="button" class="btn btn-outline-dark" *ngIf="isActive == '5'"
-                        (click)="ProcessRtoData()"> <i class="bi bi-chat-left-fill"></i> Re-Dispatch
-                    </button>
+              <div class="filter-grid">
+                <div class="filter-field">
+                  <label for="sellerName" class="form-label">Bank</label>
+                  <select
+                    class="form-select form-select-sm"
+                    id="sellerName"
+                    [(ngModel)]="sellerId"
+                  >
+                    <option value="" selected>Any</option>
+                    <option
+                      *ngFor="let seller of sellerData"
+                      [value]="seller.id"
+                    >
+                      {{ seller.name }}
+                    </option>
+                  </select>
                 </div>
 
+                <div class="filter-field">
+                  <label for="courier" class="form-label">Courier</label>
+                  <select
+                    class="form-select form-select-sm"
+                    id="courier"
+                    [(ngModel)]="courierId"
+                  >
+                    <option value="" selected>Any</option>
+                    <option
+                      *ngFor="let courier of courierData"
+                      [value]="courier.id"
+                    >
+                      {{ courier.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="filter-field">
+                  <label class="form-label">From Date:</label>
+                  <app-date-picker-invoice
+                    [selectedRange]="selectedDateRange"
+                    (dateRangeSelected)="onDateRangeSelected($event)"
+                  ></app-date-picker-invoice>
+                </div>
+              </div>
+
+              <div class="filter-actions">
+                <button class="btn-clear" (click)="clearFilters()">
+                  Clear
+                </button>
+                <button
+                  class="btn-apply"
+                  (click)="applyFilters(); toggleFiltersForm()"
+                >
+                  Apply
+                </button>
+              </div>
             </div>
-
-            <div class="table-row" *ngIf="!loading">
-
-                <table class="table">
-                    <thead class="table-head-hover">
-                        <tr>
-                            <th scope="col" *ngIf="isActive === '1' || isActive === '5'">
-                                <input type="checkbox" id="selectAllCheckbox" name="selectAll"
-                                    [(ngModel)]="isSelectAllChecked" (click)="toggleAllCheckboxes($event)">
-                            </th>
-                            <th scope="col">ID</th>
-                            <th scope="col">Kit Number</th>
-                            <th scope="col">Customer Name</th>
-                            <th scope="col">Courier</th>
-                            <th scope="col">Old AWB</th>
-                            <th scope="col">New AWB</th>
-                            <th scope="col">Recieved Date</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Re-Dispatch / <br> Destroyed Date</th>
-                            <th scope="col">Vault Days</th>
-                            <ng-container *ngIf="isStatusId1()">
-                                <th scope="col">Address Status</th>
-                            </ng-container>
-                            <ng-container *ngIf="isStatusId1()">
-                                <th scope="col">Action</th>
-                            </ng-container>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let order of rtoOrders; let i = index">
-                            <td *ngIf="isActive == '1' || isActive == '5'">
-                                <ng-container
-                                    *ngIf="isActive == '1' || (isActive == '5' && order.isProcessed != '1'); else blankSpace">
-                                    <input type="checkbox" [id]="'checkbox'+order.order" [name]="'checkbox'+order.order"
-                                        [(ngModel)]="order.selected" (ngModelChange)="updateSelectAllCheckbox()">
-                                </ng-container>
-                                <ng-template #blankSpace>
-                                    &nbsp;
-                                </ng-template>
-                            </td>
-
-                            <td>{{ i+1}}</td>
-                            <td>{{ order.kitnumber}}</td>
-                            <!-- <td>{{ order.customerName}}</td>     -->
-                            <td style="cursor: pointer;">
-                                <span [matTooltip]="getAddressTooltip(order)" matTooltipPosition="right"
-                                    matTooltipClass="multiline-tooltip">
-                                    <!-- {{ order.customerName.length > 25 ? (order.customerName | slice:0:19) + '...' : order.customerName }} -->
-                                    {{ order.customerName.trim().length > 25 ? (order.customerName.trim() | slice: 0:
-                                    19) + '...' : order.customerName.trim() }}
-                                </span>
-                            </td>
-                            <td>{{ order.courier}}</td>
-                            <td>{{ order.oldAwb}}</td>
-                            <td>{{ order.newAwb }}</td>
-                            <td>{{ order.recievedDate}}</td>
-                            <td>{{ order.rtoStatus }}</td>
-                            <td>{{ order.reDispatchOrDestroyedDate }}</td>
-                            <td>{{ order.daycount }}</td>
-                            <td *ngIf="isStatusId1()">
-                                <span class="badge" [ngClass]="order.isModified ? 'badge-success' : 'badge-danger'">
-                                    {{ order.isModified ? 'Modified' : 'Unmodified' }}
-                                </span>
-                            </td>
-                            <td *ngIf="isStatusId1()"><button class="btn btn-sm btn-outline-primary"
-                                    style="margin-right: 5px;" (click)="rtoEditDialog(order)"><i
-                                        class="ri-pencil-fill"></i>
-                                    Edit
-                                </button>
-                            </td>
-
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+          </div>
         </div>
-        <!-- <div class="row justify-content-end" style="display: flex; align-items: end; margin-bottom: 8px;">
-            <div class="col-3 d-flex justify-content-end">
-                <button class="btn" style="background-color:#12263f ; color: white; padding: 5px 20px;"(click)="ProcessRtoData()" > Process Data</button>
-            </div>
-        </div> -->
 
-        <app-paginator [length]="totalOrders" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100 , 500 , 1000]"
-            [pageIndex]="pageIndex" (page)="handlePageEvent($event)">
-        </app-paginator>
+        <app-loader [loading]="loading"></app-loader>
+
+        <!-- ================= Bulk action bar ================= -->
+        <div class="row" style="width: 25%">
+          <div
+            class="btn-group col p-1"
+            [@fadeInOut]
+            *ngIf="getSelectedCount() > 0"
+            role="group"
+            aria-label="Basic outlined example"
+            style="margin-bottom: 20px"
+          >
+            <button
+              type="button"
+              style="pointer-events: none"
+              class="btn btn-outline-dark"
+            >
+              <b>{{ getSelectedCount() }}</b> selected
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-dark"
+              *ngIf="isActive == '1'"
+              (click)="openStatusdialog()"
+            >
+              <i class="bi bi-chat-left-fill"></i> Change Status
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-dark"
+              *ngIf="isActive == '5'"
+              (click)="ProcessRtoData()"
+            >
+              <i class="bi bi-chat-left-fill"></i> Re-Dispatch
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= Table (edge-to-edge inside main-container) ================= -->
+        <div class="table-row" *ngIf="!loading">
+          <table class="table rto-table">
+            <thead>
+              <tr>
+                <th class="edge-spacer"></th>
+                <th *ngIf="isActive === '1' || isActive === '5'" class="col-check">
+                  <input
+                    type="checkbox"
+                    id="selectAllCheckbox"
+                    name="selectAll"
+                    [(ngModel)]="isSelectAllChecked"
+                    (click)="toggleAllCheckboxes($event)"
+                  />
+                </th>
+                <th>Kit / Customer</th>
+                <th>Original AWB</th>
+                <th>New AWB</th>
+                <th>Received</th>
+                <th>Vault</th>
+                <th class="text-center">Vault Days</th>
+                <th>Status</th>
+                <th *ngIf="isStatusId1()">Address Status</th>
+                <th class="text-center">Action</th>
+                <th class="edge-spacer"></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let order of filteredOrders">
+                <td class="edge-spacer"></td>
+
+                <!-- Checkbox -->
+                <td
+                  *ngIf="isActive == '1' || isActive == '5'"
+                  class="col-check"
+                >
+                  <input
+                    *ngIf="
+                      isActive == '1' ||
+                      (isActive == '5' && order.isProcessed != '1')
+                    "
+                    type="checkbox"
+                    [id]="'checkbox' + order.order"
+                    [name]="'checkbox' + order.order"
+                    [(ngModel)]="order.selected"
+                    (ngModelChange)="updateSelectAllCheckbox()"
+                  />
+                </td>
+
+                <!-- Kit / Customer -->
+                <td>
+                  <div class="cell-main">
+                    {{ order.kitnumber }}
+                    <i
+                      class="ri-file-copy-line copy-icon"
+                      (click)="copyToClipboard(order.kitnumber)"
+                    ></i>
+                  </div>
+                  <div
+                    class="cell-sub upper"
+                    [matTooltip]="getAddressTooltip(order)"
+                    matTooltipPosition="right"
+                    matTooltipClass="multiline-tooltip"
+                  >
+                    {{ order.customerName?.trim() }}
+                  </div>
+                </td>
+
+                <!-- Original AWB -->
+                <td>
+                  <div class="cell-main">
+                    {{ order.oldAwb }}
+                    <i
+                      class="ri-file-copy-line copy-icon"
+                      (click)="copyToClipboard(order.oldAwb)"
+                    ></i>
+                  </div>
+                  <div class="cell-sub">{{ order.courier }}</div>
+                </td>
+
+                <!-- New AWB -->
+                <td>
+                  <span *ngIf="order.newAwb; else noAwb" class="cell-main">{{
+                    order.newAwb
+                  }}</span>
+                  <ng-template #noAwb><span class="dash">—</span></ng-template>
+                </td>
+
+                <!-- Received -->
+                <td>
+                  <div class="cell-main">
+                    {{ order.recievedDate | date: "yyyy-MM-dd" }}
+                  </div>
+                  <div class="cell-sub">{{ order.daycount }}d ago</div>
+                </td>
+
+                <!-- Vault -->
+                <td>
+                  <ng-container *ngIf="order.vaultSrno; else noVault">
+                    <div class="cell-main">#{{ order.vaultSrno }}</div>
+                    <div class="cell-sub">{{ order.rackNo }}</div>
+                  </ng-container>
+                  <ng-template #noVault><span class="dash">—</span></ng-template>
+                </td>
+
+                <!-- Vault Days -->
+                <td class="text-center">
+                  <span
+                    class="days-pill"
+                    [class.days-pill--danger]="order.daycount > 14"
+                  >
+                    {{ order.daycount }}
+                  </span>
+                </td>
+
+                <!-- Status -->
+                <td>
+                  <span class="status-pill">
+                    <span class="status-dot"></span>{{ order.rtoStatus }}
+                  </span>
+                </td>
+
+                <!-- Address status (only status 1) -->
+                <td *ngIf="isStatusId1()">
+                  <span
+                    class="badge"
+                    [ngClass]="
+                      order.isModified ? 'badge-success' : 'badge-danger'
+                    "
+                  >
+                    {{ order.isModified ? "Modified" : "Unmodified" }}
+                  </span>
+                </td>
+
+                <!-- Action -->
+                <td class="text-center">
+                  <button
+                    *ngIf="isStatusId1()"
+                    class="btn-view me-2"
+                    (click)="rtoEditDialog(order)"
+                  >
+                    <i class="ri-pencil-fill"></i> Edit
+                  </button>
+                  <button class="btn-view">View</button>
+                </td>
+
+                <td class="edge-spacer"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <app-paginator
+        [length]="totalOrders"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+        [pageIndex]="pageIndex"
+        (page)="handlePageEvent($event)"
+      >
+      </app-paginator>
     </div>
+  </div>
 </div>

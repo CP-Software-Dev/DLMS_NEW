@@ -1,113 +1,258 @@
-<div class="card p-4" style=" border: none;">
+<div class="card">
+  <ng-container *ngFor="let info of details">
+    <div class="row mb-1">
+      <div class="col-12">
+        <div class="details-card card">
+          <div class="card-body">
+            <div class="order-details">
+              <h5 class="">Delivery</h5>
+              <div class="order-lines"></div>
+            </div>
+            <div class="card-body">
+              <div
+                *ngIf="statusdata && statusdata.length > 0; else noStatus"
+                class="timeline-wrapper"
+              >
+                <button
+                  class="nav-btn nav-btn-left"
+                  [disabled]="!canGoPrev"
+                  (click)="prevPage()"
+                  style="margin-left: -20px; margin-right: -20px"
+                >
+                  <i class="ri-arrow-left-s-line"></i>
+                </button>
 
+                <div class="timeline-horizontal">
+              
+                  <div
+                    class="status-col more-col"
+                    *ngIf="canGoPrev"
+                    (click)="prevPage()"
+                    title="click and see the tracking status"
+                  >
+                    <div class="circle-container-h">
+                      <div class="circle-more"></div>
+                    </div>
+                    <div class="status-info-h">
+                      <span class="more-text">{{ startIndex }} more</span>
+                    </div>
+                  </div>
 
-    <div class="row">
-        <div class="col-5">
-            <div class="row mb-3">
-                <div class="col-md-6 col-sm-6">
-                    <h5><i class="ri-checkbox-blank-fill"
-                            style="border: 2px solid black; margin-right: 10px;"></i>Shipments Tracking</h5>
+                  <div
+                    class="status-col"
+                    *ngFor="
+                      let status of visibleStatusData;
+                      let first = first;
+                      let last = last
+                    "
+                  >
+                    <div class="circle-container-h">
+                   
+                      <div
+                        class="line-h-left"
+                        *ngIf="first && canGoPrev"
+                      ></div>
+
+                      <div class="circle">
+                        <i class="ri-truck-line"></i>
+                      </div>
+
+                      <!-- right line -->
+                      <div
+                        [ngClass]="{
+                          'line-h': true,
+                          'line-fade': last && canGoNext,
+                          'hidden-line': last && !canGoNext
+                        }"
+                      ></div>
+                    </div>
+                    <div class="status-info-h">
+                      <span class="status-name">{{
+                        status.scanType === "RT"
+                          ? "RTO " + status.scan
+                          : status.scan
+                      }}</span>
+                      <span class="status-date">{{
+                        status.statusDateTime
+                      }}</span>
+                      <span class="status-instruction">{{
+                        status.instructions
+                      }}</span>
+                      <span class="status-location"
+                        ><i class="ri-map-pin-line"></i>
+                        {{ status.scannedLocation }}</span
+                      >
+                    </div>
+                  </div>
+
+                 
+                  <div
+                    class="status-col more-col"
+                    *ngIf="canGoNext"
+                    (click)="nextPage()"
+                    title="click and see the tracking status"
+                  >
+                    <div class="circle-container-h">
+                      <div class="circle-more"></div>
+                    </div>
+                    <div class="status-info-h">
+                      <span class="more-text"
+                        >{{
+                          statusdata.length - startIndex - itemsPerPage
+                        }}
+                        more</span
+                      >
+                    </div>
+                  </div>
                 </div>
+
+                <button
+                  class="nav-btn nav-btn-right"
+                  [disabled]="!canGoNext"
+                  (click)="nextPage()"
+                  style="margin-right: -20px; margin-left: -10px"
+                >
+                  <i class="ri-arrow-right-s-line"></i>
+                </button>
+              </div>
+              <ng-template #noStatus>
+                <div class="no-status-message">No status available</div>
+              </ng-template>
+            </div>
+            <div class="info-line">
+              <span class="label">Shipment status</span>
+              <span class="value shipment-label"
+                ><span class="dot"></span
+                ><span style="color: #16a34a">{{
+                  info.shipmentStatus || "Not Yet"
+                }}</span></span
+              >
+            </div>
+            <div class="info-line">
+              <span class="label">Courier</span>
+              <span class="value">{{ info.courier || "Not Yet" }}</span>
+            </div>
+            <div class="info-line">
+              <span class="label">Promised by</span>
+              <span class="value">{{ info.date || "Not Yet" }}</span>
+            </div>
+            <div class="info-line">
+              <span class="label">Delivered</span>
+              <span class="value">{{ info.deliveryDate || "Not Yet" }}</span>
             </div>
 
-        </div>
+            <div class="order-details mt-4">
+              <h5 class="">Order Details</h5>
+              <div class="order-lines"></div>
+            </div>
 
+            <div class="info-line">
+              <span class="label">AWB number</span>
+              <span class="value">
+                {{ info.awb || 0 }}
+                <i
+                  class="ri-file-copy-line copy-icon"
+                  (click)="copyToClipboard(info.awb)"
+                ></i>
+              </span>
+            </div>
+
+            <div class="info-line">
+              <span class="label">Routing code</span>
+              <span class="value">
+                {{ info.routingCode || "Not Yet" }}
+                <i
+                  class="ri-file-copy-line copy-icon"
+                  (click)="copyToClipboard(info.routingCode)"
+                ></i>
+              </span>
+            </div>
+
+            <div class="info-line">
+              <span class="label">Service level</span>
+              <span class="value">{{ info.serviceLevel || "Not Yet" }}</span>
+            </div>
+
+            <div class="info-line">
+              <span class="label">KIT number</span>
+              <span class="value">
+                {{ info.kitNumber || 0 }}
+                <i
+                  class="ri-file-copy-line copy-icon"
+                  (click)="copyToClipboard(info.kitNumber)"
+                ></i>
+              </span>
+            </div>
+
+            <div class="info-line">
+              <span class="label">Card</span>
+              <span class="value-block">
+                <span class="value">{{ info.cardID || 0 }}</span>
+                <span class="value-note"
+                  >the schema stores a BIN and the last four, never a full
+                  number</span
+                >
+              </span>
+            </div>
+
+            <div class="info-line">
+              <span class="label">Product type</span>
+              <span class="value">{{ info.product || "Not Yet" }}</span>
+            </div>
+
+            <div class="info-line">
+              <span class="label">Weight</span>
+              <span class="value">{{ info.weight || 0 }} g declared</span>
+            </div>
+
+            <div class="info-line">
+              <span class="label">Dimensions</span>
+              <span class="value">{{ info.dimensions || "Not yet" }}</span>
+            </div>
+
+            <div class="info-line last">
+              <span class="label">Bank order ref</span>
+              <span class="value">
+                {{ info.orderID || "Not yet" }}
+                <i
+                  class="ri-file-copy-line copy-icon"
+                  (click)="copyToClipboard(info.bankOrderRef)"
+                ></i>
+              </span>
+            </div>
+            <div class="info-line">
+              <span class="label">Promised by</span>
+              <span class="value">{{ info.promisedby || "Not yet" }}</span>
+            </div>
+            <div class="info-line">
+              <span class="label">Received in</span>
+              <span class="value">{{ info.ReceivedIn || "Not yet" }}</span>
+            </div>
+
+            <div class="order-details mt-4">
+              <h5 class="">Account</h5>
+              <div class="order-lines"></div>
+            </div>
+
+            <div class="info-line">
+              <span class="label">Institution</span>
+              <span class="value">{{ info.company || "Not yet" }}</span>
+            </div>
+            <div class="info-line">
+              <span class="label">Sales person X, customer Head✓ </span>
+              <span class="value">{{ info.seller || "Not yet" }}</span>
+            </div>
+            <div class="info-line">
+              <span class="label"> contact</span>
+              <span class="value">{{ info.contactNo || "Not yet" }}</span>
+            </div>
+            <div class="info-line">
+              <span class="label"> Bank contact</span>
+              <span class="value">{{ info.bankContactNo || "Not yet" }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="row" *ngFor="let info of details" style="margin-bottom: 16px;">
-        <div class="col-md-5 col-sm-5">
-            <div class="details-card card">
-                <div class="card-header">
-                    <span>Order Details</span>
-                </div>
-                <div class="card-body">
-                    <div class="info-row">
-                        <span class="label">Order Placed On:</span>
-                        <span class="value">{{info.date}}</span>
-                    </div>
-                    <hr>
-                    <div class="info-row">
-                        <span class="label">Courier:</span>
-                        <span class="value">{{info.courier}}</span>
-                    </div>
-                    <hr>
-                    <!-- <div class="info-row">
-                          <span class="label">Tracking ID:</span>
-                          <span class="value">{{info.awb}}</span>
-                        </div> -->
-                    <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <div class="info-row">
-                            <span class="label">Tracking ID:</span>
-                            <a class="value" style="cursor: pointer; color: #0b72c7;"
-                                (click)="navigateToTracking(info.awb)">
-                                {{ info.awb }}
-                            </a>
-                        </div >
-                        <div class="info-row">
-                            <ng-container *ngIf="info.oldAWB">
-                               <span class="label">OLD Tracking ID:</span>
-                                <a class="value" style="cursor: pointer; color: #0b72c7;"
-                                    (click)="navigateToTracking(info.oldAWB)">
-                                    {{info.oldAWB}}
-                                </a>
-                            </ng-container>
-                        </div>
-                    </div>
-
-                    <hr>
-                    <div class="info-row">
-                        <span class="label">Order ID:</span>
-                        <a class="value" style="cursor: pointer; color: #0b72c7;"
-                            (click)="navigateToOrderDetail(info.orderID)">{{info.orderID}}</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-7">
-            <div class="tracking-card card" style="max-height: 90vh; min-height: 275px">
-                <div class="card-header">
-                    <div class="row d-flex">
-                        <div class="col">
-                            <span>Delivery Status ({{statusAWB}})</span>
-                        </div>
-                        <div class="col d-flex align-items-center justify-content-end">
-                            <span class="badge badge-success">{{ info.shipmentStatus }}</span>
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="card-body" style="overflow-y: auto;">
-
-                    <div *ngIf="statusdata && statusdata.length > 0; else noStatus">
-                        <div *ngFor="let status of statusdata; let last = last;">
-                            <div class="status-row">
-                                <div class="circle-container">
-                                    <div class="circle">
-                                        <i class="ri-truck-line"></i>
-                                    </div>
-                                    <div [ngClass]="{'line': true, 'hidden-line': last}"></div>
-                                </div>
-                                <div class="status-info">
-                                    <span class="status-name">{{ status.scanType === 'RT' ? 'RTO ' + status.scan :
-                                        status.scan }}</span>
-                                    <span class="status-date">{{ status.statusDateTime }}</span>
-                                    <span class="status-instruction">{{ status.instructions }}</span>
-                                    <span class="status-location"><i class="ri-map-pin-line"></i> {{
-                                        status.scannedLocation }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <ng-template #noStatus>
-                        <div class="no-status-message">No status available</div>
-                    </ng-template>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-
+  </ng-container>
 </div>

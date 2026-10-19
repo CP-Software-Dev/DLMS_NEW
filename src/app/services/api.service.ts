@@ -5,7 +5,7 @@ import { Injectable } from "@angular/core";
 })
 export class ApiService {
   //public readonly BaseURL = 'http://sandbox.cp-logistics.co.in/api'
-  //public readonly BaseURL = 'http://192.168.51.89/api';
+  // public readonly BaseURL = 'http://192.168.51.89/api';
   public readonly BaseURL = "https://ship.cp-logistics.co.in:8011/api";
   //public readonly BaseURL = 'http://192.168.5.162:803/api';
   //public readonly BaseURL = "http://localhost:809/api";
@@ -157,3 +157,5 @@ export class ApiService {
 
   constructor() {}
 }
+
+

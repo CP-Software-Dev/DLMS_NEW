@@ -1,69 +1,143 @@
-<div class="card" [@fadeSlideInOut]>
-  <div class="card-head">
+<div class="card">
+  <!-- <div class="card-head">
     <div class="row" style="margin-bottom: 0px">
       <div class="col-8">
-        <h3>Webhook Journey</h3>
+        <h3>{{ orderID }}</h3>
       </div>
       <div class="col close-form">
+         <button class="export-btn mr-4">
+          <span class="dot-pill"></span>
+         {{shipmentStatus }}
+        </button>
         <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
       </div>
     </div>
     <div
       class="row1"
       style="
-        margin-top: 10px;
+        margin-top: 12px;
         display: flex;
         justify-content: space-between;
         align-items: center;
       "
-    >
+     >
       <div class="order">
-        <h6 style="color: #555454"><strong>Order ID :</strong>{{ orderID }}</h6>
+        <h6><strong>Order ID :</strong>{{ this.company }}</h6>
       </div>
       <div class="button">
         <button class="export-btn" (click)="exportExcel()">
           <i class="ri-upload-2-line" style="margin-right: 5px"></i>Export
         </button>
+        <button class="export-btn">
+         {{shipmentStatus }}
+        </button>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="card-head">
+    <div class="row" style="margin-bottom: 0px">
+      <div class="col-8">
+        <h3>{{ orderID }}</h3>
+      </div>
+      <div class="col header-actions">
+        <button class="export-btn status-btn">
+          <span class="dot-pill"></span>
+          <span class="status_text">{{ shipmentStatus }}</span>
+        </button>
+        <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+      </div>
+    </div>
+    <div class="row1">
+      <div class="order">
+        <h6>{{ company }}</h6>
       </div>
     </div>
   </div>
+  <!-- AWB Status section -->
+  <div class="section-block">
+    <!-- <h6 class="section-title">AWB Status</h6> -->
+    <app-awbstatus [awbInput]="awb"></app-awbstatus>
+  </div>
+
+  <!-- Shipment Details section -->
+  <div class="section-block">
+    <app-shipmentdetails
+      [orderIDInput]="orderID.toString()"
+    ></app-shipmentdetails>
+  </div>
+
+  <!-- Sab kuch is ek hi scrollable body ke andar -->
   <div class="card-body">
     <table class="table">
       <thead class="table-head-hover">
         <tr>
-          <th scope="col">Order Status</th>
-          <th scope="col">Shipment Status</th>
-          <th scope="col">Event Time</th>
-          <th scope="col">Webhook Update Time</th>
-          <th scope="col">Webhook Status</th>
+          <th scope="col">Status Paushed</th>
+          <th scope="col">Sent</th>
+          <th scope="col">Tries</th>
+          <th scope="col">Result</th>
           <th scope="col"></th>
         </tr>
       </thead>
 
       <tbody *ngFor="let journey of JourneyData">
         <tr>
-          <td
-            [ngClass]="{
-              sent: journey.isWebhookSent === '1',
-              'not-sent': journey.isWebhookSent !== '1',
-            }"
-          >
-            {{ journey.orderStatus }}
-          </td>
           <td>{{ journey.shipmentStatus }}</td>
           <td>{{ journey.eventDateTime }}</td>
-          <td>{{ journey.createdAt }}</td>
-          <td>{{ journey.isWebhookSent === "1" ? "Sent" : "Not Sent" }}</td>
+          <!-- <td>{{ journey.createdAt }}</td> -->
+          <td>Tries</td>
+          <!-- <td>{{ journey.isWebhookSent === "1" ? "Sent" : "Not Sent" }}</td> -->
           <td>
+            <!-- Delivered -->
+            <span
+              *ngIf="journey.isWebhookSent === '1'"
+              class="status-pill delivered"
+            >
+              <span class="status-dot"></span>
+              Delivered
+            </span>
+
+            <!-- Give Up + Send -->
+            <ng-container *ngIf="journey.isWebhookSent === '2'">
+              <span class="status-pill give-up">
+                <span class="status-dot"></span>
+                Give Up
+              </span>
+
+              <button
+                class="btn statusbtn btn-sm ms-2"
+                style="cursor: pointer"
+                (click)="sendWebhook(journey.id)"
+              >
+                Send
+              </button>
+            </ng-container>
+
+            <!-- Send -->
             <button
-              class="btn statusbtn btn-sm" style="cursor: pointer;"
+              *ngIf="
+                journey.isWebhookSent !== '1' && journey.isWebhookSent !== '2'
+              "
+              class="btn statusbtn btn-sm"
+              style="cursor: pointer"
               (click)="sendWebhook(journey.id)"
             >
-              {{ journey.isWebhookSent === "1" ? "Resend" : "Send" }}
+              Send
             </button>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div class="card-footer">
+    <!-- <button class="footer-btn-outline" (click)="exportExcel()">
+      <i class="ri-upload-2-line" style="margin-right: 5px"></i>Export
+    </button> -->
+    <button class="footer-btn-outline" (click)="copyToClipboard(awb)">
+      <i class="ri-file-copy-line copy-icon"></i>
+      Copy AWB
+    </button>
+    <button class="footer-btn-solid" (click)="closeDialog()">Close</button>
   </div>
 </div>

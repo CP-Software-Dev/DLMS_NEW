@@ -1,0 +1,42 @@
+<div class="intake-card">
+
+  <div class="intake-header">
+    <h3 class="intake-title">
+      Intake vs deliveries
+      <span class="intake-subtitle">last 14 days</span>
+    </h3>
+  </div>
+
+  <div *ngIf="!noData" class="intake-wrapper">
+
+    <div class="intake-holder">
+      <canvas id="intakeDeliveryChart"></canvas>
+    </div>
+
+    <div class="intake-legend">
+
+      <div class="legend-item">
+        <span class="legend-dot orders-dot"></span>
+        <span class="legend-label">Orders received</span>
+        <span class="legend-value">{{ totalOrders | number }}</span>
+      </div>
+
+      <div class="legend-item">
+        <span class="legend-dot delivered-dot"></span>
+        <span class="legend-label">Parcels delivered</span>
+        <span class="legend-value">{{ totalDelivered | number }}</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="noData" class="no-data-message">
+    <img
+      src="assets/Images/Graph.gif"
+      alt="No Data Available"
+      class="img-fluid"
+    />
+  </div>
+
+</div>

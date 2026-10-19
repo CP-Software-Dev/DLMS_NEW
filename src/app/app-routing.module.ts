@@ -131,16 +131,16 @@ const routes: Routes = [
     component: AdminReportsComponent,
     canActivate: [adminAuthGuard],
   },
-  {
-    path: 'admin/reports/orders',
-    component: OrderReportComponent,
-    canActivate: [adminAuthGuard],
-  },
-  {
-    path: 'admin/reports/shipments',
-    component: ShipmentReportComponent,
-    canActivate: [adminAuthGuard],
-  },
+  // {
+  //   path: 'admin/reports/orders',
+  //   component: OrderReportComponent,
+  //   canActivate: [adminAuthGuard],
+  // },
+  // {
+  //   path: 'admin/reports/shipments',
+  //   component: ShipmentReportComponent,
+  //   canActivate: [adminAuthGuard],
+  // },
   {
     path: 'admin/reports/warehouse',
     component: WarehouseReportComponent,
@@ -308,40 +308,45 @@ const routes: Routes = [
 
   {
     path: 'user/dashboard',
-    component: UserDashboardComponent,
+    // component: UserDashboardComponent,
+    component: DashboardComponent,
     canActivate: [userAuthGuard],
   },
   {
     path: 'user/orders',
-    component: UserOrderContainerComponent,
+    component: OrderConatinerComponent ,
     canActivate: [userAuthGuard],
   },
   {
     path: 'user/shipment',
-    component: UserShipmentsContainerComponent,
+    // component: UserShipmentsContainerComponent,
+    component: ShipmentContainerComponent,
     canActivate: [userAuthGuard],
   },
 
   {
     path: 'user/ndr',
-    component: UserNdrComponent,
+    // component: UserNdrComponent,
+    component: NdrContainerComponent,
     canActivate: [userAuthGuard],
   },
   {
     path: 'user/reports',
-    component: UserReportsComponent,
+    // component: UserReportsComponent,
+    component: AdminReportsComponent,
     canActivate: [userAuthGuard],
   },
-  {
-    path: 'user/reports/order',
-    component: UserorderReportsComponent,
-    canActivate: [userAuthGuard],
-  },
-  {
-    path: 'user/reports/shipments',
-    component: UsershipmentReportsComponent,
-    canActivate: [userAuthGuard],
-  },
+  // {
+  //   path: 'user/reports/order',
+  //   // component: UserorderReportsComponent,
+  //   component: OrderReportComponent,
+  //   canActivate: [userAuthGuard],
+  // },
+  // {
+  //   path: 'user/reports/shipments',
+  //   component: UsershipmentReportsComponent,
+  //   canActivate: [userAuthGuard],
+  // },
   {
     path: 'user/reports/warehouse',
     component: UserwarehouseReportsComponent,
@@ -376,12 +381,14 @@ const routes: Routes = [
   },
   {
     path: 'user/rto/orders',
-    component: UserRtoComponent,
+    // component: UserRtoComponent,
+    component: RtoComponent,
     canActivate: [userAuthGuard],
   },
   {
     path: 'user/rto/list',
     component: RtolistComponent,
+    // component: RtolistComponent,  --> it is only for admin
     canActivate: [userAuthGuard],
   },
   {
@@ -391,12 +398,14 @@ const routes: Routes = [
   },
   {
     path: 'user/issues',
-    component: IssuesComponent,
+    // component: IssuesComponent,
+    component: IssueticketsComponent,
     canActivate: [userAuthGuard],
   },
   {
     path: 'user/couriers',
-    component: CouriersComponent,
+    // component: CouriersComponent,
+    component: CourierListComponent,
     canActivate: [userAuthGuard],
   },
 ];

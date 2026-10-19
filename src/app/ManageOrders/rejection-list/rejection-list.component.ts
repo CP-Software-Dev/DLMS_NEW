@@ -38,9 +38,6 @@ export class RejectionListComponent implements OnInit {
   rejectedData: any[] = [];
   currentFilters: any = {};
   totalOrders: number = 0;
-  buttonText: string = 'Filters';
-  buttonIcon: string = 'ri-filter-fill';
-  showFiltersForm: boolean = false;
   sellerData: any[] = [];
   kitnumber: string = '';
   lotID: string = '';
@@ -94,17 +91,37 @@ export class RejectionListComponent implements OnInit {
     return new Date(date).toISOString().split('T')[0];
   }
 
+  // "10/6/2026 10:22:33 AM" -> "6 Oct 2026"
+  formatCreatedDate(value: string): string {
+    if (!value) {
+      return '';
+    }
+    const d = new Date(value);
+    if (isNaN(d.getTime())) {
+      return value.split(' ')[0];
+    }
+    return d.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+  }
+
+  copyAwb(awb: string): void {
+    if (!awb) {
+      return;
+    }
+    navigator.clipboard
+      .writeText(awb)
+      .then(() => this.toastr.success('AWB copied'))
+      .catch(() => this.toastr.error('Could not copy AWB'));
+  }
+
   onDateRangeSelected(dateRange: { startDate: string; endDate: string }): void {
     this.selectedDateRange = {
       startDate: this.formatDate(dateRange.startDate),
       endDate: this.formatDate(dateRange.endDate),
     };
-  }
-
-  toggleFiltersForm() {
-    this.showFiltersForm = !this.showFiltersForm;
-    this.buttonText = this.showFiltersForm ? 'Close' : 'Filters';
-    this.buttonIcon = this.showFiltersForm ? 'ri-close-fill' : 'ri-filter-fill';
   }
 
   fetchData(
@@ -198,7 +215,6 @@ export class RejectionListComponent implements OnInit {
     this.currentFilters.endDate = this.selectedDateRange.endDate;
 
     this.fetchData(this.pageIndex, this.pageSize, this.currentFilters);
-    this.toggleFiltersForm();
   }
 
   exportToCSV(): Promise<void> {
@@ -297,7 +313,7 @@ export class RejectionListComponent implements OnInit {
 
       params = params.set('startDate', startDate).set('endDate', endDate);
 
-      // 🚀 SINGLE API CALL
+      // Single API call
       this.http.get(this.apiservice.RejectedOrders, { params }).subscribe(
         (res: any) => {
           if (res.status) {

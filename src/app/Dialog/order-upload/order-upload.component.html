@@ -1,58 +1,284 @@
 <div class="card" [@fadeSlideInOut]>
-    <div class="card-head">
-        <div class="row">
-            <div class="col">
-                Bulk Orders Upload
-            </div>
-            <div class="col close-form">
-                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
-            </div>
-        </div>
+  <!-- Header -->
+  <div class="card-head">
+    <div class="row align-items-start">
+      <div class="col">
+        <h2 class="modal-title">CSV upload</h2>
+        <p class="modal-subtitle">Perso logistics file from the bank.</p>
+      </div>
+      <div class="col-auto close-form">
+        <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <!-- Institute -->
+    <div class="row mb-3 remake_first">
+      <div class="col-6">
+        <label for="sellerName" class="form-label"
+          >Institute <span class="required">*</span></label
+        >
+        <select
+          class="form-select"
+          id="sellerName"
+          [(ngModel)]="sellerId"
+          (change)="onSellerChange()"
+        >
+          <option value="" selected>Select Seller</option>
+          <option *ngFor="let seller of sellerData" [value]="seller.id">
+            {{ seller.name }}
+          </option>
+        </select>
+        <i class="ri-arrow-down-s-line custom-select-arrow"></i>
+      </div>
+
+      <div class="col-6">
+        <label for="sellerName" class="form-label"
+          >Import kind <span class="required">*</span></label
+        >
+        <select
+          class="form-select"
+          id="sellerName"
+          [(ngModel)]="sellerId"
+          (change)="onSellerChange()"
+        >
+          <option value="" selected>logistics</option>
+          <option *ngFor="let seller of sellerData" [value]="seller.id">
+            {{ seller.remake }}
+          </option>
+        </select>
+        <i class="ri-arrow-down-s-line custom-select-arrow"></i>
+      </div>
+    </div>
+    <div class="row mb-3 remake_first">
+      <div class="col-6">
+        <label for="sellerName" class="form-label"
+          >Order category <span class="required">*</span></label
+        >
+        <select
+          class="form-select"
+          id="sellerName"
+          [(ngModel)]="sellerId"
+          (change)="onSellerChange()"
+        >
+          <!-- <option value="" selected>Select Seller</option> -->
+          <!-- <option *ngFor="let seller of sellerData" [value]="seller.id">
+            {{ seller.name }}
+          </option> -->
+          <option value="">Perso</option>
+          <option value="">Insta</option>
+        </select>
+        <i class="ri-arrow-down-s-line custom-select-arrow"></i>
+      </div>
+
+      <div class="col-6">
+        <label class="form-label">Lot ID</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="lotId"
+          placeholder="optional"
+          style="background: #f6f6f7"
+        />
+      </div>
     </div>
 
-    <div class="card-body">
+    <!-- Lot ID -->
+    <!-- <div class="row mb-3">
+      <div class="col-6">
+        <label class="form-label">Lot ID</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="lotId"
+          placeholder="optional"
+          style="background: #f6f6f7"
+        />
+      </div>
+    </div> -->
 
-        <div class="row mb-3">
-            <div class="col ">
-                <label for="sellerName" class="form-label" style="font-weight: 600;">Company Name</label>
-                <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="sellerId"
-                    (change)="onSellerChange()">
-                    <option value="" selected>Select Seller</option>
-                    <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
-                </select>
-            </div>
+    <hr class="section-divider" />
+
+    <!-- File Drop Zone -->
+    <div class="row mb-3">
+      <div class="col">
+        <div class="selection-line-container">
+          <label class="form-label section-label">FILE</label>
+          <span class="driver-line"></span>
         </div>
-
-        <div class="row mb-1" *ngIf="showLotId">
-            <div class="col">
-                <label class="form-label fw-semibold">Lot ID</label>
-                <input type="text" class="form-control form-control-sm" [(ngModel)]="lotId"
-                    placeholder="Enter Lot ID" />
-            </div>
+        <div
+          class="drop-zone"
+          [class.drag-over]="isDragOver"
+          [class.file-invalid]="fileInvalid"
+          (click)="fileInput.click()"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onFileDrop($event)"
+        >
+          <input
+            #fileInput
+            type="file"
+            accept=".csv"
+            style="display: none"
+            (change)="onFileSelected($event)"
+          />
+          <div class="drop-icon">
+            <i class="ri-upload-2-fill"></i>
+          </div>
+          <div class="drop-text" *ngIf="!selectedFileName">
+            Drop the logistics CSV here
+          </div>
+          <div class="drop-text" *ngIf="selectedFileName">
+            {{ selectedFileName }}
+          </div>
+          <div class="drop-subtext">or click to browse · .csv up to 20 MB</div>
         </div>
-
-        <div class="row mb-3">
-            <div class="col">
-                <label class="form-label fw-semibold" style="visibility: hidden ;">Lot ID</label>
-                <div class="input-group">
-                    <input class="form-control" type="text" [value]="selectedFileName" readonly>
-                    <input #fileInput type="file" style="display:none;" (change)="onFileSelected($event)">
-                    <button class="btn btn-browse" type="button" (click)="fileInput.click()">Select File</button>
-                </div>
-                <div *ngIf="fileInvalid" class="text-danger mt-2">Invalid file format. Please select a .csv file.</div>
-            </div>
+        <div *ngIf="fileInvalid" class="text-danger mt-2">
+          Invalid file format. Please select a .csv file.
         </div>
-
-
-        <div class="row justify-content-end">
-            <button class="col-2 btn btn-outline-success btn-sm" (click)="uploadFile()"
-                [disabled]="!fileSelected"><b>Upload</b></button>
-            <button class="col-2 btn btn-outline-danger btn-sm" (click)="closeDialog()"><b>Close</b></button>
-        </div>
-        <div class="row download-csv">
-
-            <a href="/assets/File_format/Sample_Order.csv" download="Sample_Orders.csv"><i
-                    class="ri-download-2-fill"></i> Download CSV Format</a>
-        </div>
+      </div>
     </div>
+
+    <hr class="section-divider" />
+
+    <!-- Expected Format and download button---------- -->
+    <div class="row mb-2">
+      <div class="col d-flex align-items-center gap-2">
+        <span class="section-label">EXPECTED FORMAT</span>
+        <a
+          class="download-sample"
+          href="/assets/File_format/Sample_Order.csv"
+          download="Sample_Orders.csv"
+        >
+          <i class="ri-download-2-fill"></i> Download sample
+        </a>
+        <div class="download-line">
+          <span class="line"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-container mt-3">
+      <table class="format-table table">
+        <thead class="table-head">
+          <tr>
+            <th>Column</th>
+            <th class="">Required</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="collumn_name">ORDER_REF</td>
+            <td><span class="required-text">Required</span></td>
+            <td class="example-text">SR-10241</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">
+              KIT_NUMBER
+              <!-- <p class="col-subtext">see Remake reasons</p> -->
+            </td>
+            <td><span class="required-text">Required</span></td>
+            <td class="example-text">SHRI55550000339133</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">
+              CARD_BIN
+              <p class="col-subtext">first 8 digits only</p>
+            </td>
+            <td><span class="required-text">Required</span></td>
+            <td class="example-text">40651111</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">
+              CARD_LAST4
+              <p class="col-subtext">the full PAN is never stored</p>
+            </td>
+            <td><span class="required-text">Required</span></td>
+            <td class="example-text">3333</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">CUSTOMER_NAME</td>
+            <td><span class="required-text"> Required</span></td>
+            <td class="example-text">VIJAY KUMAR</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">ADDRESS1</td>
+            <td><span class="required-text"> Required</span></td>
+            <td class="example-text">12 MG Road</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">ADDRESS2</td>
+            <td><span class="optional-text">Optional</span></td>
+            <td class="example-text">Near Metro Gate 3</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">CITY</td>
+            <td><span class="required-text"> Required</span></td>
+            <td class="example-text">Bengaluru</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">STATE</td>
+            <td><span class="required-text"> Required</span></td>
+            <td class="example-text">KA</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">PINCODE</td>
+            <td><span class="required-text"> Required</span></td>
+            <td class="example-text">560001</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">MOBILE</td>
+            <td><span class="required-text"> Required</span></td>
+            <td class="example-text">9810000001</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">EMAIL</td>
+            <td><span class="optional-text">Optional</span></td>
+            <td class="example-text">vijay&#64;example.com</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">
+              WEIGHT
+              <p>grams, defaults by product type</p>
+            </td>
+            <td><span class="optional-text">Optional</span></td>
+            <td class="example-text">100</td>
+          </tr>
+          <tr>
+            <td class="collumn_name">LOT_ID</td>
+            <td><span class="optional-text">Optional</span></td>
+            <td class="example-text">87</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Warning message -->
+
+    <div class="warning-info">
+      <i class="ri-alert-fill warning-icon"></i>
+      <p>
+        The same file is never processed twice — it is fingerprinted on upload.
+        Rows that fail validation are rejected individually and listed on the
+        Import list, so one bad row never blocks the rest.
+      </p>
+    </div>
+  </div>
+
+  <div class="row justify-content-end footer-buttons">
+    <div class="col-auto">
+      <button class="btn btn-cancel" (click)="closeDialog()">Cancel</button>
+    </div>
+    <div class="col-auto">
+      <button
+        class="btn btn-upload"
+        (click)="uploadFile()"
+        [disabled]="!fileSelected"
+      >
+        <i class="ri-upload-2-fill"></i> Upload and process
+      </button>
+    </div>
+  </div>
 </div>

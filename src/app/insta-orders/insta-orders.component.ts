@@ -20,7 +20,9 @@ import { OrderUploadComponent } from "../Dialog/order-upload/order-upload.compon
 import { ChangestatusDialogComponent } from "../Dialog/changestatus-dialog/changestatus-dialog.component";
 import { Router } from "@angular/router";
 import { BulkshipComponent } from "../Dialog/bulkship/bulkship.component";
+import { WebhookViewComponent } from "../Dialog/webhook-view/webhook-view.component";
 import { ApiService } from "../services/api.service";
+import { SellerService } from "../services/seller.service";
 import { Subscription } from "rxjs";
 import { RefreshService } from "../services/refresh.service";
 import { OrderStateService } from "../services/States/Orders/order-state.service";
@@ -28,6 +30,11 @@ import { ToastrService } from "ngx-toastr";
 import { InstaOrdersService } from "../services/States/Orders/insta-orders.service";
 
 interface StatusData {
+  id: number;
+  name: string;
+  shortName?: string;
+  description?: string | null;
+  createdAt?: string;
   role: number;
 }
 
@@ -48,11 +55,21 @@ interface StatusData {
   ],
 })
 export class InstaOrdersComponent implements OnInit {
+  // ---------- role / view ----------
+  rolenum = 0;
+  isAdminView = false; // role 1, 2 => admin side
+  basePath: "admin" | "user" = "user";
+  private userSellerId: any = 0; // user view only (localStorage "seller")
+
   //@Input() showFiltersForm: boolean = false;
   showFiltersForm: boolean = false;
   buttonText: string = "Filters";
   buttonIcon: string = "ri-filter-fill";
   orders: any[] = [];
+
+  // Full unfiltered status master list (all statuses from API)
+  allStatusData: any[] = [];
+  // Top card menu statuses (role === 1) — same as before
   statusData: any[] = [];
   paginatedOrders: any[] = [];
   currentFilters: any = {};
@@ -80,7 +97,40 @@ export class InstaOrdersComponent implements OnInit {
     startDate: "",
     endDate: "",
   };
+  // ----------- basetotalorder for color label-----
+    baseTotalOrders: number = 0;
+
   private refreshSubscription?: Subscription;
+
+  shippedSubStatusIds: number[] = [5, 6, 7, 9, 10,  14];
+
+  shippedSubStatuses: any[] = [];
+
+  
+  private shippedPillColors: { [id: number]: { tone: string; light: string } } = {
+    5: { tone: "#7c6df7", light: "#f2eefc" },  // All Shipped   - violet
+    6: { tone: "#9aa0ac", light: "#f1f2f4" },  // Booked        - grey
+    7: { tone: "#f5a623", light: "#fff4e2" },  // Waiting for Pickup - orange
+    // 8: { tone: "#2f6fed", light: "#eaf1ff" },  // In Transit    - blue
+    9: { tone: "#14b8a6", light: "#e6faf7" },  // Out for Delivery - teal
+    10: { tone: "#16a34a", light: "#e9f9f1" }, // Delivered     - green
+    // 11: { tone: "#fa2048", light: "#fde8ec" }, // Exception     - red
+    // 12: { tone: "#8b5cf6", light: "#f2eefc" }, // RTO In Transit - purple
+    14: { tone: "#b8a6f5", light: "#f5f2fd" }, // RTO Delivered - light purple
+    // 15: { tone: "#e11d48", light: "#fde6ea" }, // Lost          - deep red
+  };
+
+  
+  getShippedPillTone(statusId: number): string {
+    return (this.shippedPillColors[statusId] || this.shippedPillColors[5]).tone;
+  }
+
+
+  getShippedPillLight(statusId: number): string {
+    return (this.shippedPillColors[statusId] || this.shippedPillColors[5]).light;
+  }
+
+  statusCounts: { [id: number]: number } = {};
 
   constructor(
     private apiservice: ApiService,
@@ -90,7 +140,8 @@ export class InstaOrdersComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
     private ordersStateService: InstaOrdersService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private sellerService: SellerService
   ) {
     const endDate = new Date(); // Today
     const startDate = new Date(); // Clone today
@@ -101,7 +152,41 @@ export class InstaOrdersComponent implements OnInit {
     };
   }
 
+  // ================= role helpers =================
+  private initRole(): void {
+    this.rolenum = Number(this.sellerService.getItem("role"));
+    this.isAdminView = this.rolenum === 1 || this.rolenum === 2;
+    this.basePath = this.isAdminView ? "admin" : "user";
+    if (!this.isAdminView) {
+      this.userSellerId = this.sellerService.getItem("seller");
+    }
+  }
+
+ 
+  get showSelect(): boolean {
+    return (
+      this.isAdminView &&
+      this.isActive !== "All" &&
+      this.isActive !== "5" &&
+      this.isActive !== "4" &&
+      this.isActive != "AWB_Success"
+    );
+  }
+
+
+  private applySellerParam(params: HttpParams, sellerId: any): HttpParams {
+    if (!this.isAdminView) {
+      return params.set("sellerID", this.userSellerId);
+    }
+    if (sellerId && sellerId !== "0") {
+      return params.set("sellerId", sellerId);
+    }
+    return params;
+  }
+
   ngOnInit(): void {
+    this.initRole();
+
     this.isSelectAllChecked = false;
     this.route.queryParams.subscribe((params) => {
       this.initializeFiltersFromParams(params);
@@ -120,7 +205,9 @@ export class InstaOrdersComponent implements OnInit {
 
     this.applyFilters();
     this.fetchOrders(this.pageIndex, this.pageSize);
-    this.loadSellerData();
+    if (this.isAdminView) {
+      this.loadSellerData();
+    }
     this.loadCourierData();
     this.loadStatus();
 
@@ -136,7 +223,8 @@ export class InstaOrdersComponent implements OnInit {
       return;
     }
 
-    if (params["sellerId"]) {
+   
+    if (this.isAdminView && params["sellerId"]) {
       this.sellerId = params["sellerId"];
     }
 
@@ -180,8 +268,16 @@ export class InstaOrdersComponent implements OnInit {
 
   loadStatus(): void {
     this.http.get<any>(this.apiservice.StatusData).subscribe((response) => {
-      this.statusData = response.data.filter(
+      // Full master list (all statuses)
+      this.allStatusData = response.data || [];
+
+      // Top card menu — same behaviour as before (role === 1)
+      this.statusData = this.allStatusData.filter(
         (item: StatusData) => item.role === 1
+      );
+
+      this.shippedSubStatuses = this.allStatusData.filter((item: any) =>
+        this.shippedSubStatusIds.includes(item.id)
       );
     });
   }
@@ -194,7 +290,7 @@ export class InstaOrdersComponent implements OnInit {
     });
   }
 
-  //--------Bank Data
+  //--------Bank Data (admin only)
 
   loadSellerData(): void {
     this.http.get<any>(this.apiservice.SellerData).subscribe((response) => {
@@ -218,8 +314,14 @@ export class InstaOrdersComponent implements OnInit {
       case 20:
         return this.rto;
       default:
-        return 0;
+     
+        return this.statusCounts[statusId] || 0;
     }
+  }
+  isShippedGroupActive(): boolean {
+    return this.shippedSubStatusIds
+      .map((id) => id.toString())
+      .includes(this.isActive);
   }
 
   //--------Daata for table
@@ -246,9 +348,7 @@ export class InstaOrdersComponent implements OnInit {
     if (filters.kitnumber) {
       params = params.set("kitnumber", filters.kitnumber);
     }
-    if (filters.sellerId && filters.sellerId !== "0") {
-      params = params.set("sellerId", filters.sellerId);
-    }
+    params = this.applySellerParam(params, filters.sellerId);
     if (filters.awbnumber) {
       params = params.set("awb", filters.awbnumber);
     }
@@ -297,6 +397,17 @@ export class InstaOrdersComponent implements OnInit {
           this.shipped = res.data.shipped || 0;
           this.rto = res.data.rto || 0;
           this.paginatedOrders = this.orders;
+
+          if (res.data.statusCounts && Array.isArray(res.data.statusCounts)) {
+            this.statusCounts = {};
+            res.data.statusCounts.forEach((item: any) => {
+              this.statusCounts[item.id ?? item.statusId] =
+                item.count ?? item.total ?? 0;
+            });
+          }
+        }
+        if (!filters.statusId) {
+          this.baseTotalOrders = res.data.total;
         }
         this.loading = false;
       },
@@ -315,7 +426,8 @@ export class InstaOrdersComponent implements OnInit {
         .map((id) => id.trim());
     }
 
-    if (this.sellerId) {
+    
+    if (this.isAdminView && this.sellerId) {
       this.currentFilters.sellerId = this.sellerId;
     }
 
@@ -386,7 +498,7 @@ export class InstaOrdersComponent implements OnInit {
     return `${customer}\n${filteredParts.join(", ")}`;
   }
 
-  //--------Dailog boxes
+  //--------Dailog boxes (admin only: upload, change status, bulk ship)
 
   openDialog(): void {
     this.dialog.open(OrderUploadComponent, {
@@ -394,7 +506,27 @@ export class InstaOrdersComponent implements OnInit {
     });
   }
 
+  openWebhookDialog(order: any): void {
+    this.dialog.open(WebhookViewComponent, {
+      data: {
+        order: order.orderID,
+        awb: order.awb,
+        shipmentStatus: order.shipmentStatus || order.orderStatus,
+        company: `${order.company} - Perso`,
+      },
+      position: { right: "1%", top: "10px" },
+      height: "calc(100vh - 40px)",
+      maxHeight: "calc(100vh - 40px)",
+      width: "700px",
+      maxWidth: "700px",
+      panelClass: "right-slide-panel",
+      backdropClass: "remake-blur-backdrop",
+      hasBackdrop: true,
+    });
+  }
+
   openStatusdialog(): void {
+    if (!this.isAdminView) return;
     const selectedOrderIds = this.getSelectedOrderIds();
     const statusID = Number(this.isActive);
     this.dialog.open(ChangestatusDialogComponent, {
@@ -408,6 +540,7 @@ export class InstaOrdersComponent implements OnInit {
   }
 
   openBulkShipdialog(): void {
+    if (!this.isAdminView) return;
     const selectedOrderDetails = this.getSelectedOrderDetails();
     this.dialog.open(BulkshipComponent, {
       panelClass: "rounded-dialog",
@@ -420,24 +553,6 @@ export class InstaOrdersComponent implements OnInit {
     this.buttonText = this.showFiltersForm ? "Close" : "Filters";
     this.buttonIcon = this.showFiltersForm ? "ri-close-fill" : "ri-filter-fill";
   }
-
-  // toggleAllCheckboxes(event: any) {
-  //   const isChecked = event.target.checked;
-  //   this.isSelectAllChecked = isChecked;
-
-  //   if (this.orders) {
-  //     for (const key in this.orders) {
-  //       if (Object.prototype.hasOwnProperty.call(this.orders, key)) {
-  //         this.orders[key].selected = isChecked;
-  //       }
-  //     }
-  //   }
-  // }
-
-  // updateSelectAllCheckbox() {
-  //   const ordersArray = Object.values(this.orders);
-  //   this.isSelectAllChecked = ordersArray.every((order: any) => order.selected);
-  // }
 
   toggleAllCheckboxes(event: any) {
     const isChecked = event.target.checked;
@@ -505,16 +620,6 @@ export class InstaOrdersComponent implements OnInit {
 
   //--------Export Order Data
 
-  // exportToCSV() {
-  //   this.fetchAllOrders()
-  //     .then((allOrders) => {
-  //       this.downloadCSV(allOrders);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching orders:", error);
-  //     });
-  // }
-
   exportToCSV(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.fetchAllOrders()
@@ -529,114 +634,6 @@ export class InstaOrdersComponent implements OnInit {
         });
     });
   }
-
-  // fetchAllOrders(): Promise<any[]> {
-  //   const pageSize = 100;
-  //   let pageIndex = 0;
-  //   const allOrders: any[] = [];
-
-  //   const fetchPage = (pageIndex: number): Promise<any> => {
-  //     return new Promise((resolve, reject) => {
-  //       let params = new HttpParams()
-  //         .set("page", (pageIndex + 1).toString())
-  //         .set("dataCount", pageSize.toString())
-  //         .set("fileType", "3");
-
-  //       if (this.currentFilters.orderIds) {
-  //         params = params.set(
-  //           "orderId",
-  //           this.currentFilters.orderIds.join(",")
-  //         );
-  //       }
-  //       if (this.currentFilters.method) {
-  //         params = params.set("method", this.currentFilters.method);
-  //       }
-  //       if (this.currentFilters.kitnumber) {
-  //         params = params.set("kitnumber", this.currentFilters.kitnumber);
-  //       }
-  //       if (this.currentFilters.sellerId) {
-  //         params = params.set("sellerId", this.currentFilters.sellerId);
-  //       }
-
-  //       if (this.currentFilters.courierId) {
-  //         params = params.set("courierId", this.currentFilters.courierId);
-  //       }
-
-  //       if (this.currentFilters.statusId !== undefined) {
-  //         if (this.currentFilters.statusId !== null) {
-  //           params = params.set(
-  //             "statusID",
-  //             this.currentFilters.statusId.toString()
-  //           );
-  //         }
-  //       }
-  //       if (
-  //         this.currentFilters.isAttempted ||
-  //         this.currentFilters.isAttempted == 0
-  //       ) {
-  //         params = params.set("isAttempted", this.currentFilters.isAttempted);
-  //       }
-  //       if (this.currentFilters.hasAwb || this.currentFilters.has == 0) {
-  //         params = params.set("hasAwb", this.currentFilters.hasAwb);
-  //       }
-
-  //       if (this.currentFilters.statusId) {
-  //         params = params.set("statusId", this.currentFilters.statusID);
-  //       }
-  //       let startDate = this.currentFilters.startDate;
-  //       let endDate = this.currentFilters.endDate;
-
-  //       if (!startDate || !endDate) {
-  //         const currentDate = new Date();
-  //         const adjustedDate = new Date(
-  //           currentDate.getTime() - currentDate.getTimezoneOffset() * 60000
-  //         )
-  //           .toISOString()
-  //           .split("T")[0];
-  //         startDate = startDate || adjustedDate;
-  //         endDate = endDate || adjustedDate;
-  //       }
-
-  //       params = params.set("startDate", startDate).set("endDate", endDate);
-  //       if (this.currentFilters.awbnumber) {
-  //         params = params.set("awb", this.currentFilters.awbnumber);
-  //       }
-  //       if (this.currentFilters.phone) {
-  //         params = params.set("phone", this.currentFilters.phone);
-  //       }
-
-  //       this.http.get(this.apiservice.Orders, { params }).subscribe(
-  //         (res: any) => {
-  //           if (res.status) {
-  //             resolve(res.data.orders);
-  //           } else {
-  //             reject("Failed to fetch data");
-  //           }
-  //         },
-  //         (error) => {
-  //           console.error("API Error:", error);
-  //           reject(error);
-  //         }
-  //       );
-  //     });
-  //   };
-
-  //   const fetchAll = async () => {
-  //     let moreData = true;
-  //     while (moreData) {
-  //       const orders = await fetchPage(pageIndex);
-  //       if (orders.length > 0) {
-  //         allOrders.push(...orders);
-  //         pageIndex++;
-  //       } else {
-  //         moreData = false;
-  //       }
-  //     }
-  //     return allOrders;
-  //   };
-
-  //   return fetchAll();
-  // }
 
   fetchAllOrders(): Promise<any[]> {
     return new Promise((resolve, reject) => {
@@ -658,9 +655,7 @@ export class InstaOrdersComponent implements OnInit {
         params = params.set("cardId", this.currentFilters.cardId);
       }
 
-      if (this.currentFilters.sellerId) {
-        params = params.set("sellerId", this.currentFilters.sellerId);
-      }
+      params = this.applySellerParam(params, this.currentFilters.sellerId);
 
       if (this.currentFilters.courierId) {
         params = params.set("courierId", this.currentFilters.courierId);
@@ -701,7 +696,7 @@ export class InstaOrdersComponent implements OnInit {
         params = params.set("phone", this.currentFilters.phone);
       }
 
-      // 🚀 SINGLE API CALL
+    
       this.http.get(this.apiservice.OrdersExport, { params }).subscribe(
         (res: any) => {
           if (res.status) {
@@ -711,7 +706,7 @@ export class InstaOrdersComponent implements OnInit {
               reject("No data");
               return;
             }
-            resolve(orders); // ✅ full data comes directly
+            resolve(orders); 
           } else {
             this.toastr.error("Failed to fetch data");
             reject("Failed to fetch data");
@@ -728,7 +723,7 @@ export class InstaOrdersComponent implements OnInit {
 
   downloadCSV(data: any[]) {
     const csvData = this.convertToCSV(data);
-    const randomNumber = Math.floor(Math.random() * 90000) + 10000; // Generate a 5-digit random number
+    const randomNumber = Math.floor(Math.random() * 90000) + 10000; 
     const fileName = `Order_17185${randomNumber}.csv`;
     const blob = new Blob([csvData], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
@@ -789,21 +784,38 @@ export class InstaOrdersComponent implements OnInit {
     this.isActive = status;
   }
 
-  //------Routes
+
 
   navigateToImportList() {
-    this.router.navigate(["admin/orders/list"]);
+    this.router.navigate(["admin/orders/list"]); // admin only
   }
 
   navigateToOrderDetail(orderID: string): void {
-    this.router.navigate(["/admin/orders/details", orderID]);
+    this.router.navigate([`/${this.basePath}/orders/details`, orderID]);
   }
 
   navigatetoInstaDetails(orderID: string): void {
-    this.router.navigate(["/admin/insta/details", orderID]);
+    this.router.navigate([`/${this.basePath}/insta/details`, orderID]);
   }
 
   navigateToAwbStatus(awb: string): void {
-    this.router.navigate(["admin/status", awb]);
+    this.router.navigate([`${this.basePath}/status`, awb]);
+  }
+
+
+  // -------------
+    getPercentage(count: number): number {
+    if (!this.baseTotalOrders) {
+      return 0;
+    }
+    const pct = (count / this.baseTotalOrders) * 100;
+    return pct > 100 ? 100 : pct;
+  }
+   getLabelOpacity(count: number): number {
+    if (count === 0) {
+      return 0.65;
+    }
+    const opacity = this.getPercentage(count) / 100;
+    return Math.max(opacity, 0.4);
   }
 }

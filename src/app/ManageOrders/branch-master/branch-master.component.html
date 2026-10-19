@@ -1,101 +1,99 @@
 <div class="card">
-    <div class="card-head">
-
-        <!-- Card-header elements -->
-
-        <div class="row">
-            <div class="col-md-6 col-sm-6">
-                <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Branch Master</h5>
-            </div>
-            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
-                <button class="btn btn-outline-dark btn-sm me-3" (click)="openDialog()">
-                    <i class="ri-upload-2-line"></i> CSV Upload
-                </button>
-                <button class="btn btn-outline-dark btn-sm me-3" (click)=" toggleFiltersForm()">
-                    <i [class]="buttonIcon"></i> {{ buttonText }}
-                </button>
-            </div>
-        </div>
-
-        <div class="form" *ngIf="showFiltersForm" style="margin-top: 30px;">
-
-            <div class="row">
-
-                <!-- Phone -->
-                <div class="col-md-3">
-                    <div class="mb-2">
-                        <label for="sellerName" class="form-label">Bank Name</label>
-                        <select class="form-select form-select-sm mb-2" id="sellerName" [(ngModel)]="sellerId">
-                            <option value="" selected disabled>Select Bank</option>
-                            <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-3 d-flex align-items-end">
-                    <div class="button-grp mb-2 d-flex justify-content-start">
-                        <button class="btn btn-outline-dark btn-sm me-3" type="button"
-                            style="background-color: rgb(5, 114, 209); font-size: small; color: white;"
-                            (click)="applyFilters()">Apply</button>
-                        <button class="btn btn-danger btn-sm me-3" style="font-size: small; box-shadow: none;"
-                            (click)="clearFilters()">Clear</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="page-head">
+    <div class="page-head_text">
+      <h2 class="page-title">Branch Master</h2>
+      <p class="page-sub">
+        Where Insta consignments are delivered, and who signs for them.
+      </p>
     </div>
 
+    <button type="button" class="btn-upload" (click)="openDialog()">
+      <i class="ri-upload-2-line"></i> CSV Upload
+    </button>
+  </div>
 
-    <div class="card-body">
+  <div class="card-body">
+    <div class="filter-bar">
+      <div class="filter-field">
+        <label for="sellerName" class="form-label">Bank Name</label>
+        <select
+          class="form-select form-select-sm"
+          id="sellerName"
+          [(ngModel)]="sellerId"
+        >
+          <option value="" selected disabled>Select Bank</option>
+          <option *ngFor="let seller of sellerData" [value]="seller.id">
+            {{ seller.name }}
+          </option>
+        </select>
+      </div>
 
-        <div class="row">
-
-
-            <div class="table-row">
-                <table class="table">
-                    <thead class="table-head-hover">
-                        <th scope="col">ID</th>
-                        <th scope="col">Institution</th>
-                        <th scope="col">Branch Code</th>
-                        <th scope="col">Branch Head</th>
-                        <th scope="col">Contact</th>
-                        <th scope="col">Address</th>
-                    </thead>
-
-                    <tbody>
-                        <tr *ngFor="let data of pincodeData">
-                            <td>{{ data.id }}</td>
-                            <td>{{ data.institutionName}}</td>
-                            <td>{{ data.branchCode}}</td>
-                            <td>{{ data.name}}</td>
-                            <td>{{ data.phone}}</td>
-                            <!-- <td style="font-size: 13px; line-height: 1.4; color: #333;">
-                            <div style="font-weight: 500;">{{ data.address1 }}</div>
-                            <div *ngIf="data.address2" style="color: #555;">{{ data.address2 }}</div>
-                            <div style="color: #777;">
-                                {{ data.city }}, {{ data.state }} - {{ data.pincode }}
-                            </div>
-                        </td> -->
-                            <td style="font-size: 13px;">
-                                <div>{{ data.address1 }}</div>
-                                <div *ngIf="data.address2">{{ data.address2 }}</div>
-                                <div>
-                                    <span style="font-weight:600;">{{ data.city }}</span>,
-                                    {{ data.state }} -
-                                    <span style="color:#2563eb;">{{ data.pincode }}</span>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Pagination  -->
-
-        <app-paginator [length]="totalOrders" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100 , 500 , 1000]"
-            [pageIndex]="pageIndex" (page)="handlePageEvent($event)">
-        </app-paginator>
-
+      <div class="filter-actions">
+        <button class="btn-apply" type="button" (click)="applyFilters()">
+          Apply
+        </button>
+        <button class="btn-clear" type="button" (click)="clearFilters()">
+          Clear
+        </button>
+      </div>
     </div>
+
+    <div class="table-row">
+      <table class="table table-borderless branch-table">
+        <thead class="table-head-hover">
+          <tr>
+            <th scope="col">Branch Code</th>
+            <th scope="col">Branch Head</th>
+            <th scope="col">Contact</th>
+            <th scope="col">Address</th>
+            <th scope="col" class="num">Consignments</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let data of pincodeData">
+            <td>
+              <span class="cell-code">{{ data.branchCode }}</span>
+              <i
+                class="ri-file-copy-line copy-icon"
+                (click)="copyToClipboard(data.branchCode)"
+              ></i>
+            </td>
+
+            <td>
+              <div class="cell-main">{{ data.name }}</div>
+              <div class="cell-sub">{{ data.institutionName }}</div>
+            </td>
+
+            <td>
+              <span class="cell-muted">{{ data.phone || "—" }}</span>
+            </td>
+
+            <td>
+              <div class="cell-main">{{ data.address1 }}</div>
+              <div class="cell-sub" *ngIf="data.address2">
+                {{ data.address2 }}
+              </div>
+              <div class="cell-sub upper">
+                {{ data.city }}, {{ data.state }} — {{ data.pincode }}
+              </div>
+            </td>
+
+            <td class="num">
+              <span class="cell-count">not yet</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <app-paginator
+      [length]="totalOrders"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+      [pageIndex]="pageIndex"
+      (page)="handlePageEvent($event)"
+    >
+    </app-paginator>
+  </div>
 </div>

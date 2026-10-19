@@ -1,172 +1,211 @@
 <div class="card" [@fadeSlideInOut]>
-
-    <div class="card-head">
-
-        <div class="row">
-            <div class="col">
-                <h3>Add Employee</h3>
-            </div>
-            <div class="col close-form">
-                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
-            </div>
-        </div>
-
+  <div class="drawer-head">
+    <div class="drawer-head_text">
+      <h3 class="drawer-title">Add Employee</h3>
     </div>
-    <div class="card-body">
-        <div class="row">
+    <button type="button" class="close-btn" (click)="closeDialog()">
+      <i class="ri-close-line"></i>
+    </button>
+  </div>
 
-            <div class="col">
-                <label class="form-label">First Name <font color="red">*</font> </label>
-                <input type="text" name="Name" [(ngModel)]="newUserObj.firstName" (ngModelChange)="validateInput()"
-                    [ngClass]="{'empty-input': formSubmitted && !newUserObj.firstName}" class="form-control"
-                    placeholder="Enter First Name" id="fname" autocomplete="off" maxlength="30" (keypress)="allowOnlyAlphanumeric($event)">
-                    <span *ngIf="newUserObj?.firstName && newUserObj.firstName.length >= 30" class="text-danger">
-                        Maximum length of 30 characters reached.
-                    </span>
-                </div>
-            <div class="col">
-                <label class="form-label">Last Name <font color="red">*</font> </label>
-                <input type="text" name="Name" [(ngModel)]="newUserObj.lastName" (ngModelChange)="validateInput()"
-                    [ngClass]="{'empty-input': formSubmitted && !newUserObj.lastName}" class="form-control"
-                    placeholder="Enter Last Name" id="lname" autocomplete="off" maxlength="30" (keypress)="allowOnlyAlphanumeric($event)">
-                    <span *ngIf="newUserObj?.lastName && newUserObj.lastName.length >= 30" class="text-danger">
-                        Maximum length of 30 characters reached.
-                    </span>
-                </div>
+  <div class="drawer-body">
+    <div class="field-grid">
+      <div class="field">
+        <label class="form-label">First Name <span class="req">*</span></label>
+        <input
+          type="text"
+          name="Name"
+          [(ngModel)]="newUserObj.firstName"
+          (ngModelChange)="validateInput()"
+          [ngClass]="{ 'empty-input': formSubmitted && !newUserObj.firstName }"
+          class="form-control"
+          placeholder="Enter First Name"
+          id="fname"
+          autocomplete="off"
+          maxlength="30"
+          (keypress)="allowOnlyAlphanumeric($event)"
+        />
+        <span
+          *ngIf="newUserObj.firstName && newUserObj.firstName.length >= 30"
+          class="text-danger"
+        >
+          Maximum length of 30 characters reached.
+        </span>
+      </div>
 
+      <div class="field">
+        <label class="form-label">Last Name <span class="req">*</span></label>
+        <input
+          type="text"
+          name="Name"
+          [(ngModel)]="newUserObj.lastName"
+          (ngModelChange)="validateInput()"
+          [ngClass]="{ 'empty-input': formSubmitted && !newUserObj.lastName }"
+          class="form-control"
+          placeholder="Enter Last Name"
+          id="lname"
+          autocomplete="off"
+          maxlength="30"
+          (keypress)="allowOnlyAlphanumeric($event)"
+        />
+        <span
+          *ngIf="newUserObj.lastName && newUserObj.lastName.length >= 30"
+          class="text-danger"
+        >
+          Maximum length of 30 characters reached.
+        </span>
+      </div>
+
+      <div class="field">
+        <label class="form-label">Employee Email <span class="req">*</span></label>
+        <input
+          type="email"
+          name="emailAddress"
+          [(ngModel)]="newUserObj.emailAddress"
+          (ngModelChange)="resetEmailValidation()"
+          [ngClass]="{ 'empty-input': formSubmitted && !newUserObj.emailAddress }"
+          class="form-control"
+          placeholder="Enter Email id"
+          id="email"
+          autocomplete="off"
+          maxlength="100"
+        />
+        <span *ngIf="formSubmitted && invalidemail" class="invalid-email text-danger">
+          Invalid Email.
+        </span>
+        <span
+          *ngIf="newUserObj.emailAddress && newUserObj.emailAddress.length >= 100"
+          class="text-danger"
+        >
+          Maximum length of 100 characters reached.
+        </span>
+      </div>
+
+      <div class="field">
+        <label class="form-label">Contact No. <span class="req">*</span></label>
+        <input
+          type="text"
+          name="contact"
+          [(ngModel)]="newUserObj.contact"
+          (ngModelChange)="resetPhoneValidation()"
+          [ngClass]="{ 'empty-input': formSubmitted && !newUserObj.contact }"
+          class="form-control"
+          placeholder="Enter Your Number"
+          id="phone"
+          autocomplete="off"
+          maxlength="15"
+          (keypress)="allowOnlyNumeric($event)"
+        />
+        <span *ngIf="formSubmitted && invalidphone" class="invalid-email text-danger">
+          Invalid Contact Number.
+        </span>
+        <span
+          *ngIf="newUserObj.contact && newUserObj.contact.length >= 15"
+          class="text-danger"
+        >
+          Maximum length of 15 reached.
+        </span>
+      </div>
+
+      <div class="field field--full">
+        <label class="form-label">User Code <span class="req">*</span></label>
+        <div class="input-wrap">
+          <input
+            type="text"
+            name="employee-name"
+            [(ngModel)]="newUserObj.username"
+            (ngModelChange)="resetUserValidation()"
+            [ngClass]="{ 'empty-input': formSubmitted && !newUserObj.username }"
+            class="form-control"
+            placeholder="Enter User Name"
+            id="usercode"
+            autocomplete="off"
+            maxlength="30"
+          />
+          <i
+            class="bi bi-info-circle info-icon"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Usercode should contain only lowercase letters and numbers with no special characters."
+          ></i>
         </div>
-        <div class="row">
-
-            <div class="col">
-                <label class="form-label">Employee Email <font color="red">*</font> </label>
-                <input type="email" name="emailAddress" [(ngModel)]="newUserObj.emailAddress"
-                    (ngModelChange)="resetEmailValidation()"
-                    [ngClass]="{'empty-input': formSubmitted && !newUserObj.emailAddress}" class="form-control"
-                    placeholder="Enter Email id" id="email" autocomplete="off" maxlength="100">
-                <span *ngIf="formSubmitted && invalidemail" class="invalid-email text-danger">
-                    Invalid Email.
-                </span>
-                <span *ngIf="newUserObj?.emailAddress && newUserObj.emailAddress.length >= 100" class="text-danger">
-                    Maximum length of 100 characters reached.
-                </span>
-            </div>
-            <div class="col">
-                <label class="form-label">Contact No. <font color="red">*</font> </label>
-                <input type="text" name="contact" [(ngModel)]="newUserObj.contact"
-                    (ngModelChange)="resetPhoneValidation()"
-                    [ngClass]="{'empty-input': formSubmitted && !newUserObj.contact}" class="form-control"
-                    placeholder="Enter Your Number" id="phone" autocomplete="off" maxlength="15" (keypress)="allowOnlyNumeric($event)">
-                <span *ngIf="formSubmitted && invalidphone" class="invalid-email text-danger">
-                    Invalid Contact Number.
-                </span>
-                <span *ngIf="newUserObj?.contact && newUserObj.contact.length >= 15" class="text-danger">
-                    Maximum length of 15 reached.
-                </span>
-            </div>
-
-        </div>
-        <div class="row">
-
-            <div class="col">
-                <label class="form-label">User Code <font color="red">*</font> </label>
-                <input type="text" name="employee-name" [(ngModel)]="newUserObj.username"
-                    (ngModelChange)="resetUserValidation()"
-                    [ngClass]="{'empty-input': formSubmitted && !newUserObj.username}" class="form-control"
-                    placeholder="Enter User Name" id="usercode" autocomplete="off" maxlength="30">
-
-                    <i class="bi bi-info-circle position-absolute"
-                    style="top: 71%; right: 32px; transform: translateY(-50%); cursor: pointer;"
-                    data-bs-toggle="tooltip" data-bs-placement="bottom"
-                    title="Usercode should contain only lowercase letters and numbers with no special characters."></i>
-                <span *ngIf="formSubmitted && invaliduser" class="invalid-email text-danger">
-                    Only lowercase alphabets and numbers are allowed.
-                </span>
-                <span *ngIf="newUserObj?.username && newUserObj.username.length >= 30" class="text-danger">
-                    Maximum length of 30 reached.
-                </span>
-            </div>
-            <!-- <div class="col">
-                <label class="form-label">Password <font color="red">*</font> </label>
-                <input type="password" name="employee-password" [(ngModel)]="newUserObj.password" class="form-control"
-                    placeholder="Enter Password" id="password" autocomplete="new-password">
-            </div> -->
-        </div>
-        <div class="row">
-            <div class="col">
-                <label class="form-label">Permissions</label>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-check">
-
-                            <input type="checkbox" class="form-check-input" id="orders"
-                                [(ngModel)]="newUserObj.hasOrders"
-                                (ngModelChange)="updatePermission('hasOrders', $event)">
-                            <label class="form-check-label" for="orders">Manage Orders</label>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="shipments"
-                                [(ngModel)]="newUserObj.hasShipment"
-                                (ngModelChange)="updatePermission('hasShipment', $event)">
-                            <label class="form-check-label" for="shipments">Manage Shipment</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-check">
-
-                            <input type="checkbox" class="form-check-input" id="orders"
-                                [(ngModel)]="newUserObj.hasNdr"
-                                (ngModelChange)="updatePermission('hasNdr', $event)">
-                            <label class="form-check-label" for="ndr">Manage NDR</label>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="shipments"
-                                [(ngModel)]="newUserObj.hasRto"
-                                (ngModelChange)="updatePermission('hasRto', $event)">
-                            <label class="form-check-label" for="rto">Manage RTO</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-check">
-
-                            <input type="checkbox" class="form-check-input" id="reports"
-                                [(ngModel)]="newUserObj.hasReports"
-                                (ngModelChange)="updatePermission('hasReports', $event)">
-                            <label class="form-check-label" for="reports">Manage Reports</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-2">
-                <button class="btn btn-outline-danger " (click)="closeDialog()">Close</button>
-            </div>
-
-            <div class="col-2">
-                <button class="btn btn-primary " (click)="user()">Save</button>
-            </div>
-        </div>
-        <!-- <span *ngIf="invalidsubmit" class=" text-danger">
-            Please agree to user policies before proceeding.
-        </span> -->
-
+        <span *ngIf="formSubmitted && invaliduser" class="invalid-email text-danger">
+          Only lowercase alphabets and numbers are allowed.
+        </span>
+        <span
+          *ngIf="newUserObj.username && newUserObj.username.length >= 30"
+          class="text-danger"
+        >
+          Maximum length of 30 reached.
+        </span>
+      </div>
     </div>
+
+    <div class="section-title">
+      <span>Permissions</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="perm-grid">
+      <label class="perm-item" for="orders">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="orders"
+          [(ngModel)]="newUserObj.hasOrders"
+          (ngModelChange)="updatePermission('hasOrders', $event)"
+        />
+        <span>Manage Orders</span>
+      </label>
+
+      <label class="perm-item" for="shipments">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="shipments"
+          [(ngModel)]="newUserObj.hasShipment"
+          (ngModelChange)="updatePermission('hasShipment', $event)"
+        />
+        <span>Manage Shipment</span>
+      </label>
+
+      <label class="perm-item" for="ndr">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="ndr"
+          [(ngModel)]="newUserObj.hasNdr"
+          (ngModelChange)="updatePermission('hasNdr', $event)"
+        />
+        <span>Manage NDR</span>
+      </label>
+
+      <label class="perm-item" for="rto">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="rto"
+          [(ngModel)]="newUserObj.hasRto"
+          (ngModelChange)="updatePermission('hasRto', $event)"
+        />
+        <span>Manage RTO</span>
+      </label>
+
+      <label class="perm-item" for="reports">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="reports"
+          [(ngModel)]="newUserObj.hasReports"
+          (ngModelChange)="updatePermission('hasReports', $event)"
+        />
+        <span>Manage Reports</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="drawer-foot">
+    <button type="button" class="btn-cancel" (click)="closeDialog()">Close</button>
+    <button type="button" class="btn-save" (click)="user()">Save</button>
+  </div>
 </div>

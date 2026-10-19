@@ -1,35 +1,41 @@
 <div class="card">
-    <div class="card-head">
-        <div class="row">
-            <div class="col-md-6 col-sm-6">
-                <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Couriers </h5>
-            </div>
-            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
-                <button class="btn btn-outline-dark btn-sm me-3" (click)="navigateTOCourierlist()"> <i class="ri-arrow-left-circle-line"></i>
-                    Back</button>
-            </div>
+  <!-- Page header -->
+  <div class="page-head">
+    <div class="page-head_text">
+      <h2 class="page-title">Couriers</h2>
+      <p class="page-sub">Courier partners available to integrate.</p>
+    </div>
+
+    <button type="button" class="btn-back" (click)="navigateTOCourierlist()">
+      <i class="ri-arrow-left-line"></i> Back
+    </button>
+  </div>
+
+  <div class="card-body">
+    <div class="courier-grid">
+      <div class="courier-card" *ngFor="let courier of Couriers">
+        <div class="courier-image">
+          <img [src]="courier.imageUrl" [alt]="courier.name" />
         </div>
 
-    </div>
-    <div class="card-body p-3">
-        <div class="row">            
-            <ng-container *ngFor="let courier of Couriers; let i = index">
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-                    <div class=" courier-card card">
-                        
-                        <div class=" card-body">  
-                            <div class="card-image text-center">
-                                <img [src]="courier.imageUrl" class="card-img-top" alt="User Image"> 
-                            </div>                                                
-                        </div>
-                        <div class="card-footer d-flex justify-content-between align-items-center">
-                            <h5 class="card-text">{{ courier.name }}</h5>
-                            <span *ngIf="courier.status === 1" class="badge bg-success" style="font-size: 14px;">Integrated</span>
-                            <button *ngIf="courier.status === 0" (click)="addCourier()" class="btn integrate btn-outline-dark btn-sm">Integrate</button>
-                        </div>
-                    </div>
-                </div>
-            </ng-container>
+        <div class="courier-footer">
+          <h3 class="courier-name">{{ courier.name }}</h3>
+
+          <span class="status-pill" *ngIf="courier.status === 1">
+            <span class="status-dot"></span>
+            Integrated
+          </span>
+
+          <button
+            type="button"
+            *ngIf="courier.status === 0"
+            class="btn-integrate"
+            (click)="addCourier()"
+          >
+            Integrate
+          </button>
         </div>
+      </div>
     </div>
+  </div>
 </div>

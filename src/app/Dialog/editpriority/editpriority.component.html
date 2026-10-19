@@ -1,71 +1,59 @@
-<div class="card" [@fadeSlideInOut]>
- 
-    <div class="card-head">
-       
-        <div class="row">
-            <div class="col">
-                <h3>Update Priority</h3>
-            </div>
-            <div class="col close-form">
-                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
-            </div>
-        </div>
- 
+<div class="drawer-form">
+
+  <!-- Header -->
+  <div class="drawer-head">
+    <div>
+      <h3 class="drawer-title"> Edit rule</h3>
+      <p class="drawer-sub">{{ name }}</p>
     </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col">
-                <label class="form-label">Rule Name</label>
-                <input type="text" name="rulename" class="form-control" placeholder="Enter Rule Name" id="name" disabled [(ngModel)]="name">
-            </div>
-            <div class="col">
-                <label class="form-label">Institution</label>
-                <input type="text" name="institutiuon" class="form-control" placeholder="Enter Institution" id="institutiuon" disabled [(ngModel)]="institution">    
-            </div>
-            
-        </div>
-       
-        <div class="row">
+    <button type="button" class="drawer-close" aria-label="Close" (click)="closeDialog()">&times;</button>
+  </div>
 
-            <div class="col-sm-6">
-                <label for="courier" class="form-label">Priority 1</label>
-                <select class="form-select form-select-sm mb-2" name="firstPriority" id="sellerName"
-                    [(ngModel)]="firstPriorityId">
-                    <option value="" selected disabled>Select Courier</option>
-                    <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}
-                    </option>
-                </select>
-            </div>
-
-            <div class="col-sm-6">
-                <label for="courier" class="form-label">Priority 2</label>
-                <select class="form-select form-select-sm mb-2" name="secondPriority" id="sellerName"
-                    [(ngModel)]="secondPriorityId">
-                    <option value="" selected disabled>Select Courier</option>
-                    <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}
-                    </option>
-                </select>
-            </div>
-
-            <div class="col-sm-6">
-                <label for="courier" class="form-label">Priority 3</label>
-                <select class="form-select form-select-sm mb-2" name="thirdPriority" id="sellerName"
-                    [(ngModel)]="thirdPriorityId">
-                    <option value="" selected disabled>Select Courier</option>
-                    <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}
-                    </option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-2">
-                <button class="btn btn-outline-danger " (click)="closeDialog()">Close</button>
-            </div>
-           
-            <div class="col-2">
-                <button class="btn btn-primary" (click)="UpdatePriority()">Update</button>
-            </div>
-        </div>   
+  <!-- Body -->
+  <div class="drawer-body">
+    <div class="row g-3">
+      <div class="col-6">
+        <label for="name" class="d-label">Rule name</label>
+        <input type="text" name="rulename" class="d-input" placeholder="Enter Rule Name"
+          id="name" disabled [(ngModel)]="name">
+      </div>
+      <div class="col-6">
+        <label for="institutiuon" class="d-label">Institution</label>
+        <input type="text" name="institutiuon" class="d-input" placeholder="Enter Institution"
+          id="institutiuon" disabled [(ngModel)]="institution">
+      </div>
     </div>
+
+    <div class="section-title"><span>Courier priority</span></div>
+
+    <div class="prio-row">
+      <span class="num n1">1</span>
+      <select class="d-input" name="firstPriority" id="editP1" [(ngModel)]="firstPriorityId">
+        <option value="" selected disabled>Select Courier</option>
+        <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}</option>
+      </select>
+    </div>
+
+    <div class="prio-row">
+      <span class="num n2">2</span>
+      <select class="d-input" name="secondPriority" id="editP2" [(ngModel)]="secondPriorityId">
+        <option value="" selected disabled>Select Courier</option>
+        <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}</option>
+      </select>
+    </div>
+
+    <div class="prio-row">
+      <span class="num n3">3</span>
+      <select class="d-input" name="thirdPriority" id="editP3" [(ngModel)]="thirdPriorityId">
+        <option value="" selected disabled>Select Courier</option>
+        <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="drawer-foot">
+    <button type="button" class="btn-cancel" (click)="closeDialog()">Close</button>
+    <button type="button" class="btn-create" (click)="UpdatePriority()">&#10003; Update</button>
+  </div>
 </div>

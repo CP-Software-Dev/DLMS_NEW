@@ -1,0 +1,154 @@
+.drf-wrapper {
+  position: relative;
+  width: 100%;
+  font-family: inherit;
+}
+
+/* -------- Closed trigger box -------- */
+.drf-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  border: 1px solid #e8e9ee;
+  border-radius: 15px;
+  padding: 8px 12px;
+  background-color: #FAFAFD;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.drf-trigger-icon {
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.drf-trigger-label {
+  flex: 1;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.drf-chevron {
+  color: #6b7280;
+  font-size: 15px;
+  transition: transform 0.2s ease;
+}
+
+.drf-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+/* -------- Dropdown panel -------- */
+.drf-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  width: 700px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+}
+
+.drf-panel-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #1f2430;
+  margin-bottom: 16px;
+}
+
+.drf-preset-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.drf-preset-btn {
+  border: 1px solid #dcdddd;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.875rem;
+  color: #a4a5a7;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+  font-weight: 700;
+}
+
+.drf-preset-btn:hover {
+  background-color: #f9fafb;
+}
+
+.drf-preset-btn.active {
+  border: 1.5px solid #7c5cf0;
+  background-color: #f2eefc;
+  color: #7c5cf0;
+  font-weight: 800;
+}
+
+/* -------- Custom range inline inputs -------- */
+.drf-custom-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.drf-custom-input {
+  flex: 1;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+.drf-custom-sep {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* -------- Footer -------- */
+.drf-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.drf-btn-cancel {
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+}
+
+.drf-btn-cancel:hover {
+  background-color: #f9fafb;
+}
+
+.drf-btn-apply {
+  background-color: #7c5cf0;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 22px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+}
+
+.drf-btn-apply:hover {
+  background-color: #6941e8;
+}

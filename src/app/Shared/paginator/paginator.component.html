@@ -1,15 +1,16 @@
 <div class="paginator">
     <div class="left-section">
+        <span class=" pagination-info mr-2">Rows</span>
         <select (change)="onPageSizeChange($event)">
-            <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+            <option *ngFor="let size of pageSizeOptions" [value]="size" >{{ size }}</option>
         </select>
         <div class="pagination-info">
-            Showing {{ startIndex + 1 }} to {{ endIndex }} of {{ length }} entries
+             {{ startIndex + 1 }}-{{ endIndex }} of <span style="font-weight:900;color: black; margin-right: 3px;">{{ length }}</span> 
         </div>
     </div>
     <div class="pagination-buttons" *ngIf="shouldShowPagination">
         <button (click)="goToPage(pageIndex - 1)" style="text-align: center;" [disabled]="pageIndex === 0">
-            <i class="ri-arrow-left-s-line" style="font-size: 15px;"></i> Prev
+           Prev
         </button>
         <ng-container *ngFor="let page of pages">
             <span (click)="goToPage(page)" [class.active]="page === pageIndex">
@@ -17,13 +18,13 @@
             </span>
         </ng-container>
         <button (click)="goToPage(pageIndex + 1)" style="text-align: center;" [disabled]="pageIndex >= totalPages - 1">
-            Next <i class="ri-arrow-right-s-line" style="font-size: 15px;"></i>
+            Next
         </button>
     </div>
 
     <div class="page-input"  *ngIf="shouldShowPagination">
         <input type="number" [(ngModel)]="inputPageNumber" min="1" max="{{ totalPages }}"  [maxlength]="maxDigits(totalPages)" pattern="\d{1,{{ maxDigits(totalPages) }}}" placeholder="" (input)="validateInput($event)">
         <button (click)="goToInputPage()">Jump to Page</button>
-        <span style="margin-left: 5px;">of {{ totalPages }} pages</span>
+        <span style="margin-left: 5px;color: rgb(124, 122, 122);" >of <span  style="font-weight:900;color: black; margin-right: 3px; font-size: 12px;">{{totalPages}}</span> pages</span>
     </div>
 </div>

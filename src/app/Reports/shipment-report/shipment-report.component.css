@@ -1,234 +1,498 @@
-.reports-container {
-  display: flex;
-  padding: 20px;
-  gap: 20px; /* Add some space between the columns */
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin: 0.8rem 0 0.8rem 0;
-  border-radius: 8px;
+:host {
+  --grad-primary: linear-gradient(135deg, var(--indigo) 0%, var(--sky) 100%);
+  --shadow-primary: 0 8px 18px -6px rgba(124, 107, 245, 0.55);
+  --shadow-card: 0 1px 2px rgba(26, 26, 46, 0.04);
+  --bg-head: #fafafd;
+  --bg-segment: #eff0f7;
+  --border-check: #c9cde0;
+  --focus-ring: 0 0 0 3px rgba(139, 127, 240, 0.18);
+  --radius-xl: 22px;
+  --radius-pill: 999px;
+
+  display: block;
+  font-family: inherit; 
+  color: var(--text-primary);
 }
 
-.created-reports-list {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 20px;
-  flex: 2.5; /* Use 2.5 parts of the flex container */
+:host button,
+:host input,
+:host select {
+  font-family: inherit;
 }
 
-.create-report {
-  border-radius: 5px;
-  padding: 20px;
-  flex: 7.5; 
+.rp-page {
+  padding: 25px 35px 32px;
+  background-color: var(--bg-page);
+  margin-left: -10px;
+  margin-right: -10px;
 }
 
-.title {
-  font-size: 1.5em;
+/* ---------- Header ---------- */
+.rp-header h1 {
+  margin: 0 0 6px;
+  font-size: 35px;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+}
+.rp-header p {
+  margin: 10px 0 18px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+/* ---------- Layout ---------- */
+.rp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  padding: 0px 25px;
+}
+
+/* ---------- Cards ---------- */
+.rp-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+.rp-card-head {
+  padding: 22px 20px 20px;
+  font-size: 25px;
+  font-weight: 750;
+  border-bottom: 1px solid var(--border);
+}
+.rp-card-body {
+  padding: 22px 20px 24px;
+}
+
+/* ---------- Form fields ---------- */
+.rp-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.rp-row-2.rp-single {
+  grid-template-columns: 1fr;
+}
+.rp-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+.rp-field input,
+.rp-field select {
+  width: 100%;
+  height: 42px;
+  padding:25px 18px;
+  box-sizing: border-box;
+  font-size: 14px;
   font-weight: 600;
-  display: block;
-  margin-bottom: 10px;
+  color: var(--text-primary);
+  background: #fafafd;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
 }
-
-.subtitle {
-  font-size: 1em;
+.rp-field input::placeholder {
+  color: var(--text-faint);
   font-weight: 500;
-  display: block;
-  margin-bottom: 5px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.rp-field input:hover,
+.rp-field select:hover {
+  border-color: var(--border-check);
+}
+.rp-field input:focus,
+.rp-field select:focus {
+  background: var(--white);
+  border-color: var(--primary);
+  box-shadow: var(--focus-ring);
 }
 
-.report-category {
-  margin-bottom: 20px;
+/* Select needs no vertical padding, otherwise the selected text is clipped */
+.rp-field select {
+  padding: 0 18px;
+  cursor: pointer;
 }
 
-
-
-ul {
-  list-style-type: disc;
-  padding-left: 0;
-}
-
-.report-icon{
-  margin-right: 5px;
-}
-li {
-  margin-bottom: 5px;
-  margin-left: 30px;
-  font-size: .9em;
-}
-
-a {
-  text-decoration: none;
-  color: #007bff;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-.create-report p {
-  margin-bottom: 20px;
-}
-
-.create-report {
-  border-radius: 5px;
-  padding: 20px;
-  flex: 7.5;
-}
-
-h4{
-  margin-bottom: 30px;
-}
-
-
-.form-group{
+/* ---------- Section divider ---------- */
+.rp-section {
   display: flex;
   align-items: center;
+  gap: 12px;
+  margin: 24px 0 14px;
 }
-.form-check-input{
-  margin-top: 5px;
+.rp-section span {
+  font-size: 14px;
+  font-weight: 750;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.rp-section .toggle_all {
+  text-transform: capitalize;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+}
+.rp-section::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
 }
 
-
-.report-label{
-  font-size: 1em;
-  font-weight: 500;
+.rp-section .rp-check-sm {
+  gap: 8px;
 }
-.form-control , .form-select:focus , .form-check-input{
-  border: 1px solid #cccc;
-  box-shadow: none;
+.rp-section .rp-check-sm span {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-secondary);
+}
+.rp-section .rp-check-sm:hover span {
+  color: var(--text-primary);
 }
 
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropbtn {
-  background-color: white;
-  color: black;
-  border: 1px solid #ccc;
-  padding: 7px;
-  border-radius: 5px;
-  font-size: 16px;
+.rp-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
   cursor: pointer;
+  transition: color 0.15s;
+}
+.rp-link:hover {
+  color: var(--accent-violet);
+}
+
+/* ---------- Segmented control ---------- */
+.rp-segment {
+  display: inline-flex;
+  padding: 4px;
+  gap: 2px;
+  background: var(--bg-segment);
+  border-radius: var(--radius-pill);
+}
+.rp-segment button {
+  border: 0;
+  background: transparent;
+  padding: 8px 18px;
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    box-shadow 0.15s;
+}
+.rp-segment button:hover:not(.active) {
+  color: var(--text-secondary);
+}
+.rp-segment button.active {
+  background: var(--white);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(26, 26, 46, 0.12);
+}
+
+/* ---------- Checkbox grid ---------- */
+.rp-checks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+}
+.rp-check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+.rp-check:hover {
+  color: var(--text-primary);
+}
+.rp-check input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  display: grid;
+  place-content: center;
+  background: var(--white);
+  border: 1.5px solid var(--border-check);
+  border-radius: 5px;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    border-color 0.12s;
+}
+.rp-check input::after {
+  content: "";
+  width: 9px;
+  height: 5px;
+  margin-top: -2px;
+  border-left: 2px solid var(--white);
+  border-bottom: 2px solid var(--white);
+  transform: rotate(-45deg) scale(0);
+  transition: transform 0.12s;
+}
+.rp-check input:checked {
+  background: var(--accent-violet);
+  border-color: var(--accent-violet);
+}
+.rp-check input:checked::after {
+  transform: rotate(-45deg) scale(1);
+}
+.rp-check span {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ---------- Buttons ---------- */
+.rp-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 28px;
+}
+.rp-btn-primary {
+  border: 0;
+  padding: 11px 20px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--white);
+  background: var(--grad-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-primary);
+  cursor: pointer;
+  transition:
+    transform 0.12s,
+    opacity 0.12s;
+}
+.rp-btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.rp-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.rp-btn-ghost {
+  padding: 11px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.rp-btn-ghost:hover {
+  background: var(--bg-input);
+}
+
+/* ---------- Saved reports table ---------- */
+.rp-table {
   width: 100%;
+  border-collapse: collapse;
+}
+.rp-table th {
+  padding: 14px 20px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 750;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--bg-head);
+  border-bottom: 1px solid var(--border);
+}
+.rp-table td {
+  padding: 14px 20px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border);
+}
+.rp-table tbody tr {
+  transition: background 0.12s;
+}
+.rp-table tbody tr:hover {
+  background: var(--bg-head);
+}
+.rp-name {
+  font-size: 15px;
+  font-weight: 700;
+}
+.rp-sub {
+  margin-top: 5px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+
+  color: var(--text-muted);
+}
+.rp-date {
+  font-size: 15px;
+  font-weight: 750;
+  white-space: nowrap;
+  letter-spacing: 0.6px;
+}
+.rp-empty {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.rp-run {
+  border: 0;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--white);
+  background: var(--grad-primary);
+  border-radius: 10px;
+  box-shadow: var(--shadow-primary);
+  cursor: pointer;
+  transition:
+    filter 0.15s,
+    transform 0.12s;
+}
+.rp-run:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+/* ---------- Pager ---------- */
+.rp-pager {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--text-muted);
 }
-
-.selected-statuses {
-  display: inline-block;
-  max-width: calc(100% - 20px); /* Adjust as necessary to leave space for the icon */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: middle;
+.rp-rows {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
 }
-
-.dropbtn span {
-  order: 1;
+.rp-rows select {
+  height: 36px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
 }
-
-.dropbtn i {
-  margin-left: 5px;
-  order: 2;
+.rp-rows select:focus {
+  border-color: var(--primary);
+  box-shadow: var(--focus-ring);
 }
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #fff;
-  margin-top: 5px;
-  min-width: 250px;
-  height: 250px;
-  overflow: auto;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-  border: 1px solid #ccc;
-  border-radius: 7px;
-  padding: 8px;
-  box-sizing: border-box;
+.rp-range b {
+  color: var(--text-primary);
 }
-
-.dropdown-content::-webkit-scrollbar {
-  width: 2px !important; /* Use !important to ensure the style is applied */
+.rp-pages {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
-
-.dropdown-content::-webkit-scrollbar-track {
-  background: #f1f1f1 !important;
-  border-radius: 7px !important;
-}
-
-.dropdown-content::-webkit-scrollbar-thumb {
-  background: #888 !important;
-  border-radius: 7px !important;
-}
-
-.dropdown-content::-webkit-scrollbar-thumb:hover {
-  background: #555 !important;
-}
-
-.dropdown-content::-webkit-scrollbar-button {
-  display: none !important;
-}
-.dropdown-content {
-  scrollbar-width: thin; 
-  scrollbar-color: #888 #f1f1f1; 
-}
-
-.dropdown-content {
-  -ms-overflow-style: -ms-autohiding-scrollbar; 
-}
-.dropdown-content.show {
-  display: block;
-}
-
-.dropdown-content .searchfield {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-  border: none;
-  border-bottom: 1px solid gray;
-  margin-bottom: 8px;
-}
-
-.dropdown-content label {
-  display: block;
-  padding: 8px;
+.rp-page-btn {
+  border: 0;
+  background: none;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
   cursor: pointer;
 }
-
-.dropdown-content label:hover {
-  background-color: #f1f1f1;
+.rp-page-btn:hover:not(:disabled) {
+  color: var(--accent-violet);
+}
+.rp-page-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.rp-page-num {
+  min-width: 34px;
+  height: 34px;
+  border: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-muted);
+  background: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.rp-page-num:hover:not(.active) {
+  background: var(--bg-input);
+}
+.rp-page-num.active {
+  color: var(--white);
+  background: var(--grad-primary);
+  box-shadow: var(--shadow-primary);
 }
 
-.dropdown-content input[type="checkbox"] {
-  margin-right: 8px;
+/* ---------- Keyboard focus ---------- */
+.rp-segment button:focus-visible,
+.rp-btn-primary:focus-visible,
+.rp-btn-ghost:focus-visible,
+.rp-run:focus-visible,
+.rp-link:focus-visible,
+.rp-page-btn:focus-visible,
+.rp-page-num:focus-visible,
+.rp-check input:focus-visible {
+  outline: 2px solid var(--accent-violet);
+  outline-offset: 2px;
 }
 
-
-.example-form-field {
-  width: 470px;
-  margin-top: -5px;
-  margin-bottom: -25px;
-  margin-left: -10px;
+/* ---------- Responsive ---------- */
+@media (max-width: 992px) {
+  .rp-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 520px) {
+  .rp-row-2,
+  .rp-checks {
+    grid-template-columns: 1fr;
+  }
+  .rp-card-body {
+    padding: 18px 16px 20px;
+  }
 }
 
-.example-form-field:focus {
-  border-color: #747575;
-}
-
-::ng-deep .mdc-notched-outline {
-  padding: 12px;
-}
-
-::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--outlined.mdc-text-field--no-label{
-  padding:4px 0px;
-}
-
-::ng-deep .mat-date-range-input-container{
-  margin-left: 50px;
-}
-
-::ng-deep .mat-mdc-form-field-icon-suffix{
-  margin-right:15px;
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }

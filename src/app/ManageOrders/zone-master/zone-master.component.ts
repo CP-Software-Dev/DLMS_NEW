@@ -82,9 +82,14 @@ export class ZoneMasterComponent {
     this.buttonIcon = this.showFiltersForm ? "ri-close-fill" : "ri-filter-fill";
   }
 
-  openDialog(): void {
+    openDialog(): void {
     this.dialog.open(ZoneMasterFileUploadComponent, {
-      panelClass: "rounded-dialog",
+      panelClass: 'credentials-drawer',
+      backdropClass: 'blur-backdrop',
+      width: '540px',
+      maxWidth: 'calc(100vw - 32px)',
+      enterAnimationDuration: '0ms',
+      exitAnimationDuration: '250ms',
     });
   }
 

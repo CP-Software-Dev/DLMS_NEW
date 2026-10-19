@@ -49,6 +49,10 @@ import {
 })
 export class WebhookViewComponent implements OnInit {
   orderID: number = 0;
+  orderStatus:string="";
+  shipmentStatus:string=""
+  company:string="";
+  awb: string = '';
   JourneyData: any[] = [];
 
   constructor(
@@ -59,6 +63,9 @@ export class WebhookViewComponent implements OnInit {
     private dialogRef: MatDialogRef<WebhookViewComponent>,
   ) {
     this.orderID = data.order;
+    this.awb = data.awb || '';
+    this.shipmentStatus = data.shipmentStatus || '';
+    this.company = data.company || " "
   }
 
   ngOnInit(): void {
@@ -73,6 +80,7 @@ export class WebhookViewComponent implements OnInit {
         if (res.status) {
           this.JourneyData = res.data.statuses;
         }
+        
       });
   }
 
@@ -151,6 +159,13 @@ export class WebhookViewComponent implements OnInit {
         this.fetchOrderJourney();
         console.error(err);
       },
+    });
+  }
+
+  copyToClipboard(text: string | number): void {
+    if (!text) return;
+    navigator.clipboard.writeText(text.toString()).then(() => {
+      this.toastr.success('Copied to clipboard');
     });
   }
 }

@@ -27,24 +27,24 @@ declare var bootstrap: any;
         "void",
         style({
           opacity: 0,
-          transform: "translateY(-50%)",
+          transform: "translateX(100%)",
         })
       ),
       transition("void => *", [
         animate(
-          "700ms ease",
+          "350ms ease-out",
           style({
             opacity: 1,
-            transform: "translateY(0)",
+            transform: "translateX(0)",
           })
         ),
       ]),
       transition("* => void", [
         animate(
-          "300ms ease",
+          "250ms ease-in",
           style({
             opacity: 0,
-            transform: "translateY(-50%)",
+            transform: "translateX(100%)",
           })
         ),
       ]),

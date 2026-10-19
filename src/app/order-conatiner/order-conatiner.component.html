@@ -1,84 +1,136 @@
-<div class="card">
+@if (canViewOrders) {
+  <div class="card orders-card">
     <div class="card-head">
-        <div class="row">
-            <div class="col-md-7 col-sm-7 d-flex align-items-center">
-                <h5 class="mb-0 me-4"><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Orders
-                </h5>
-                @if(serviceType === 1){<div class="task-tabs">
-
-                    <button class="tab-btn" [class.active]="activeTab === 'perso'" (click)="setTab('perso')">
-                        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        <span>Perso</span>
-                    </button>
-
-                    <button class="tab-btn" [class.active]="activeTab === 'insta'" (click)="setTab('insta')">
-                        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="8" y1="6" x2="21" y2="6"></line>
-                            <line x1="8" y1="12" x2="21" y2="12"></line>
-                            <line x1="8" y1="18" x2="21" y2="18"></line>
-                            <circle cx="3" cy="6" r="1"></circle>
-                            <circle cx="3" cy="12" r="1"></circle>
-                            <circle cx="3" cy="18" r="1"></circle>
-                        </svg>
-                        <span>Insta</span>
-                    </button>
-
-                </div>}
-            </div>
-
-            <div class="col-md-5 col-sm-5 d-flex justify-content-end align-items-center">
-
-                @if(activeTab=== 'insta'){<button class="btn btn-outline-dark btn-sm me-3" (click)="openRemakeDialog()">
-                    <i class="ri-upload-2-line"></i> Remake Upload
-                </button>}
-
-                <button class="btn btn-outline-dark btn-sm me-3" (click)="openDialog()">
-                    <i class="ri-upload-2-line"></i> CSV Upload
-                </button>
-                <button class="btn btn-outline-dark btn-sm me-3" (click)="navigateToImportList()">
-                    <i class="ri-list-check"></i> Import List
-                </button>
-                @if(activeTab=== 'insta'){<button class="btn btn-outline-dark btn-sm me-3" (click)="instaExportToCSV()" [disabled]="isExportingInsta">
-                    <!-- <i class="ri-export-fill"></i>Export -->
-                     <span *ngIf="!isExportingInsta">
-                        <i class="ri-export-fill"></i> Export
-                    </span>
-
-                    <span *ngIf="isExportingInsta">
-                        <i class="ri-loader-4-line spin"></i> Exporting...
-                    </span>
-                </button>}
-                @if(activeTab=== 'perso'){<button class="btn btn-outline-dark btn-sm me-3" (click)="persoExportToCSV()" [disabled]="isExporting">
-                    <!-- <i class="ri-export-fill"></i>Export -->
-                     <span *ngIf="!isExporting">
-                        <i class="ri-export-fill"></i> Export
-                    </span>
-
-                    <span *ngIf="isExporting">
-                        <i class="ri-loader-4-line spin"></i> Exporting...
-                    </span>
-                </button>}
-
-                @if(activeTab=== 'insta'){<button class="btn btn-outline-dark btn-sm me-3" (click)=" onInstaFilters()">
-                    <i [class]="buttonIcon"></i> Filter
-                </button>
-                }
-                @if(activeTab=== 'perso'){<button class="btn btn-outline-dark btn-sm me-3" (click)="onPersoFilters()">
-                    <i [class]="buttonIcon"></i> Filter
-                </button>}
-            </div>
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+        <div class="d-flex flex-column">
+          <h5 class="mb-0 ">Orders</h5>
+          <p>Personalised cards — the customer's name and data are printed on the card, and each kit is posted to that customer's own address.</p>
         </div>
+        <div class="ms-auto">
+          <div class="d-flex justify-content-end align-items-center flex-wrap gap-2 link_items">
+
+      
+            @if (serviceType === 1) {
+              <div class="task-tabs">
+                <button
+                  class="tab-btn"
+                  [class.active]="activeTab === 'perso'"
+                  (click)="setTab('perso')"
+                >
+                  <svg
+                    class="tab-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span>Perso</span>
+                </button>
+
+                <button
+                  class="tab-btn"
+                  [class.active]="activeTab === 'insta'"
+                  (click)="setTab('insta')"
+                >
+                  <svg
+                    class="tab-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <circle cx="3" cy="6" r="1"></circle>
+                    <circle cx="3" cy="12" r="1"></circle>
+                    <circle cx="3" cy="18" r="1"></circle>
+                  </svg>
+                  <span>Insta</span>
+                </button>
+              </div>
+            }
+
+            <!-- Remake Upload: ADMIN ONLY + insta tab -->
+            @if (isAdminView && activeTab === "insta") {
+              <button
+                class="btn btn-outline-dark btn-sm"
+                (click)="openRemakeDialog()"
+              >
+                <i class="ri-upload-2-line"></i> Remake Upload
+              </button>
+            }
+
+            <!-- CSV Upload + Import List: ADMIN ONLY -->
+            @if (isAdminView) {
+              <button class="btn btn-outline-dark btn-sm" (click)="openDialog()">
+                <i class="ri-upload-2-line"></i> CSV Upload
+              </button>
+
+              <button
+                class="btn btn-outline-dark btn-sm"
+                (click)="navigateToImportList()"
+              >
+                <i class="ri-list-check"></i> Import List
+              </button>
+            }
+
+            <!-- Export: admin + user  -->
+            @if (activeTab === "insta") {
+              <button
+                class="btn btn-outline-dark btn-sm"
+                (click)="instaExportToCSV()"
+                [disabled]="isExportingInsta"
+              >
+                <span *ngIf="!isExportingInsta">
+                  <i class="ri-export-fill"></i> Export
+                </span>
+                <span *ngIf="isExportingInsta">
+                  <i class="ri-loader-4-line spin"></i> Exporting...
+                </span>
+              </button>
+            }
+
+            @if (activeTab === "perso") {
+              <button
+                class="btn btn-outline-dark btn-sm"
+                (click)="persoExportToCSV()"
+                [disabled]="isExporting"
+              >
+                <span *ngIf="!isExporting">
+                  <i class="ri-export-fill"></i> Export
+                </span>
+                <span *ngIf="isExporting">
+                  <i class="ri-loader-4-line spin"></i> Exporting...
+                </span>
+              </button>
+            }
+
+          </div>
+        </div>
+      </div>
     </div>
 
-    @if(activeTab == 'perso'){
-    <app-orders #persoOrders></app-orders>
+    @if (activeTab == "perso") {
+      <app-orders #persoOrders></app-orders>
     }
-    @if(activeTab == 'insta'){
-    <app-insta-orders #instaOrders></app-insta-orders>
+    @if (activeTab == "insta") {
+      <app-insta-orders #instaOrders></app-insta-orders>
     }
-</div>
+  </div>
+} @else {
+
+  <div class="card orders-card">
+    <div class="card-head">
+      <h5 class="mb-0">Orders</h5>
+      <p>You don't have permission to view orders. Please contact your administrator.</p>
+    </div>
+  </div>
+}

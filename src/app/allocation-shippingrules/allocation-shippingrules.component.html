@@ -1,144 +1,240 @@
-<div class="row">
-    <div class="col-sm-6 ">
-        <div class="row" style="justify-content: end; padding-right: 12px;">
-            <div class="col-sm-4 form-group">
-                <select class="form-select form-select-sm mb-2" name="institutionID" id="sellerName"
-                    (change)="onBankChange($event)">
-                    <option value="" selected>All</option>
-                    <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 scrollable-column">
-                <div class="row">
-                    <div class="col-6" *ngFor="let priority of courierPriority">
-                        <div class="card-body priority-card">
-                            <div class="form-row">
-                                <div class="col-sm-8">
-                                    <h5><b>{{ priority.name }}</b>
-                                        <a (click)="onEditPriority(priority)" class="btn btn-link">
-                                            <i class="ri-edit-line"></i>
-                                        </a>
-                                    </h5>
-                                    <span>{{ priority.institution }}</span>
-                                </div>
-                                <div class="col-sm-4" style=" display: flex; justify-content: end;">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                                            [checked]="priority.isActive === 'Active'"
-                                            (change)="onPriorityStatusChange($event,priority.id)">
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="form-row">
-                                <div class="col-sm-12">
-                                    <h6><b>Courier Priority</b></h6>
-                                </div>
-                                <div class="col-sm-12">
-                                    <b style="color: #28a745;">Priority 1:</b> {{ priority.firstPriority }}
-                                </div>
-                                <div class="col-sm-12">
-                                    <b style="color: #28a745;">Priority 2:</b> {{ priority.secondPriority }}
-                                </div>
-                                <div class="col-sm-12">
-                                    <b style="color: #28a745;">Priority 3:</b> {{ priority.thirdPriority }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div *ngIf="!courierPriority || courierPriority.length === 0" class="col-12 text-center" style="margin-top: 50px;">
-                        <img src="assets\Images\Graph.gif" alt="No Data Available" class="img-fluid">
-                        <p>No data available</p>
-                    </div>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-
-    </div>
-
-    <div class="col-sm-6">
-        <form action="" class="create_new_order_filter_form">
-            <div class="card">
-                <div class="card-head">
-                    <h6>Add New Shipping Rule</h6>
-                </div>
-                <div class="card-body">
-                    <div class="form-row">
-                        <div class="col-sm-6 form-group" style="margin-bottom: 1rem;">
-                            <label for="Rule-name" class="form-label">Rule Name
-                                <span class="text-danger font-weight-bold">*</span>
-                            </label>
-                            <input type="text" [(ngModel)]="name" name="name" class="form-control "
-                                placeholder="Enter Your First Name" id="fname" autocomplete="off">
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            <label for="sellerName" class="form-label">Bank Name</label>
-                            <select class="form-select form-select-sm mb-2" name="sellerId" id="sellerName"
-                                [(ngModel)]="sellerId">
-                                <option value="" selected disabled>Select Bank</option>
-                                <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
-                            </select>
-                        </div>
-
-
-                    </div>
-
-                    <div class="form-row mb-10">
-                        <div class="col-sm-12 d-inline-flex">
-                            <h6>Courier Priority</h6>
-                            <span class="text-danger font-weight-bold">*</span>
-                        </div>
-                    </div>
-
-                    <div class="card-body" style="background-color: #e3ebf6;">
-                        <div class="row">
-
-                            <div class="col-sm-6">
-                                <label for="courier" class="form-label">Priority 1</label>
-                                <select class="form-select form-select-sm mb-2" name="firstPriority" id="sellerName"
-                                    [(ngModel)]="firstPriority">
-                                    <option value="" selected disabled>Select Courier</option>
-                                    <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="col-sm-6">
-                                <label for="courier" class="form-label">Priority 2</label>
-                                <select class="form-select form-select-sm mb-2" name="secondPriority" id="sellerName"
-                                    [(ngModel)]="secondPriority">
-                                    <option value="" selected disabled>Select Courier</option>
-                                    <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="col-sm-6">
-                                <label for="courier" class="form-label">Priority 3</label>
-                                <select class="form-select form-select-sm mb-2" name="thirdPriority" id="sellerName"
-                                    [(ngModel)]="thirdPriority">
-                                    <option value="" selected disabled>Select Courier</option>
-                                    <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-footer text-right" style="padding: 20px;">
-                    <button class="btn btn-sm btn-primary" style="margin-right: 10px; box-shadow: none;"
-                        (click)="saveReport()">Save</button>
-                </div>
-            </div>
-        </form>
-    </div>
+<!-- LIST SECTION -->
+<div class="row" style="justify-content: end; padding-right: 12px">
+  <div class="col-sm-3 form-group">
+    <select
+      class="form-select form-select-sm mb-2"
+      name="institutionID"
+      id="bankFilter"
+      (change)="onBankChange($event)"
+    >
+      <option value="" selected>All</option>
+      <option *ngFor="let seller of sellerData" [value]="seller.id">
+        {{ seller.name }}
+      </option>
+    </select>
+  </div>
 </div>
+
+<div class="row">
+  <div class="col-12 scrollable-column">
+    <div class="row">
+      <div class="col-md-6 mb-3" *ngFor="let priority of courierPriority">
+        <div class="rule-card">
+          <!-- Header -->
+          <div class="rule-head">
+            <div>
+              <h5 class="rule-name">
+                {{ priority.name }}
+                <a (click)="onEditPriority(priority)" class="edit-btn">
+                  <i class="ri-edit-line"></i>
+                </a>
+              </h5>
+              <div class="rule-sub">
+                {{ priority.institution }}
+                <ng-container *ngIf="priority.orders != null">
+                  · {{ priority.orders }} orders
+                </ng-container>
+                <ng-container *ngIf="priority.held">
+                  · <span class="held">{{ priority.held }} held</span>
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="form-check form-switch rule-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [checked]="priority.isActive === 'Active'"
+                (change)="onPriorityStatusChange($event, priority.id)"
+              />
+            </div>
+          </div>
+
+          <!-- Courier rows -->
+          <div class="rule-list">
+            <div class="rule-row">
+              <span class="num n1">1</span>
+              <span class="courier">{{ priority.firstPriority }}</span>
+              <span class="tries" *ngIf="priority.tries != null">{{ priority.tries }} tries</span>
+            </div>
+            <div class="rule-row">
+              <span class="num n2">2</span>
+              <span class="courier">{{ priority.secondPriority }}</span>
+              <span class="tries" *ngIf="priority.tries != null">{{ priority.tries }} tries</span>
+            </div>
+            <div class="rule-row">
+              <span class="num n3">3</span>
+              <span class="courier">{{ priority.thirdPriority }}</span>
+              <span class="tries" *ngIf="priority.tries != null">{{ priority.tries }} tries</span>
+            </div>
+          </div>
+
+          <ng-container *ngIf="priority.p1Percent != null">
+            <div class="dist-bar">
+              <span class="seg s1" [style.width.%]="priority.p1Percent"></span>
+              <span class="seg s2" [style.width.%]="priority.p2Percent"></span>
+              <span class="seg s3" [style.width.%]="priority.p3Percent"></span>
+            </div>
+            <div class="dist-legend">
+              <span><i class="dot s1"></i>P1 {{ priority.p1Percent }}%</span>
+              <span><i class="dot s2"></i>P2 {{ priority.p2Percent }}%</span>
+              <span><i class="dot s3"></i>P3 {{ priority.p3Percent }}%</span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div
+        *ngIf="!courierPriority || courierPriority.length === 0"
+        class="col-12 text-center"
+        style="margin-top: 50px"
+      >
+        <img
+          src="assets/Images/Graph.gif"
+          alt="No Data Available"
+          class="img-fluid"
+        />
+        <p>No data available</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP: Add New Shipping Rule (MatDialog isi template ko kholta hai) -->
+<!-- <ng-template #addRuleTpl>
+
+  <div class="card-head d-flex justify-content-between align-items-center">
+    <h6 class="mb-0">Add New Shipping Rule</h6>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+  </div>
+
+  <form class="create_new_order_filter_form" (ngSubmit)="saveReport()">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-6 form-group" style="margin-bottom: 1rem">
+          <label for="ruleName" class="form-label">Rule Name
+            <span class="text-danger font-weight-bold">*</span>
+          </label>
+          <input type="text" [(ngModel)]="name" name="name" class="form-control"
+            placeholder="Enter Rule Name" id="ruleName" autocomplete="off" />
+        </div>
+        <div class="col-sm-6 form-group">
+          <label for="bankName" class="form-label">Bank Name</label>
+          <select class="form-select form-select-sm mb-2" name="sellerId" id="bankName"
+            [(ngModel)]="sellerId">
+            <option value="" selected disabled>Select Bank</option>
+            <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="d-inline-flex mb-2">
+        <h6>Courier Priority</h6>
+        <span class="text-danger font-weight-bold">*</span>
+      </div>
+
+      <div class="card-body" style="background-color: #e3ebf6">
+        <div class="row">
+          <div class="col-sm-6">
+            <label for="p1" class="form-label">Priority 1</label>
+            <select class="form-select form-select-sm mb-2" name="firstPriority" id="p1"
+              [(ngModel)]="firstPriority">
+              <option value="" selected disabled>Select Courier</option>
+              <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}</option>
+            </select>
+          </div>
+          <div class="col-sm-6">
+            <label for="p2" class="form-label">Priority 2</label>
+            <select class="form-select form-select-sm mb-2" name="secondPriority" id="p2"
+              [(ngModel)]="secondPriority">
+              <option value="" selected disabled>Select Courier</option>
+              <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}</option>
+            </select>
+          </div>
+          <div class="col-sm-6">
+            <label for="p3" class="form-label">Priority 3</label>
+            <select class="form-select form-select-sm mb-2" name="thirdPriority" id="p3"
+              [(ngModel)]="thirdPriority">
+              <option value="" selected disabled>Select Courier</option>
+              <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer text-right" style="padding: 20px">
+      <button type="button" class="btn btn-sm btn-secondary" style="margin-right: 10px"
+        (click)="closeModal()">Cancel</button>
+      <button type="submit" class="btn btn-sm btn-primary" style="box-shadow: none">Save</button>
+    </div>
+  </form>
+</ng-template> -->
+
+
+
+
+<!-- POPUP: New shipping rule (right side drawer) -->
+<ng-template #addRuleTpl>
+  <form class="drawer-form" (ngSubmit)="saveReport()">
+
+    <!-- Header -->
+    <div class="drawer-head">
+      <div>
+        <h3 class="drawer-title">New shipping rule</h3>
+        <p class="drawer-sub">Which courier is asked first</p>
+      </div>
+      <button type="button" class="drawer-close" aria-label="Close" (click)="closeModal()">&times;</button>
+    </div>
+
+    <!-- Body -->
+    <div class="drawer-body">
+      <div class="row g-3">
+        <div class="col-6">
+          <label for="ruleName" class="d-label">Rule name <span class="req">*</span></label>
+          <input type="text" [(ngModel)]="name" name="name" class="d-input"
+            placeholder="e.g. ShriRam_P2" id="ruleName" autocomplete="off" />
+        </div>
+        <div class="col-6">
+          <label for="bankName" class="d-label">Bank <span class="req">*</span></label>
+          <select class="d-input" name="sellerId" id="bankName" [(ngModel)]="sellerId">
+            <option value="" selected disabled>Select Bank</option>
+            <option *ngFor="let seller of sellerData" [value]="seller.id">{{ seller.name }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section-title"><span>Courier priority</span></div>
+
+      <div class="prio-row">
+        <span class="num n1">1</span>
+        <select class="d-input" name="firstPriority" id="p1" [(ngModel)]="firstPriority">
+          <option value="" selected disabled>Select Courier</option>
+          <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}</option>
+        </select>
+      </div>
+
+      <div class="prio-row">
+        <span class="num n2">2</span>
+        <select class="d-input" name="secondPriority" id="p2" [(ngModel)]="secondPriority">
+          <option value="" selected disabled>Select Courier</option>
+          <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}</option>
+        </select>
+      </div>
+
+      <div class="prio-row">
+        <span class="num n3">3</span>
+        <select class="d-input" name="thirdPriority" id="p3" [(ngModel)]="thirdPriority">
+          <option value="" selected disabled>Select Courier</option>
+          <option *ngFor="let courier of courierData" [value]="courier.id">{{ courier.name }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="drawer-foot">
+      <button type="button" class="btn-cancel" (click)="closeModal()">Cancel</button>
+      <button type="submit" class="btn-create">&#10003; Create rule</button>
+    </div>
+  </form>
+</ng-template>

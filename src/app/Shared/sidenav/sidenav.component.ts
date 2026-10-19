@@ -7,9 +7,8 @@ import {
   Output,
   PLATFORM_ID,
 } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
-import { filter } from 'rxjs/operators';
 import { SellerService } from '../../services/seller.service';
 
 interface SideNavToggle {
@@ -23,32 +22,116 @@ interface SideNavToggle {
   styleUrl: './sidenav.component.css',
 })
 export class SidenavComponent implements OnInit {
-  data: any;
+  @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
+
+  // ---------- role / view ----------
+  // 1 = Super Admin, 2 = Admin, 3 = Client, 4 = Client User
+  rolenum = 0;
+  hasValidRole = false;
+  isAdminView = false; // roles 1 and 2 use the admin side
+  basePath: 'admin' | 'user' = 'user';
+  isAdmin = false; // every valid role except 2
+  isSuperAdmin = false; // role 1
+
+  // Roles whose menu is limited by the permission flags saved at login.
+  // Add 2 here to apply the same flags to the Admin role.
+  private readonly permissionRoles: number[] = [4];
+
+  permissions = {
+    orders: true,
+    shipments: true,
+    ndr: true,
+    rto: true,
+    reports: true,
+  };
+
+  // ---------- ui state ----------
+  collapsed = false;
+  collapsedfix = false;
+  screenWidth = 0;
+  shipmentClicked = false;
+  manageOrdersClicked = false;
+  accessClicked = false;
+  integrationsClicked = false;
+  buttonIcon: string = 'ri-arrow-down-s-line';
+  managebuttonIcon: string = 'ri-arrow-down-s-line';
+  accessButtonIcon: string = 'ri-arrow-down-s-line';
+  integrationsButtonIcon: string = 'ri-arrow-down-s-line';
+
   constructor(
     private router: Router,
     private sellerService: SellerService,
     @Inject(PLATFORM_ID) private platformId: Object,
-  ) {
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        if (isPlatformBrowser(this.platformId)) {
-          this.isShipmentActive =
-            this.isLinkActive('admin/shipment') ||
-            this.isLinkActive('admin/ndr') ||
-            this.isLinkActive('admin/rto');
-        }
-      });
+  ) {}
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.screenWidth = window.innerWidth;
+    }
+
+    this.rolenum = Number(this.sellerService.getItem('role'));
+    this.hasValidRole = [1, 2, 3, 4].includes(this.rolenum);
+    this.isAdminView = this.rolenum === 1 || this.rolenum === 2;
+    this.basePath = this.isAdminView ? 'admin' : 'user';
+    this.isAdmin = this.hasValidRole && this.rolenum !== 2;
+    this.isSuperAdmin = this.rolenum === 1;
+
+    this.loadPermissions();
+
+    this.onToggleSideNav.emit({
+      collapsed: this.collapsed,
+      screenWidth: this.screenWidth,
+    });
   }
+
+  // ================= permissions =================
+  private loadPermissions(): void {
+    if (!this.permissionRoles.includes(this.rolenum)) return;
+
+    const flag = (key: string) => this.sellerService.getItem(key) === '1';
+    this.permissions = {
+      orders: flag('hasOrder'),
+      shipments: flag('hasShipments'),
+      ndr: flag('hasNdr'),
+      rto: flag('hasRto'),
+      reports: flag('hasReports'),
+    };
+  }
+
+  // Admin side, excluding role 2 (Allocation, Integrations, Access, ...)
+  get isFullAdmin(): boolean {
+    return this.isAdminView && this.isAdmin;
+  }
+
+  // Users List page: admin/users on the admin side, user/employees for banks
+  get usersPage(): string {
+    return this.isAdminView ? 'users' : 'employees';
+  }
+
+  // ================= active state =================
+  // Matches the exact route or any child route (query string ignored)
   isLinkActive(url: string): boolean {
     const currentUrl = this.router.url.split('?')[0];
     return currentUrl === `/${url}` || currentUrl.startsWith(`/${url}/`);
+  }
+
+  // isActive('orders') -> admin/orders or user/orders
+  isActive(page: string): boolean {
+    return this.isLinkActive(`${this.basePath}/${page}`);
+  }
+
+  isShipmentDropdownActive(): boolean {
+    return (
+      !this.shipmentClicked &&
+      (this.isActive('shipment') || this.isActive('ndr') || this.isActive('rto'))
+    );
   }
 
   isManageOrdersDropdownActive(): boolean {
     return (
       !this.manageOrdersClicked &&
       (this.isLinkActive('admin/nsz') ||
+        this.isLinkActive('admin/remake') ||
         this.isLinkActive('admin/branch-master') ||
         this.isLinkActive('admin/zone-master') ||
         this.isLinkActive('admin/awb-finder') ||
@@ -60,32 +143,30 @@ export class SidenavComponent implements OnInit {
     );
   }
 
-  isShipmentDropdownActive(): boolean {
+  isAccessDropdownActive(): boolean {
     return (
-      !this.shipmentClicked &&
-      (this.isLinkActive('admin/shipment') ||
-        this.isLinkActive('admin/ndr') ||
-        this.isLinkActive('admin/rto'))
+      !this.accessClicked &&
+      (this.isActive(this.usersPage) ||
+        this.isActive('roles') ||
+        this.isActive('audit-log') ||
+        this.isActive('system-settings'))
     );
   }
-  @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
-  collapsed = false;
-  collapsedfix = false;
-  screenWidth = 0;
-  shipmentClicked = false;
-  manageOrdersClicked = false;
-  buttonIcon: string = 'ri-arrow-down-s-line';
-  managebuttonIcon: string = 'ri-arrow-down-s-line';
-  isShipmentActive = false;
-  isShipmentListActive = false;
-  isExceptionListActive = false;
 
-  isAdmin: boolean = false;
-  isSuperAdmin: boolean = false;
-  role: boolean = false;
+  isIntegrationsDropdownActive(): boolean {
+    return (
+      !this.integrationsClicked &&
+      (this.isActive('webhook') ||
+        this.isActive('awb-series') ||
+        this.isActive('status-mapping') ||
+        this.isActive('error-codes') ||
+        this.isActive('sftp-sources'))
+    );
+  }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
+  // ================= layout =================
+  @HostListener('window:resize')
+  onResize() {
     if (isPlatformBrowser(this.platformId)) {
       this.screenWidth = window.innerWidth;
       if (this.screenWidth <= 768) {
@@ -98,31 +179,9 @@ export class SidenavComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.screenWidth = window.innerWidth;
-    }
-
-    const role = this.sellerService.getItem('role');
-    if (role == '1') {
-      this.isAdmin = true;
-      this.isSuperAdmin = true;
-    }
-    if (role == '2') {
-      this.isAdmin = false;
-    } else {
-      this.isAdmin = true;
-    }
-
-    this.onToggleSideNav.emit({
-      collapsed: this.collapsed,
-      screenWidth: this.screenWidth,
-    });
-  }
-
   toggleCollapse(): void {
     this.collapsedfix = !this.collapsedfix;
-    this.collapsed = this.collapsedfix; // Ensure collapsed matches collapsedfix
+    this.collapsed = this.collapsedfix;
     this.onToggleSideNav.emit({
       collapsed: this.collapsedfix,
       screenWidth: this.screenWidth,
@@ -130,11 +189,11 @@ export class SidenavComponent implements OnInit {
   }
 
   onMouseEnter() {
-    if (this.collapsedfix != true) this.collapsed = true;
+    if (!this.collapsedfix) this.collapsed = true;
   }
 
   onMouseLeave() {
-    if (this.collapsedfix != true) this.collapsed = false;
+    if (!this.collapsedfix) this.collapsed = false;
   }
 
   closeSidenav(): void {
@@ -147,107 +206,40 @@ export class SidenavComponent implements OnInit {
 
   toggleShipmentClicked() {
     this.shipmentClicked = !this.shipmentClicked;
-    if (this.shipmentClicked) {
-      this.buttonIcon = 'ri-arrow-up-s-line';
-    } else {
-      this.buttonIcon = 'ri-arrow-down-s-line';
-    }
+    this.buttonIcon = this.shipmentClicked
+      ? 'ri-arrow-up-s-line'
+      : 'ri-arrow-down-s-line';
   }
 
   toggleManageOrdersClicked() {
     this.manageOrdersClicked = !this.manageOrdersClicked;
-    if (this.manageOrdersClicked) {
-      this.managebuttonIcon = 'ri-arrow-up-s-line';
-    } else {
-      this.managebuttonIcon = 'ri-arrow-down-s-line';
-    }
+    this.managebuttonIcon = this.manageOrdersClicked
+      ? 'ri-arrow-up-s-line'
+      : 'ri-arrow-down-s-line';
   }
 
-  navigateToDashboard() {
-    this.router.navigate(['admin/dashboard']);
-  }
-  navigateToOrders() {
-    this.router.navigate(['admin/orders']);
-  }
-  navigateToBranchOrders(path: string) {
-    this.router.navigate([path]);
-  }
-  navigateToShipment() {
-    this.router.navigate(['admin/shipment']);
-  }
-  navigateToException() {
-    this.router.navigate(['admin/ndr']);
-  }
-  navigateToRTO() {
-    this.router.navigate(['admin/rto']);
-  }
-  navigateToAllocation() {
-    this.router.navigate(['admin/allocation']);
-  }
-  navigateToCourier() {
-    this.router.navigate(['admin/couriers']);
-  }
-  navigateToNSZ() {
-    this.router.navigate(['admin/nsz']);
-  }
-  navigateToPincodeMaster() {
-    this.router.navigate(['admin/pincode-master']);
-  }
-  navigateToRemake() {
-    this.router.navigate(['admin/remake']);
-  }
-  navigateToRejection() {
-    this.router.navigate(['admin/rejection-list']);
-  }
-  navigateToWarehouse() {
-    this.router.navigate(['admin/warehouses']);
-  }
-  navigateToUser() {
-    this.router.navigate(['admin/users']);
-  }
-  navigateToWebhook() {
-    this.router.navigate(['admin/webhook']);
-  }
-  navigateToReports() {
-    this.router.navigate(['admin/reports']);
-  }
-  navigateToSales() {
-    this.router.navigate(['admin/sales']);
+  toggleAccessClicked() {
+    this.accessClicked = !this.accessClicked;
+    this.accessButtonIcon = this.accessClicked
+      ? 'ri-arrow-up-s-line'
+      : 'ri-arrow-down-s-line';
   }
 
-  navigateToBank() {
-    this.router.navigate(['admin/banks']);
+  toggleIntegrationsClicked() {
+    this.integrationsClicked = !this.integrationsClicked;
+    this.integrationsButtonIcon = this.integrationsClicked
+      ? 'ri-arrow-up-s-line'
+      : 'ri-arrow-down-s-line';
   }
 
-  navigateToIssues() {
-    this.router.navigate(['admin/issues']);
+  // ================= navigation =================
+  // goTo('orders') -> admin/orders or user/orders depending on role
+  goTo(page: string): void {
+    this.router.navigate([`${this.basePath}/${page}`]);
   }
 
-  navigateCourierDetails() {
-    this.router.navigate(['admin/bank-invoice']);
-  }
-
-  navigateToBranchMaster() {
-    this.router.navigate(['admin/branch-master']);
-  }
-
-  navigateToZoneMaster() {
-    this.router.navigate(['admin/zone-master']);
-  }
-
-  navigateToOldAwbFinder() {
-    this.router.navigate(['admin/awb-finder']);
-  }
-
-  navigateToAutomationLog() {
-    this.router.navigate(['admin/automation-log']);
-  }
-
-  navigateToWebhookLog() {
-    this.router.navigate(['admin/webhook-log']);
-  }
-
-  navigateToUpdateAddress() {
-    this.router.navigate(['admin/update-address']);
+  // RTO routes differ per side: admin/rto and user/rto/orders
+  goToRto(): void {
+    this.router.navigate([this.isAdminView ? 'admin/rto' : 'user/rto/orders']);
   }
 }
