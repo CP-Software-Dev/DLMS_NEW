@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from '../../services/api.service';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
@@ -32,11 +32,16 @@ export class NewwarehouseComponent implements OnInit {
     { id: 'rto', role: 'RTO' },
   ];
   constructor(
-    private router: Router,
+    private dialogRef: MatDialogRef<NewwarehouseComponent>,
     private apiservice: ApiService,
     private http: HttpClient,
     private toastr: ToastrService,
-  ) {}
+  ) {
+    // Open as a right-side panel
+    this.dialogRef.addPanelClass('new-side-panel');
+    this.dialogRef.updateSize('min(640px, 95vw)', 'calc(100vh - 32px)');
+    this.dialogRef.updatePosition({ top: '16px', right: '16px' });
+  }
 
   ngOnInit() {
     this.fetchBanks();
@@ -82,11 +87,12 @@ export class NewwarehouseComponent implements OnInit {
     this.http.post(this.apiservice.CreateWarehouse, payload).subscribe({
       next: (res: any) => {
         this.toastr.success('Warehouse Created Successfully', 'Success');
-        this.navigateToWarehouse();
+        // Close the dialog and tell the list to reload
+        this.dialogRef.close(true);
       },
       error: (err) => {
         console.error(err);
-         this.toastr.error('Failed to create warhouse', 'Success');
+        this.toastr.error('Failed to create warhouse', 'Success');
       },
     });
   }
@@ -118,7 +124,7 @@ export class NewwarehouseComponent implements OnInit {
     }
   }
 
-  navigateToWarehouse() {
-    this.router.navigate(['/admin/warehouses']);
+  close() {
+    this.dialogRef.close();
   }
 }

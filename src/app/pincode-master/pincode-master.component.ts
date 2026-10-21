@@ -74,11 +74,17 @@ export class PincodeMasterComponent {
     this.buttonIcon = this.showFiltersForm ? 'ri-close-fill' : 'ri-filter-fill';
   }
 
-  openDialog(): void {
-    this.dialog.open(PincodeFileUploadComponent, {
-      panelClass: 'rounded-dialog',
-    });
-  }
+ openDialog(): void {
+  this.dialog.open(PincodeFileUploadComponent, {
+    panelClass: 'upload-side-dialog',
+    backdropClass: 'upload-backdrop',
+    position: { right: '16px', top: '16px' },
+    width: '640px',
+    maxWidth: '95vw',
+    height: 'calc(100vh - 32px)',
+    autoFocus: false,
+  });
+}
 
   applyFilters() {
     this.fetchData(this.pageIndex, this.pageSize);

@@ -27,7 +27,7 @@ export class DatePickerInvoiceComponent implements OnInit, OnChanges {
   }>();
 
   @Input() selectedRange!: { startDate: string; endDate: string };
-
+  @Input() opens: 'left' | 'right' | 'center' = 'right';
   ranges: any = {
     Today: [moment(), moment()],
     Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],

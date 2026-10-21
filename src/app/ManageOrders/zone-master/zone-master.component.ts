@@ -86,7 +86,7 @@ export class ZoneMasterComponent {
     this.dialog.open(ZoneMasterFileUploadComponent, {
       panelClass: 'credentials-drawer',
       backdropClass: 'blur-backdrop',
-      width: '540px',
+      width: '640px',
       maxWidth: 'calc(100vw - 32px)',
       enterAnimationDuration: '0ms',
       exitAnimationDuration: '250ms',

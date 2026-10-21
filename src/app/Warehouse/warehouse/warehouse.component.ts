@@ -1,9 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RefreshService } from '../../services/refresh.service';
+import { EditWarehouseComponent } from '../edit-warehouse/edit-warehouse.component';
+import { NewwarehouseComponent } from '../newwarehouse/newwarehouse.component';
 @Component({
   selector: 'app-warehouse',
   templateUrl: './warehouse.component.html',
@@ -34,6 +37,7 @@ export class WarehouseComponent implements OnInit {
     private apiservice: ApiService,
     private http: HttpClient,
     private refreshservice: RefreshService,
+    private dialog: MatDialog,
   ) { }
 
 
@@ -185,15 +189,30 @@ export class WarehouseComponent implements OnInit {
   }
 
   editWarehouse(warehouse: any) {
-    sessionStorage.setItem('warehouse', JSON.stringify(warehouse));
-    this.router.navigate(['admin/warehouses/edit'], {
-      state: {
-        warehouse: warehouse,
-      },
+    const dialogRef = this.dialog.open(EditWarehouseComponent, {
+      data: { isEdit: true, warehouseData: warehouse },
+    });
+
+    dialogRef.afterClosed().subscribe((updated) => {
+      if (updated) {
+        this.loadData(this.pageIndex, this.pageSize);
+      }
     });
   }
 
+  // navigateToAddWatehouse() {
+  //   this.router.navigate(['admin/warehouses/add']);
+  // }
+
   navigateToAddWatehouse() {
-    this.router.navigate(['admin/warehouses/add']);
-  }
+  const dialogRef = this.dialog.open(NewwarehouseComponent, {
+    data: { isEdit: false },
+  });
+
+  dialogRef.afterClosed().subscribe((created) => {
+    if (created) {
+      this.loadData(this.pageIndex, this.pageSize);
+    }
+  });
+}
 }

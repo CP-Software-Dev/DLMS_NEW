@@ -1,22 +1,16 @@
-<div class="card">
-  <div class="card-head">
-    <div class="row">
-      <div class="col">
-        <h5>Create Warehouse</h5>
-      </div>
-      <div class="col text-end">
-        <button
-          class="btn btn-sm btn-outline-dark btn-sm me-3"
-          (click)="navigateToWarehouse()"
-        >
-          <i class="ri-arrow-left-circle-line"></i> Back
-        </button>
-      </div>
+<div class="dlg">
+  <div class="dlg-head">
+    <div class="dlg-titles">
+      <h5>Create Warehouse</h5>
     </div>
+    <button type="button" class="close-btn" (click)="close()" aria-label="Close">
+      <i class="ri-close-line"></i>
+    </button>
   </div>
-  <div class="card-body">
-    <div class="row">
-      <div class="col-6 mb-2">
+
+  <div class="dlg-body">
+    <div class="form-grid">
+      <div class="field">
         <label for="courier-name" class="form-label"
           >Warehouse Name
           <span class="text-danger font-weight-bold">*</span>
@@ -29,7 +23,8 @@
           [(ngModel)]="warehouseObj.warehouseName"
         />
       </div>
-      <div class="col-6 mb-2">
+
+      <div class="field">
         <label for="api-key" class="form-label"
           >Unique Code
           <span class="text-danger font-weight-bold">*</span>
@@ -43,8 +38,8 @@
         />
       </div>
 
-      <div class="col-6 mb-2">
-        <label class="form-label">Bank Name <font color="red">*</font></label>
+      <div class="field">
+        <label class="form-label">Bank Name <span class="text-danger">*</span></label>
         <select
           class="form-select form-select-sm"
           [(ngModel)]="institutionId"
@@ -58,9 +53,9 @@
         <div *ngIf="invalidBankSelection" class="text-danger">Select Bank.</div>
       </div>
 
-      <div class="col-6 mb-2">
+      <div class="field">
         <label class="form-label"
-          >Warehouse Type <font color="red">*</font></label
+          >Warehouse Type <span class="text-danger">*</span></label
         >
         <select class="form-select form-select-sm" [(ngModel)]="warehouseType">
           <option value="" selected disabled>Select Warehouse Type</option>
@@ -70,7 +65,7 @@
         </select>
       </div>
 
-      <div class="col-6 mb-2">
+      <div class="field">
         <label for="api-key" class="form-label"
           >Contact Name
           <span class="text-danger font-weight-bold">*</span>
@@ -84,7 +79,7 @@
         />
       </div>
 
-      <div class="col-6 mb-2">
+      <div class="field">
         <label for="api-key" class="form-label"
           >Contact Number
           <span class="text-danger font-weight-bold">*</span>
@@ -97,7 +92,8 @@
           [(ngModel)]="warehouseObj.contactPersonNumber"
         />
       </div>
-      <div class="col-12 mb-2">
+
+      <div class="field full">
         <label for="api-key" class="form-label"
           >Address Line 1
           <span class="text-danger font-weight-bold">*</span>
@@ -110,7 +106,8 @@
           [(ngModel)]="warehouseObj.address1"
         />
       </div>
-      <div class="col-12 mb-2">
+
+      <div class="field full">
         <label for="api-key" class="form-label"
           >Address Line 2
         </label>
@@ -122,7 +119,8 @@
           [(ngModel)]="warehouseObj.address2"
         />
       </div>
-      <div class="col-12 mb-2">
+
+      <div class="field full">
         <label for="api-key" class="form-label"
           >Address Line 3
         </label>
@@ -134,7 +132,8 @@
           [(ngModel)]="warehouseObj.address3"
         />
       </div>
-      <div class="col-6 mb-2">
+
+      <div class="field">
         <label for="api-key" class="form-label"
           >City
           <span class="text-danger font-weight-bold">*</span>
@@ -147,7 +146,8 @@
           [(ngModel)]="warehouseObj.city"
         />
       </div>
-      <div class="col-6 mb-2">
+
+      <div class="field">
         <label for="api-key" class="form-label"
           >Pincode
           <span class="text-danger font-weight-bold">*</span>
@@ -161,10 +161,12 @@
         />
       </div>
     </div>
-    <div>
-      <button class="btn btn-sm btn-primary" (click)="onSubmit()">
-        Submit
-      </button>
-    </div>
+  </div>
+
+  <div class="dlg-foot">
+    <button type="button" class="cancel-btn" (click)="close()">Cancel</button>
+    <button type="button" class="submit-btn" (click)="onSubmit()">
+      <i class="ri-check-line"></i> Submit
+    </button>
   </div>
 </div>

@@ -1,11 +1,12 @@
-/* Same look as the other filter inputs (Kit Number, Order ID) */
+/* Date picker container - aligned with other filter inputs */
 .daterange-container {
   display: flex;
   align-items: center;
   width: 100%;
   height: 40px;
+  min-width: 0;
   box-sizing: border-box;
-  padding: 0.12rem 0.9rem;
+  padding: 0 12px;
   border: 1px solid #e8e9ec;
   border-radius: 15px;
   background-color: #fafafd;
@@ -16,75 +17,150 @@
   border-color: #747575;
 }
 
+/* Input and icon alignment */
 .daterange-input-wrapper {
   position: relative;
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
 }
 
 .daterange-input {
+  display: block;
   width: 100%;
+  min-width: 0;
   height: 100%;
-  padding: 0 28px 0 0;
+  margin: 0;
+  padding: 0 26px 0 0;
   border: none;
   outline: none;
+  box-sizing: border-box;
   background: transparent;
   font-family: var(--font-family);
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
   color: #1f2430;
   cursor: pointer;
-  transition: border-color 0.3s;
+  text-overflow: ellipsis;
 }
 
 .daterange-input::placeholder {
   color: #a8a9ac;
   font-weight: 600;
+  opacity: 1;
 }
 
 .daterange-input:focus {
   outline: none;
+  box-shadow: none;
 }
 
+/* Calendar icon vertically centered */
 .calendar-icon {
   position: absolute;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  pointer-events: none; /* Icon should not block clicks on the input */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
   font-size: 16px;
   line-height: 1;
   color: #4b5563;
-  cursor: pointer;
+  pointer-events: none;
 }
 
-.daterangepicker {
-  position: absolute;
-  min-width: 500px !important;
+@media (max-width: 767px) {
+  .daterange-container {
+    height: 38px;
+  }
+
+  .daterange-input {
+    font-size: 0.85rem;
+  }
 }
 
-.daterangepicker .calendar-table {
-  width: auto !important;
-}
+/* ---------- Date range picker popup (component scoped via ng-deep) ---------- */
 
 ::ng-deep .md-drppicker {
-  min-width: 600px;
-}
-
-::ng-deep .md-drppicker {
+  z-index: 99999 !important;
+  box-sizing: border-box;
+  max-width: calc(100vw - 24px);
   font-size: 12px;
 }
 
-::ng-deep .md-drppicker .calendar,
-::ng-deep .md-drppicker .calendar-table,
-::ng-deep .md-drppicker .calendar-table table,
-::ng-deep .md-drppicker .calendar-table th,
-::ng-deep .md-drppicker .calendar-table td {
-  font-size: inherit;
+::ng-deep .md-drppicker .calendar {
+  max-width: 100%;
 }
 
+::ng-deep .md-drppicker .calendar-table {
+  width: auto;
+}
+
+::ng-deep .md-drppicker .calendar-table table {
+  width: 100%;
+}
+
+::ng-deep .md-drppicker .calendar-table th,
+::ng-deep .md-drppicker .calendar-table td,
 ::ng-deep .md-drppicker .btn {
   font-size: 12px;
+}
+
+::ng-deep .md-drppicker td,
+::ng-deep .md-drppicker th {
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  ::ng-deep .md-drppicker {
+    min-width: 600px;
+  }
+}
+
+/* Phones: show the popup as a panel inside the viewport */
+@media (max-width: 767px) {
+  ::ng-deep .md-drppicker {
+    position: fixed !important;
+    top: 72px !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+    transform: none !important;
+  }
+
+  ::ng-deep .md-drppicker::before,
+  ::ng-deep .md-drppicker::after {
+    display: none !important;
+  }
+
+  ::ng-deep .md-drppicker .ranges,
+  ::ng-deep .md-drppicker .calendar {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  ::ng-deep .md-drppicker .ranges ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+    padding: 0;
+  }
+
+  ::ng-deep .md-drppicker .calendar-table {
+    width: 100%;
+  }
+
+  ::ng-deep .md-drppicker .calendar.right {
+    margin-top: 8px;
+  }
 }

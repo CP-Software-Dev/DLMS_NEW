@@ -2,21 +2,27 @@ body {
   background-color: var(--bg-page);
   font-family: var(--font-family);
 }
+
 .dashboard-page-bg {
   background-color: var(--bg-page);
   min-height: 100vh;
   margin-left: -8px;
   margin-right: -10px;
+  overflow-x: clip;
 }
+
 .card {
   display: flex;
   flex-direction: column;
   border-radius: 0.5rem;
   margin: 0 0 0.8rem 0;
 }
+
 .main-card {
   background-color: var(--bg-page);
+  overflow: visible;
 }
+
 .card-head {
   padding: 1.25rem 1rem 0 1.5rem;
   display: flex;
@@ -24,6 +30,7 @@ body {
   justify-content: space-between;
   background-color: var(--bg-page);
   margin-top: 14px;
+  overflow: visible;
 
   .by_bank {
     font-size: 16px;
@@ -62,6 +69,11 @@ body {
   ::ng-deep .mat-date-range-input-inner {
     font-size: 0.9rem;
   }
+}
+
+.main-card .card-head .bg-container {
+  flex: 1 1 100%;
+  min-width: 0;
 }
 
 /* ---------- Section headings ---------- */
@@ -111,6 +123,8 @@ body {
       display: flex;
       flex-direction: column;
       gap: 2px;
+      min-width: 0;
+      max-width: 100%;
 
       .summary-number {
         font-size: 28px;
@@ -129,7 +143,7 @@ body {
         }
       }
 
-      /* plain (non-clickable) number: permission nahi hai ya role allowed nahi */
+      /* plain (non-clickable) number: no permission or role not allowed */
       span.summary-number {
         cursor: default;
 
@@ -139,9 +153,6 @@ body {
       }
 
       .summary-label {
-        /* font-size: 12px;
-        font-weight: 400;
-        color: var(--text-secondary); */
         display: block;
         font-size: 13.5px;
         font-weight: 700;
@@ -154,6 +165,7 @@ body {
         z-index: 1;
         font-family: var(--font-family);
       }
+
       .text-nobody {
         display: block;
         font-size: 11.5px;
@@ -216,6 +228,7 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
 .parcels_courier {
   font-size: 13px;
   font-weight: 600;
@@ -238,10 +251,12 @@ body {
     box-shadow: 0 1px 2px rgba(31, 36, 48, 0.04);
     min-height: 400px;
     height: 100%;
+    min-width: 0;
 
     .card-body {
       padding: 1.25rem 0.8rem;
       height: 100%;
+      min-width: 0;
 
       .text-wrapper {
         display: flex;
@@ -249,6 +264,7 @@ body {
         align-items: flex-start;
         text-align: left;
         height: 100%;
+        min-width: 0;
 
         .custom-text {
           font-weight: 750;
@@ -261,6 +277,7 @@ body {
 
         .graph-content {
           width: 100%;
+          min-width: 0;
           flex: 1;
           display: flex;
           justify-content: center;
@@ -299,12 +316,6 @@ body {
     padding: 10px 0 3px 23px;
 
     .legend_item {
-      /* display: flex;
-      align-items: center;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-secondary); */
-
       display: flex;
       align-items: center;
       font-size: 11.5px;
@@ -343,17 +354,14 @@ body {
   .card-body {
     padding: 0 0 2px;
     max-height: 350px;
+    overflow-x: auto;
     overflow-y: auto;
 
-    .table th {
-      /* font-size: 11px;
-      font-weight: 700;
-      background-color: #f9fbfd;
-      text-align: left;
-      text-transform: uppercase;
-      color: rgb(165, 164, 164);
-      padding: 15px 0 15px 10px; */
+    .table {
+      min-width: 760px;
+    }
 
+    .table th {
       font-size: 11.5px;
       font-weight: 800;
       font-family: var(--font-family);
@@ -395,47 +403,11 @@ body {
   color: var(--white);
 }
 
-@media (max-width: 872px) {
-  .card-body {
-    overflow-x: scroll;
-  }
-
-  .card-body .col-md-2.btn {
-    width: 100%;
-    margin: 0 10px 5px;
-  }
-
-  .example-form-field {
-    width: 80%;
-    margin-bottom: -30px;
-  }
-
-  .graph-card .graph-card-box {
-    min-height: 340px;
-  }
-}
-
-@media (max-width: 1400px) and (min-width: 873px) {
-  .card-body {
-    overflow-x: scroll;
-  }
-
-  .card-body .col-md-2.btn {
-    width: 100%;
-    margin: 0 10px 5px;
-  }
-
-  .example-form-field {
-    width: 80%;
-    margin-bottom: -30px;
-  }
-}
-
 /* ---------- Dropdowns ---------- */
 
-.btn {
+.dashboard-header-item .btn {
   display: block;
-  width: 330px;
+  width: 100%;
 }
 
 .btn-sm.dropdown {
@@ -473,7 +445,6 @@ body {
 }
 
 .btn-sm.dropdown.active {
-  /* background-color: #c0c8f7ee; */
   border-color: #c0c8f7ee;
 }
 
@@ -503,12 +474,16 @@ body {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 18px;
+  overflow: visible;
 }
 
 .dashboard-title-block {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-top: -30px;
+  min-width: 0;
+  overflow: visible;
 }
 
 .dashboard-text {
@@ -525,9 +500,11 @@ body {
 .dashboard-header-controls {
   display: flex;
   align-items: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 10px;
   margin-right: 10px;
+  position: relative;
+  z-index: 1100;
 }
 
 .dashboard-header-item {
@@ -536,6 +513,51 @@ body {
   position: relative;
   border: 1px solid #d9dce3;
   border-radius: 8px;
+  min-width: 0;
+  background: var(--white);
+}
+
+.seller-item {
+  width: 120px;
+}
+
+.type-item {
+  width: 90px;
+}
+
+.type-label {
+  padding: 5px 12px;
+  font-size: 14px;
+  color: #676768;
+  white-space: nowrap;
+}
+
+.date-picker-item {
+  width: 230px;
+}
+
+.date-picker-item app-date-picker-invoice {
+  display: block;
+  width: 100%;
+}
+
+.date-picker-item ::ng-deep .daterange-container {
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  height: 34px;
+}
+
+.dashboard-header-item .btn-sm.dropdown {
+  padding-right: 26px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dashboard-header-item .dropdown-menu {
+  width: auto;
+  min-width: 100%;
 }
 
 .dashboard-subtitle {
@@ -629,7 +651,7 @@ body {
 }
 
 .bank_name {
-  font-size: 13.5;
+  font-size: 13.5px;
   font-weight: 800;
   color: #1f2430;
   padding: 9px;
@@ -859,10 +881,6 @@ tbody:nth-of-type(8n + 7) .status_mix {
 }
 
 .stage-label {
-  /* font-size: 13px;
-  color: #5c5c72;
-  margin-top: 6px; */
-
   display: block;
   font-size: 13.5px;
   font-weight: 700;
@@ -1025,14 +1043,198 @@ tbody:nth-of-type(8n + 7) .status_mix {
   background: #ef8151;
 }
 
-/* ---------- Responsive ---------- */
+/* ====================================================== */
+/* Responsive                                             */
+/* ====================================================== */
 
+/* Large tablets and small laptops */
+@media (max-width: 1399px) {
+  .example-form-field {
+    width: 80%;
+    margin-bottom: -30px;
+  }
+}
+
+@media (max-width: 1199px) {
+  .dashboard-header-controls {
+    width: 100%;
+    justify-content: flex-start;
+    margin-right: 0;
+  }
+
+  .dashboard-title-block {
+    margin-top: -20px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 991px) {
+  .graph-card {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .graph-card .graph-card-box {
+    min-height: 340px;
+  }
+
+  .table-card .card {
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+
+  .card-head {
+    padding-left: 1rem;
+  }
+
+  .sub-card .summary-card {
+    min-height: 110px;
+  }
+}
+
+/* Phones */
 @media (max-width: 767px) {
+  .dashboard-page-bg {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .dashboard-title-block {
+    margin-top: 0;
+    width: 100%;
+  }
+
+  .dashboard-text {
+    font-size: 22px;
+    padding-top: 16px;
+  }
+
+  .dashboard-subtitle {
+    white-space: normal;
+  }
+
+  .dashboard-header-row {
+    gap: 10px;
+  }
+
+  .dashboard-header-controls {
+    gap: 8px;
+  }
+
+  .quick-range-group {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .range-btn {
+    flex: 1 0 auto;
+  }
+
+  .seller-item,
+  .type-item,
+  .type-label {
+    flex: 1 1 calc(50% - 8px);
+    width: auto;
+  }
+
+  .date-picker-item {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .refresh-btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  .pipeline-wrap {
+    padding: 8px 0;
+  }
+
   .stage-value {
     font-size: 24px;
   }
+
+  .stage-card {
+    min-height: 110px;
+    padding: 16px 14px;
+  }
+
+  .stage-icon {
+    margin-bottom: 12px;
+  }
+
   .attention-bar {
     align-items: flex-start;
     flex-direction: column;
+    margin-right: 0 !important;
+  }
+
+  .sub-card .summary-card {
+    min-height: 100px;
+    padding: 16px 18px;
+  }
+
+  .sub-card .summary-card .summary-body .summary-number {
+    font-size: 24px;
+  }
+
+  .graph-card .graph-card-box {
+    min-height: 300px;
+  }
+
+  .card-head {
+    padding: 1rem 0.75rem 0;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .table-card .card {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  .table-card .card .status_legend {
+    gap: 10px;
+    padding-left: 14px;
+  }
+
+  .section-heading {
+    font-size: 16px;
+  }
+
+  .example-form-field {
+    width: 100%;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .seller-item,
+  .type-item,
+  .type-label {
+    flex: 1 1 100%;
+  }
+
+  .stage-value {
+    font-size: 22px;
+  }
+
+  .stage-label {
+    font-size: 12.5px;
+  }
+
+  .pill {
+    font-size: 12px;
+  }
+
+  .attention-pills {
+    gap: 8px;
+  }
+
+  .parcels_courier {
+    display: block;
+    margin-left: 0;
   }
 }

@@ -175,13 +175,6 @@
       }
 
       .sidenav-link-text {
-        /* margin-left: 10px;
-        font-weight: 400;
-        color: var(--text-secondary);
-        font-size: 14px;
-        letter-spacing: 0.08em;
-        line-height: 1.3; */
-
         margin-left: 5px;
         font-weight: 600;
         color: #565e70;
@@ -284,7 +277,6 @@
       .submenu-link-text {
         margin-left: 8px;
         font-weight: 400;
-        font-family: inherit;
         color: var(--text-secondary);
         font-size: 14px;
         letter-spacing: 0.08em;
@@ -374,4 +366,34 @@
 .sidenav-nav .submenu-nav-item.active .submenu-link-icon {
   color: var(--accent-violet-dark);
   font-weight: 600;
+}
+
+/* Remove focus ring / border on click inside the sidenav */
+.sidenav *,
+.sidenav *:focus,
+.sidenav *:focus-visible,
+.sidenav *:active {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sidenav .btn-close,
+.sidenav .btn-close:focus,
+.sidenav .btn-close:focus-visible,
+.sidenav .btn-close:active,
+.sidenav .dropdown-nav-link:focus,
+.sidenav .dropdown-nav-link:focus-visible,
+.sidenav .dropdown-nav-link:active,
+.sidenav .sidenav-nav-link:focus,
+.sidenav .submenu-nav-link:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Keyboard users still get a soft focus background */
+.sidenav .sidenav-nav-link:focus-visible,
+.sidenav .dropdown-nav-link:focus-visible,
+.sidenav .submenu-nav-link:focus-visible {
+  background-color: var(--bg-hover);
 }

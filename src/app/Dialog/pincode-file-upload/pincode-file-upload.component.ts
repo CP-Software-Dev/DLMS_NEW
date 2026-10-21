@@ -1,16 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import {
-  trigger,
-  state,
-  transition,
-  style,
-  animate,
-} from "@angular/animations";
-import {
-  HttpEventType,
   HttpClient,
   HttpHeaders,
-  HttpErrorResponse,
 } from "@angular/common/http";
 import { ToastrService } from "ngx-toastr";
 import { MatDialogRef } from "@angular/material/dialog";
@@ -21,35 +12,6 @@ import { RefreshService } from "../../services/refresh.service";
   selector: "app-pincode-file-upload",
   templateUrl: "./pincode-file-upload.component.html",
   styleUrl: "./pincode-file-upload.component.css",
-  animations: [
-    trigger("fadeSlideInOut", [
-      state(
-        "void",
-        style({
-          opacity: 0,
-          transform: "translateY(-50%)",
-        })
-      ),
-      transition("void => *", [
-        animate(
-          "700ms ease",
-          style({
-            opacity: 1,
-            transform: "translateY(0)",
-          })
-        ),
-      ]),
-      transition("* => void", [
-        animate(
-          "300ms ease",
-          style({
-            opacity: 0,
-            transform: "translateY(-50%)",
-          })
-        ),
-      ]),
-    ]),
-  ],
 })
 export class PincodeFileUploadComponent {
   constructor(
@@ -59,51 +21,73 @@ export class PincodeFileUploadComponent {
     private refreshservice: RefreshService,
     private dialogRef: MatDialogRef<PincodeFileUploadComponent>
   ) {}
+
   selectedFileName: string = "";
   fileInvalid: boolean = false;
   fileSelected: boolean = false;
+  isDragging: boolean = false;
+  uploading: boolean = false;
   file: File | null = null;
-  sellerData: any[] = [];
-  sellerId: string = "";
 
   onFileSelected(event: any) {
-    const file: File = event.target.files[0];
+    const file: File | undefined = event.target.files[0];
+    this.handleFile(file);
+    event.target.value = ""; // same file dobara select karne par bhi change event chale
+  }
 
-    if (file) {
-      // Accept both XLSX and XLS formats
-      if (file.type === 'text/csv') {
-        this.selectedFileName = file.name;
-        this.fileSelected = true;
-        this.fileInvalid = false;
-        this.file = file;
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    this.isDragging = true;
+  }
 
-      } else {
-        this.selectedFileName = '';
-        this.fileSelected = false;
-        this.fileInvalid = true;
-        this.file = null;
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    this.isDragging = false;
+  }
 
-      }
-    } else {
-      this.selectedFileName = '';
-      this.fileSelected = false;
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    this.isDragging = false;
+    this.handleFile(event.dataTransfer?.files?.[0]);
+  }
+
+  private handleFile(file?: File) {
+    if (!file) {
+      this.resetFile(false);
+      return;
+    }
+    // Windows par csv ka type kabhi 'application/vnd.ms-excel' aata hai,
+    // isliye extension se check karte hain
+    if (file.name.toLowerCase().endsWith(".csv")) {
+      this.selectedFileName = file.name;
+      this.fileSelected = true;
       this.fileInvalid = false;
-      this.file = null; // Reset fileInvalid flag
+      this.file = file;
+    } else {
+      this.resetFile(true);
     }
   }
 
+  private resetFile(invalid: boolean) {
+    this.selectedFileName = "";
+    this.fileSelected = false;
+    this.fileInvalid = invalid;
+    this.file = null;
+  }
+
   uploadFile() {
-    if (this.file) {
-      const formData: FormData = new FormData();
-      formData.append("file", this.file, this.file.name);
+    if (!this.file) return;
 
-      const url = `${this.apiservice.PincodeFileUpload}?file=${this.file.name}`;
+    const formData: FormData = new FormData();
+    formData.append("file", this.file, this.file.name);
 
-      const headers = new HttpHeaders({
-        Accept: "application/json",
-      });
+    const url = `${this.apiservice.PincodeFileUpload}?file=${this.file.name}`;
+    const headers = new HttpHeaders({ Accept: "application/json" });
 
-      this.http.post(url, formData, { headers }).subscribe((res: any) => {
+    this.uploading = true;
+    this.http.post(url, formData, { headers }).subscribe({
+      next: (res: any) => {
+        this.uploading = false;
         if (res.status) {
           this.toastr.success("File Uploaded Successfully.", "Success");
           this.dialogRef.close();
@@ -111,8 +95,12 @@ export class PincodeFileUploadComponent {
         } else {
           this.toastr.error(res.errors, "Failure");
         }
-      });
-    }
+      },
+      error: () => {
+        this.uploading = false;
+        this.toastr.error("Something went wrong.", "Failure");
+      },
+    });
   }
 
   closeDialog() {

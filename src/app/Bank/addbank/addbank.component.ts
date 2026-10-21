@@ -73,6 +73,10 @@ export class AddbankComponent implements OnInit {
     private toastr: ToastrService,
     private dialogRef: MatDialogRef<AddbankComponent>
   ) {
+     this.dialogRef.addPanelClass('bank-side-panel');
+    this.dialogRef.updateSize('min(640px, 95vw)', 'calc(100vh - 32px)');
+    this.dialogRef.updatePosition({ top: '16px', right: '16px' });
+
     this.addBankObj = new Bankmodal();
     this.editBankObj = new EditBankmodal();
     if (data) {

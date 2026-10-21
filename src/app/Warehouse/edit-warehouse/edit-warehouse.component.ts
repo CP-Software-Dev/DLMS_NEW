@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ApiService } from '../../services/api.service';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './edit-warehouse.component.html',
   styleUrl: './edit-warehouse.component.css',
 })
-export class EditWarehouseComponent {
+export class EditWarehouseComponent implements OnInit {
   institutionId: string = '';
   warehouseId: number = 0;
   warehouseType: string = '';
@@ -33,36 +33,21 @@ export class EditWarehouseComponent {
     { id: 'pick', role: 'Pickup' },
     { id: 'rto', role: 'RTO' },
   ];
+
   constructor(
-    private router: Router,
+    private dialogRef: MatDialogRef<EditWarehouseComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private apiservice: ApiService,
     private http: HttpClient,
     private toastr: ToastrService,
-  ) {}
+  ) {
+    this.dialogRef.addPanelClass('edit-side-panel');
+    this.dialogRef.updateSize('min(640px, 95vw)', 'calc(100vh - 32px)');
+    this.dialogRef.updatePosition({ top: '16px', right: '16px' });
+  }
 
   ngOnInit() {
     this.fetchBanks();
-
-    // const warehouse = JSON.parse(sessionStorage.getItem('warehouse') || '{}');
-
-    // if (warehouse) {
-    //   this.warehouseId = warehouse.id;
-
-    //   this.institutionId = warehouse.institutionId?.toString() || '';
-    //   this.warehouseType = warehouse.type || '';
-
-    //   this.warehouseObj = {
-    //     warehouseName: warehouse.warehouseName || '',
-    //     uid: warehouse.uid || '',
-    //     contactPerson: warehouse.contactPerson || '',
-    //     contactPersonNumber: warehouse.contactPersonNumber || '',
-    //     address1: warehouse.address1 || '',
-    //     address2: warehouse.address2 || '',
-    //     address3: warehouse.address3 || '',
-    //     city: warehouse.city || '',
-    //     pincode: warehouse.pincode?.toString() || '',
-    //   };
-    // }
   }
 
   onSubmit() {
@@ -105,7 +90,7 @@ export class EditWarehouseComponent {
     this.http.put(this.apiservice.UpdateWarehouse, payload).subscribe({
       next: (res: any) => {
         this.toastr.success('Warehouse Updated Successfully', 'Success');
-        this.navigateToWarehouse();
+        this.dialogRef.close(true);
       },
       error: (err) => {
         console.error(err);
@@ -115,21 +100,17 @@ export class EditWarehouseComponent {
   }
 
   fetchBanks(): void {
-  this.http.get(this.apiservice.BankList).subscribe(
-    (res: any) => {
+    this.http.get(this.apiservice.BankList).subscribe((res: any) => {
       if (res.status) {
         this.banks = res.data;
-
-        const warehouse = history.state?.warehouse;
+        const warehouse = this.data?.warehouseData ?? history.state?.warehouse;
 
         if (warehouse) {
           this.warehouseId = warehouse.id;
-
-          // Find bank by name
           const selectedBank = this.banks.find(
             (bank: any) =>
               bank.name?.trim().toLowerCase() ===
-              warehouse.institutionName?.trim().toLowerCase()
+              warehouse.institutionName?.trim().toLowerCase(),
           );
 
           if (selectedBank) {
@@ -152,9 +133,8 @@ export class EditWarehouseComponent {
           };
         }
       }
-    }
-  );
-}
+    });
+  }
 
   onBankChange(bankId: number): void {
     const numericBankId = Number(bankId);
@@ -171,7 +151,7 @@ export class EditWarehouseComponent {
     }
   }
 
-  navigateToWarehouse() {
-    this.router.navigate(['/admin/warehouses']);
+  close() {
+    this.dialogRef.close();
   }
 }

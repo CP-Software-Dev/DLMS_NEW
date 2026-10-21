@@ -3,9 +3,9 @@
     <div class="card-head">
       <div class="row bg-container">
         <!-- ================= HEADER ================= -->
-        <div class="col-md-12 col-sm-3" style="vertical-align: middle">
+        <div class="col-12">
           <div class="dashboard-header-row">
-            <div class="dashboard-title-block" style="margin-top: -30px">
+            <div class="dashboard-title-block">
               <h5 class="mb-0 dashboard-text">Dashboard</h5>
               <small class="dashboard-subtitle">
                 {{ selectedQuickRangeLabel }}
@@ -55,12 +55,11 @@
                 </button>
               </div>
 
-              <!-- Seller dropdown: ADMIN ONLY -->
+              <!-- Seller dropdown: admin only -->
               @if (isAdminView) {
-                <div class="dashboard-header-item" style="width: 110px">
+                <div class="dashboard-header-item seller-item">
                   <button
                     class="btn btn-sm dropdown"
-                    style="width: 100%"
                     type="button"
                     id="moreDropdown"
                     data-bs-toggle="dropdown"
@@ -72,7 +71,6 @@
                   </button>
                   <ul
                     class="dropdown-menu dropdown-menu-end"
-                    style="width: 20%"
                     aria-labelledby="moreDropdown"
                   >
                     <li *ngFor="let seller of sellerData">
@@ -90,10 +88,9 @@
 
               <!-- Perso / Insta dropdown (serviceType 1) -->
               @if (serviceType == 1) {
-                <div class="dashboard-header-item" style="width: 80px">
+                <div class="dashboard-header-item type-item">
                   <button
                     class="btn btn-sm dropdown"
-                    style="width: 100%"
                     type="button"
                     id="typeDropdown"
                     data-bs-toggle="dropdown"
@@ -104,7 +101,6 @@
                   </button>
                   <ul
                     class="dropdown-menu dropdown-menu-end"
-                    style="width: 100%"
                     aria-labelledby="typeDropdown"
                   >
                     @if (isAdminView) {
@@ -139,23 +135,15 @@
                   </ul>
                 </div>
               } @else if (serviceType === 2 || serviceType === 3) {
-                <div
-                  class="dashboard-header-item"
-                  style="
-                    padding: 5px 12px;
-                    font-size: 14px;
-                    color: #676768;
-                    background: var(--white);
-                  "
-                >
+                <div class="dashboard-header-item type-label">
                   {{ selectedTypeLabel }}
                 </div>
               }
 
               <!-- Date picker -->
-              <div style="width: auto">
+              <div class="dashboard-header-item date-picker-item">
                 <app-date-picker-invoice
-                  style="border-radius: 8px; font-size: 14px"
+                  opens="left"
                   [selectedRange]="selectedDateRange"
                   (dateRangeSelected)="onDateRangeSelected($event)"
                 ></app-date-picker-invoice>
@@ -269,9 +257,7 @@
                   style="color: #ffffff; font-weight: 600"
                   >103</span
                 >
-                <span class="pill-text" style="color: #f5a524"
-                  >AWB Error</span
-                >
+                <span class="pill-text" style="color: #f5a524">AWB Error</span>
                 <i class="bi bi-chevron-right pill-chevron"></i>
               </a>
               @if (isAdminView) {
@@ -296,9 +282,7 @@
                   style="color: #ffffff; font-weight: 600"
                   >28</span
                 >
-                <span class="pill-text" style="color: #fb8a5c"
-                  >Lost</span
-                >
+                <span class="pill-text" style="color: #fb8a5c">Lost</span>
                 <i class="bi bi-chevron-right pill-chevron"></i>
               </a>
               <a
@@ -310,9 +294,7 @@
                   style="color: #ffffff; font-weight: 600"
                   >28</span
                 >
-                <span class="pill-text" style="color: #fb8a5c"
-                  >RTO</span
-                >
+                <span class="pill-text" style="color: #fb8a5c">RTO</span>
                 <i class="bi bi-chevron-right pill-chevron"></i>
               </a>
             </div>
@@ -373,9 +355,9 @@
                 }
                 <span class="summary-label">Total Shipped</span>
                 <span class="summary-label">
-                  <span class="text-nobody"
-                     style="    color: 
-color-mix(in srgb,#3b9eef 75%, #1F2430);"
+                  <span
+                    class="text-nobody"
+                    style="color: color-mix(in srgb, #3b9eef 75%, #1f2430)"
                     >{{
                       percent(getCardCount("Shipped"), getCardCount("Orders"))
                     }}% of orders</span
@@ -553,8 +535,7 @@ color-mix(in srgb,#3b9eef 75%, #1F2430);"
     </div>
   </div>
 
-  <!-- ================= INTAKE VS DELIVERY + COURIER SHARE (admin + user ) ================= -->
-
+  <!-- ================= INTAKE VS DELIVERY + COURIER SHARE (admin and user) ================= -->
   <div class="row graph-card g-3 mt-1">
     <div class="col-lg-6 col-12">
       <div class="card graph-card-box">
@@ -586,7 +567,7 @@ color-mix(in srgb,#3b9eef 75%, #1F2430);"
     </div>
   </div>
 
-  <!-- ================= STATUS TRACKERS (admin + user dono, same admin components) ================= -->
+  <!-- ================= STATUS TRACKERS (admin and user, same components) ================= -->
   <div class="row graph-card g-3 mt-1">
     <p class="section-heading">Status trackers</p>
 

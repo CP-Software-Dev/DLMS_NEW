@@ -206,16 +206,16 @@ const routes: Routes = [
     component: ShipmentdetailsComponent,
     canActivate: [adminAuthGuard],
   },
-  {
-    path: 'admin/warehouses/add',
-    component: NewwarehouseComponent,
-    canActivate: [adminAuthGuard],
-  },
-   {
-    path: 'admin/warehouses/edit',
-    component: EditWarehouseComponent,
-    canActivate: [adminAuthGuard],
-  },
+  // {
+  //   path: 'admin/warehouses/add',
+  //   component: NewwarehouseComponent,
+  //   canActivate: [adminAuthGuard],
+  // },
+  //  {
+  //   path: 'admin/warehouses/edit',
+  //   component: EditWarehouseComponent,
+  //   canActivate: [adminAuthGuard],
+  // },
   {
     path: 'admin/webhook/add',
     component: AddWebhookComponent,

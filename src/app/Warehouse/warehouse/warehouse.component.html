@@ -1,119 +1,117 @@
 <div class="card">
   <div class="card-head">
-    <div class="row">
-      <div class="col-md-6 col-sm-6">
-        <h5>
-          <i class="ri-checkbox-blank-fill" style="border: 2px solid black"></i>
-          Warehouse List
-        </h5>
+    <div class="head-row">
+      <div>
+        <h5>Warehouse List</h5>
       </div>
-      <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
-        <button class="btn btn-outline-dark btn-sm me-3" [class.active]="isActive === 'Export'" (click)="exportToCSV()">
+      <div class="head-actions">
+        <button
+          class="head-btn"
+          [class.active]="isActive === 'Export'"
+          (click)="exportToCSV()"
+        >
           <i class="ri-upload-2-line"></i> Export
         </button>
-        <button class="btn btn-outline-dark btn-sm me-3" (click)="navigateToAddWatehouse()">
+        <button
+          class="head-btn head-btn--primary"
+          (click)="navigateToAddWatehouse()"
+        >
           <i class="bi-plus"></i> New Warehouse
         </button>
+      </div>
+    </div>
+  </div>
 
-        <button class="btn btn-outline-dark btn-sm me-3" (click)="toggleFiltersForm()">
-          <i [class]="buttonIcon"></i> {{ buttonText }}
+  <div class="card-body">
+    <div class="filter-bar">
+      <!-- Bank Name -->
+      <div class="field">
+        <label for="sellerName" class="form-label">Bank Name</label>
+        <select
+          class="form-select form-select-sm"
+          id="sellerName"
+          [(ngModel)]="sellerId"
+        >
+          <option value="" selected disabled>Select Bank</option>
+          <option *ngFor="let seller of sellerData" [value]="seller.id">
+            {{ seller.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- type -->
+      <div class="field">
+        <label for="type" class="form-label">Warehouse Type</label>
+        <select
+          class="form-select form-select-sm"
+          id="type"
+          [(ngModel)]="type"
+        >
+          <option value="" selected disabled>Select Type</option>
+          <option value="pick">Pickup</option>
+          <option value="rto">RTO</option>
+        </select>
+      </div>
+
+      <!-- Buttons -->
+      <div class="filter-actions">
+        <button class="apply-btn" type="button" (click)="applyFilters()">
+          Apply
+        </button>
+        <button class="clear-btn" type="button" (click)="clearFilters()">
+          Clear
         </button>
       </div>
     </div>
 
-    <div class="form" *ngIf="showFiltersForm" style="margin-top: 15px">
-      <div class="row align-items-end">
-
-        <!-- Bank Name -->
-        <div class="col-md-3">
-          <label for="sellerName" class="form-label">Bank Name</label>
-          <select class="form-select form-select-sm" id="sellerName" [(ngModel)]="sellerId">
-            <option value="" selected disabled>Select Bank</option>
-            <option *ngFor="let seller of sellerData" [value]="seller.id">
-              {{ seller.name }}
-            </option>
-          </select>
-        </div>
-
-        <!-- type -->
-        <div class="col-md-3">
-          <label for="type" class="form-label">Warehouse Type</label>
-          <select class="form-select form-select-sm" id="type" [(ngModel)]="type">
-            <option value="" selected disabled>Select Type</option>
-            <option value="pick">Pickup</option>
-            <option value="rto">RTO</option>
-          </select>
-        </div>
-
-        <!-- Buttons -->
-        <div class="col-md-3">
-          <button class="btn btn-primary btn-sm me-2" type="button" (click)="applyFilters()">
-            Apply
-          </button>
-
-          <button class="btn btn-danger btn-sm" type="button" (click)="clearFilters()">
-            Clear
-          </button>
-        </div>
-
-      </div>
-    </div>
-
-
-  </div>
-  <div class="card-body">
     <div class="table-row">
       <table class="table">
         <thead class="table-head-hover">
           <tr>
-            <th scope="col">S.No.</th>
+            <th scope="col">Warehouse </th>
             <th scope="col">Bank Name</th>
-            <th scope="col">Warehouse Name</th>
             <th scope="col">Contact Person</th>
             <th scope="col">Type</th>
-            <th scope="col">Warehouse Details</th>
             <th scope="col">Creation Date</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let entry of warehouseEntries; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ entry.institutionName }}</td>
-            <td>{{ entry.warehouseName }}</td>
             <td>
-              {{ entry.contactPerson }}<br /><i class="bi bi-phone"></i>{{ entry.contactPersonNumber }}
+              <div class="cell-main">{{ entry.warehouseName }}</div>
+              <span class="cell-sub">
+                {{ getFullAddress(entry) }}
+              </span>
             </td>
-            <td>{{ entry.type }}</td>
-            <td style="
-                max-width: 150px;
-                white-space: normal;
-                word-wrap: break-word;
-                overflow-wrap: break-word;
-              ">
-              {{ getFullAddress(entry) }}
+            <td><span class="pill pill-grey">{{ entry.institutionName }}</span></td>
+            <td>
+              <div class="cell-main">{{ entry.contactPerson }}</div>
+              <span class="cell-sub"
+                ><i class="bi bi-phone"></i>{{ entry.contactPersonNumber }}</span
+              >
             </td>
+            <td><span class="pill pill-blue">{{ entry.type }}</span></td>
             <td>{{ entry.date }}</td>
             <td>
-              <button class="btn btn-sm btn-outline-primary" style="margin-right: 5px" (click)="editWarehouse(entry)">
+              <button class="view-btn" (click)="editWarehouse(entry)">
                 <i class="ri-pencil-fill"></i>{{ entry.action1 }}
               </button>
-              <!-- 
-                            <button class="btn btn-sm btn-outline-primary" style="margin-right: 5px;"><i
-                                    class="ri-check-line"></i>{{ entry.action2
-                                }}</button>
-
-                            <button class="btn btn-sm btn-outline-primary" style="margin-right: 5px;"><i
-                                    class="ri-check-line"></i>{{ entry.action3
-                                }}</button> -->
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <app-paginator [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
-      [pageIndex]="pageIndex" (page)="handlePageEvent($event)">
-    </app-paginator>
+    <div class="paginator-wrap">
+      <app-paginator
+        [length]="totalCount"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+        [pageIndex]="pageIndex"
+        (page)="handlePageEvent($event)"
+      >
+      </app-paginator>
+    </div>
   </div>
 </div>

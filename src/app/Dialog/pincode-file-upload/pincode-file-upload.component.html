@@ -1,34 +1,73 @@
-<div class="card" [@fadeSlideInOut]>
-    <div class="card-head">
-        <div class="row">
-            <div class="col">
-                Pincode Master Upload
-            </div>
-            <div class="col close-form">
-                <i class="close-icon ri-close-fill" (click)="closeDialog()"></i>
-            </div>
-        </div>
+<div class="upload-card">
+  <div class="upload-head">
+    <h5>Pincode Master Upload</h5>
+    <button type="button" class="close-btn" (click)="closeDialog()" aria-label="Close">
+      <i class="ri-close-line"></i>
+    </button>
+  </div>
+
+  <div class="upload-body">
+    <div class="section-label">
+      <span>FILE</span>
+      <span class="line"></span>
     </div>
 
-    <div class="card-body">
-        <div class="row mb-3">
-            <div class="col">
-                <div class="input-group">
-                    <input class="form-control" type="text" [value]="selectedFileName" readonly>
-                    <input #fileInput type="file" style="display:none;" (change)="onFileSelected($event)">
-                    <button class="btn btn-browse" type="button" (click)="fileInput.click()">Select File</button>
-                </div>
-                <div *ngIf="fileInvalid" class="text-danger mt-2">Invalid file format. Please select a .csv file.</div>
-            </div>
-        </div>
-        
-        <div class="row justify-content-end">
-            <button class="col-2 btn btn-outline-success btn-sm" (click)="uploadFile()" [disabled]="!fileSelected"><b>Upload</b></button>
-            <button class="col-2 btn btn-outline-danger btn-sm" (click)="closeDialog()"><b>Close</b></button>
-        </div>
-        <div class="row download-csv">
-            
-            <a href="/assets/File_format/Sample_pincode_master.csv" download="Sample_Pincode_Master.csv"><i  class="ri-download-2-fill"></i> Download CSV Format</a>
-        </div>
+    <input
+      #fileInput
+      type="file"
+      accept=".csv"
+      hidden
+      (change)="onFileSelected($event)"
+    />
+
+    <div
+      class="drop-zone"
+      [class.dragging]="isDragging"
+      [class.has-file]="fileSelected"
+      (click)="fileInput.click()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    >
+      <div class="drop-icon"><i class="ri-upload-2-line"></i></div>
+
+      <ng-container *ngIf="!fileSelected; else fileInfo">
+        <div class="drop-title">Drop the CSV file here</div>
+        <div class="drop-sub">or click to browse · .csv only</div>
+      </ng-container>
+
+      <ng-template #fileInfo>
+        <div class="drop-title">{{ selectedFileName }}</div>
+        <div class="drop-sub">Click to change file</div>
+      </ng-template>
     </div>
+
+    <div *ngIf="fileInvalid" class="error-text">
+      Invalid file format. Please select a .csv file.
+    </div>
+
+    <div class="section-label">
+      <span>EXPECTED FORMAT</span>
+      <a
+        class="download-btn"
+        href="/assets/File_format/Sample_pincode_master.csv"
+        download="Sample_Pincode_Master.csv"
+      >
+        <i class="ri-download-2-line"></i> Download CSV Format
+      </a>
+      <span class="line"></span>
+    </div>
+  </div>
+
+  <div class="upload-foot">
+    <button type="button" class="btn-close-dialog" (click)="closeDialog()">Close</button>
+    <button
+      type="button"
+      class="btn-upload"
+      (click)="uploadFile()"
+      [disabled]="!fileSelected || uploading"
+    >
+      <i class="ri-upload-2-line"></i> Upload
+    </button>
+  </div>
 </div>

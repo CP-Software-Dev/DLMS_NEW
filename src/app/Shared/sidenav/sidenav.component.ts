@@ -33,8 +33,6 @@ export class SidenavComponent implements OnInit {
   isAdmin = false; // every valid role except 2
   isSuperAdmin = false; // role 1
 
-  // Roles whose menu is limited by the permission flags saved at login.
-  // Add 2 here to apply the same flags to the Admin role.
   private readonly permissionRoles: number[] = [4];
 
   permissions = {
