@@ -1,53 +1,52 @@
 <div class="card">
-    <div class="card-head">
-        <div class="row">
-            <div class="col-md-6 col-sm-6">
-                <h5><i class="ri-checkbox-blank-fill" style="border: 2px solid black;"></i> Sales Dashboard</h5>
-            </div>
-            <div class="col-md-6 col-sm-6 d-flex justify-content-end align-items-center">
-                <!-- <button class="btn btn-outline-dark btn-sm me-3"
-                    ><i class="ri-upload-2-line"></i> Export</button> -->
-                <button class="btn btn-outline-dark btn-sm me-3" (click)="openDialog()"> <i class="bi-plus"></i>
-                    Add New</button>
-            </div>
-        </div>
-
+  <div class="card-head">
+    <div class="head-row">
+      <div>
+        <h5>Sales Dashboard</h5>
+      </div>
+      <!-- <button class="btn btn-outline-dark btn-sm me-3"
+          ><i class="ri-upload-2-line"></i> Export</button> -->
+      <button class="head-btn head-btn--primary" (click)="openDialog()">
+        <i class="bi-plus"></i> Add New
+      </button>
     </div>
-    <div class="card-body">
-        <div class="table-row">
-            <table class="table">
-                <thead class="table-head-hover">
-                    <tr>
+  </div>
 
-                        <th scope="col">ID</th>
-                        <th scope="col">Sales Person</th>
-                        <th scope="col">Contact Number</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Created By</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Edit</th>
-                    </tr>
-
-                </thead>
-                <tbody>
-                    <tr *ngFor="let person of data">
-                        <td>{{person.id}}</td>
-                        <td>{{person.name}}</td>
-                        <td>{{person.contact}}</td>
-                        <td>{{person.email}}</td>
-                        <td>{{person.createdBy}}</td>
-                        <td>
-                            <span class="badge" [ngClass]="person.isActive ? 'badge-success' : 'badge-danger'">
-                                {{ person.isActive ? 'Active' : 'Inactive' }}
-                            </span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary" (click)="editDetails(person)"><i
-                                    class="ri-pencil-fill"></i> Edit </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+  <div class="card-body">
+    <div class="table-row">
+      <table class="table">
+        <thead class="table-head-hover">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Sales Person</th>
+            <th scope="col">Contact Number</th>
+            <th scope="col">Email</th>
+            <th scope="col">Created By</th>
+            <th scope="col">Status</th>
+            <th scope="col">Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let person of data">
+            <td>{{person.id}}</td>
+            <td><span class="cell-main">{{person.name}}</span></td>
+            <td>{{person.contact}}</td>
+            <td>{{person.email}}</td>
+            <td>{{person.createdBy}}</td>
+            <td>
+              <span class="pill" [ngClass]="person.isActive ? 'pill-green' : 'pill-red'">
+                <span class="pill-dot"></span>
+                {{ person.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td>
+              <button class="view-btn" (click)="editDetails(person)">
+                <i class="ri-pencil-fill"></i> Edit
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>

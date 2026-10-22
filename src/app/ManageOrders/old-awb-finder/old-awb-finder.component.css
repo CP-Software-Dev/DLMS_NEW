@@ -1,5 +1,9 @@
 :host {
   display: block;
+  min-height: 100vh;
+  margin-left: -10px;
+  margin-right: -10px;
+  background-color: var(--bg-page);
 }
 
 /* ---------- Page ---------- */
@@ -9,8 +13,6 @@
   flex-direction: column;
   background-color: var(--bg-page);
   border: none;
-  margin-left: -10px;
-  margin-right: -10px;
 }
 
 /* ---------- Header ---------- */
@@ -221,7 +223,6 @@
     transform: rotate(360deg);
   }
 }
-
 
 @container list (max-width: 1199px) {
   .card .card-body {

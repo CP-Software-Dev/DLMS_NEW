@@ -64,9 +64,10 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  padding: 22px 24px 18px;
   border-bottom: 1px solid #eceef2;
-  background: linear-gradient(135deg, #f1ecff 0%, #fdeef2 100%);
+  padding: 30px 24px 30px;
+ background: radial-gradient(at 4% 10%, rgba(139, 127, 240, 0.16) 0, transparent 55%), radial-gradient(at 70% -10%, rgba(59, 158, 239, 0.14) 0, transparent 50%), radial-gradient(at 96% 90%, rgba(242, 97, 122, 0.10) 0, transparent 48%), var(--white);
+
 }
 
 .drawer-title {

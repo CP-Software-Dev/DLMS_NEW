@@ -43,6 +43,7 @@ export class AutomationLogComponent {
   pincode: string = "";
   sellerData: any[] = [];
   sellerId: string = "";
+  isRefreshing: boolean = false;
 
   private refreshSubscription?: Subscription;
 
@@ -81,6 +82,12 @@ export class AutomationLogComponent {
     this.fetchData(this.pageIndex, this.pageSize);
   }
 
+  // Reloads the current page and shows a loading state on the Refresh button
+  refresh() {
+    this.isRefreshing = true;
+    this.fetchData(this.pageIndex, this.pageSize);
+  }
+
   fetchData(pageIndex: number, pageSize: number) {
     let params = new HttpParams()
       .set("pageNumber", (pageIndex + 1).toString())
@@ -90,8 +97,15 @@ export class AutomationLogComponent {
       (res: any) => {
         this.files = res.data.data;
         this.totalFiles = res.data.totalCount;
+
+        if (this.isRefreshing) {
+          this.toastr.success("Log refreshed", "Success");
+        }
+        this.isRefreshing = false;
       },
-      (error) => {}
+      (error) => {
+        this.isRefreshing = false;
+      }
     );
   }
 

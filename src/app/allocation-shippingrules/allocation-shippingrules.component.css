@@ -194,8 +194,9 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 24px 24px 20px;
-    background: linear-gradient(135deg, #ece9ff 0%, #f6efff 55%, #ffe9ee 100%);
+    padding: 30px 24px 30px;
+ background: radial-gradient(at 4% 10%, rgba(139, 127, 240, 0.16) 0, transparent 55%), radial-gradient(at 70% -10%, rgba(59, 158, 239, 0.14) 0, transparent 50%), radial-gradient(at 96% 90%, rgba(242, 97, 122, 0.10) 0, transparent 48%), var(--white);
+
     border-bottom: 1px solid #ececf4;
 }
 

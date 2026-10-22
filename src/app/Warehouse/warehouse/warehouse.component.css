@@ -212,12 +212,15 @@
 .card .table td {
   border-left: none;
   border-right: none;
+  border-bottom: none;
+  border-top: none;
+
 }
 
 .card .table th {
   padding: 13px 8px;
   background-color: #fafafd;
-  /* border-bottom: 1px solid #f3f4f8; */
+  border-bottom: 1px solid #f3f4f8;
   white-space: normal;
   text-align: left;
   vertical-align: middle;
